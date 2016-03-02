@@ -1,0 +1,16 @@
+import matplotlib
+import matplotlib.pyplot as plt
+
+def plotSingle(image):
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.matshow(image.reshape(28, 28), cmap = matplotlib.cm.binary)
+    plt.xticks(np.array([]))
+    plt.yticks(np.array([]))
+    plt.show()
+
+
+
+
+if __name__ == "__main__":
+    pass
