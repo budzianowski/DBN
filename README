@@ -1,3 +1,11 @@
 Python library for unsupervised training of Deep Restricted Bolztmann Machines using three different approaches.
 
 MIT license.
+
+Adding command line args
+In order to add command line arguments:
+1. Add the argument name as key in dictionary at top of RBM.py, add the default value at the argument type as keys
+2. Can then access the argument in main function using: args['arg-name']
+To add command line flag:
+1. Add name of flag and default value to flag dictionary at top of RBM.py
+2. Can access flag as args['flag-name']
