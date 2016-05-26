@@ -44,11 +44,12 @@ class RBM(object):
         self.dW = np.zeros((n_hid, n_vis))
         self.dW_prev = np.zeros((n_hid, n_vis))
 
-        self.persistent_chain_vis = np.zeros((n_vis, batchSize)) # TODO should be size of the batch
-        self.persistent_chain_hid = np.zeros((n_hid, batchSize))
+        self.persistent_chain_vis = None #np.zeros((n_vis, batchSize)) # TODO should be size of the batch
+        self.persistent_chain_hid = None
 
         self.eps = 1e-8  # Some "tiny" value, used to enforce min/max boundary conditions
         self.momentum = momentum
+        self.idxs = 0  # index for computing proxy LL
 
         # If the user specifies the training dataset, it can be useful to
         # initialize the visible biases according to the empirical expected

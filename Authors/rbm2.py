@@ -22,7 +22,6 @@ class RBM(object):
     """Restricted Boltzmann Machine (RBM)  """
     def __init__(
         self,
-        input=None,
         n_visible=784,
         n_hidden=500,
         W=None,
@@ -72,19 +71,19 @@ class RBM(object):
             vbias = np.zeros((n_visible, 1))
 
         # initialize input layer for standalone RBM or layer0 of DBN
-        self.input = input
         self.W = W
         self.hbias = hbias
         self.vbias = vbias
 
+        self.persistent = None
 
 
     def free_energy(self, v_sample):
         ''' Function to compute the free energy '''
         wx_b = np.dot(v_sample, self.W) + self.hbias.T
         vbias_term = np.dot(v_sample, self.vbias)
-        hidden_term = np.sum(np.log(1 + np.exp(wx_b)), axis=1)
-        return -hidden_term - vbias_term
+        hidden_term = np.sum(np.log(1 + np.exp(wx_b)), axis=1).reshape(100,1)
+        return - hidden_term - vbias_term
 
     def propup(self, vis):
         '''This function propagates the visible units activation upwards to
@@ -172,14 +171,14 @@ class RBM(object):
         """
         # compute positive phase
         pre_sigmoid_ph, ph_mean, ph_sample = self.sample_h_given_v(batch)
-
+        chain = ph_sample
         # decide how to initialize persistent chain:
         # for CD, we use the newly generate hidden sample
         # for PCD, we initialize from the old state of the chain
-        if persistent is None:
-            chain = ph_sample
-        else:
-            chain = persistent
+        # if self.persistent is None:
+        #     chain = ph_sample
+        # else:
+        #     chain = self.persistent
         # perform actual negative phase
         # in order to implement CD-k/PCD-k we need to scan over the
 
@@ -196,9 +195,9 @@ class RBM(object):
         self.hbias += lr * (np.sum(ph_sample, 0) - np.sum(chain, 0)).reshape(self.hbias.shape)  # enforce the column vector
         self.vbias += lr * (np.sum(batch, 0) - np.sum(chain_end, 0)).reshape(self.vbias.shape)
 
-        if persistent is None:
+        if self.persistent is None: # todo change it
             # Note that this works only if persistent is a shared variable
-            persistent = chain
+            self.persistent = chain
             # pseudo-likelihood is a better proxy for PCD
             monitoring_cost = self.get_pseudo_likelihood_cost(batch)
         else:
@@ -217,7 +216,8 @@ class RBM(object):
         # flip bit x_i of matrix xi and preserve all other bits x_{\i}
         # Equivalent to xi[:,bit_i_idx] = 1-xi[:, bit_i_idx], but assigns
         # the result to xi_flip, instead of working in place on xi.
-        xi_flip = 1 - batch[:, self.bit_i_idx]
+        xi_flip = batch
+        xi_flip[:, self.bit_i_idx] = 1 - batch[:, self.bit_i_idx]
 
         # calculate free energy with bit flipped
         fe_xi_flip = self.free_energy(xi_flip)
@@ -226,7 +226,7 @@ class RBM(object):
         cost = np.mean(self.n_visible * np.log(sigmoid(fe_xi_flip - fe_xi)))
 
         # increment bit_i_idx % number as part of updates
-        self.bit_i_idx += 1 % self.n_visible
+        self.bit_i_idx = (self.bit_i_idx + 1) % self.n_visible
 
         return cost
 
@@ -268,7 +268,7 @@ class RBM(object):
         return cross_entropy
 
 
-def test_rbm(learning_rate=0.1, training_epochs=15,
+def test_rbm(learning_rate=0.1, training_epochs=200,
              dataset='mnist.pkl.gz', batch_size=100,
              n_chains=20, n_samples=10, output_folder='rbm_plots',
              n_hidden=500):
@@ -301,7 +301,7 @@ def test_rbm(learning_rate=0.1, training_epochs=15,
     # initialize storage for the persistent chain (state = hidden
     # layer of chain)
     persistent_chain = np.zeros((batch_size, n_hidden))
-    print(train_set_x.shape)
+
     print("constructing model")
     # construct the RBM class
     rbm = RBM(n_visible=28 * 28,
@@ -313,12 +313,16 @@ def test_rbm(learning_rate=0.1, training_epochs=15,
     for epoch in range(training_epochs):
         mean_cost = []
         for index in range(n_train_batches):
-            print(index)
-            mean_cost += rbm.get_cost_updates(train_set_x[index * batch_size: (index + 1) * batch_size],
+            cost = rbm.get_cost_updates(train_set_x[index * batch_size: (index + 1) * batch_size],
                                               lr=learning_rate,
                                           persistent=persistent_chain,
                                                k=1) #[train_rbm(batch_index)]
-
+            if index % 100 == 0:
+                print(cost)
+            if -10**5 < cost < 10**5:
+                mean_cost.append(cost)
+            else:
+                pass
         print('Training epoch %d, cost is ' % epoch, np.mean(mean_cost))
 
     end_time = timeit.default_timer()

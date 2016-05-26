@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.special import expit
-import SamplingEMF as SamplingEMF
-import RBMBase as RBMBase
+import SamplingEMF
+import RBMBase
+import copy
 
 
 def free_energy(rbm, vis):
@@ -12,14 +13,14 @@ def free_energy(rbm, vis):
 
 def score_samples(rbm, vis):
     n_feat, n_samples = vis.shape
-    vis_corrupted = vis
-    idxs = np.random.random_integers(0, n_feat - 1, 1)
-    # for (i, j) in zip(idxs, range(n_samples)):  # corruption of particular bit in a given (j) sample
-    #     vis_corrupted[i, j] = 1 - vis_corrupted[i, j]
+    vis_corrupted = copy.deepcopy(vis)
+    idxs = np.random.random_integers(0, n_feat - 1, n_samples)
+    for (i, j) in zip(idxs, range(n_samples)):  # corruption of particular bit in a given (j) sample
+        vis_corrupted[i, j] = 1 - vis_corrupted[i, j]
 
-    vis_corrupted[idxs, :] = 1 - vis_corrupted[idxs, :]
     fe = free_energy(rbm, vis)
     fe_corrupted = free_energy(rbm, vis_corrupted)
+
     logPL = n_feat * np.log(expit(fe_corrupted - fe))
 
     return logPL

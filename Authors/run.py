@@ -3,9 +3,10 @@
 
 from scipy.special import expit
 
-import utils as utils
-import Training as Training
-import RBMBase as RBMBase
+import utils
+import Training
+import Training2
+import RBMBase
 
 import numpy as np
 import gzip
@@ -18,12 +19,13 @@ import os
 def run_mnist():
     # Set parameters
     Epochs         = 20
+    VisibleUnits   = 784
     HiddenUnits    = 500
     Approx         = ["CD"]
     ApproxSteps    = 1
-    Persistent     = True
     LearnRate      = 0.005
-    PersistStart   = 1
+    PersistStart   = 1000 # TODO - persistent make it work
+
     Momentum       = 0.5
     DecayMagnitude = 0.01
     DecayType      = "l1"
@@ -44,7 +46,7 @@ def run_mnist():
     ValidSet = utils.binarize(ValidSet, threshold=0.001).T    # Create binary data
 
     print('initializing model')
-    rbm = RBMBase.RBM(28*28, HiddenUnits,
+    rbm = RBMBase.RBM(VisibleUnits, HiddenUnits,
                       momentum  = Momentum,
                       sigma     = Sigma,
                       TrainData=TrainSet,
@@ -53,12 +55,11 @@ def run_mnist():
                       )
 
     print('start of training')
-    Training.fit(rbm, TrainSet, ValidSet,
+    Training2.fit(rbm, TrainSet, ValidSet,
                  n_epochs           = Epochs,
                  weight_decay     = DecayType,
                  decay_magnitude  = DecayMagnitude,
                  lr               = LearnRate,
-                 persistent       = Persistent,
                  NormalizationApproxIter = ApproxSteps,
                  monitor_vis      = True,
                  approx           = Approx,

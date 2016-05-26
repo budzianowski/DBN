@@ -3,25 +3,24 @@ from scipy.special import expit
 import RBMBase as RBMBase
 
 def sample(means):
-    # rands = np.random.random(means.shape)
-    # samples = rands < means  # TODO check if means < rands is also ok
-    # samples = samples.astype('int')
     samples = np.random.binomial(size=means.shape, n=1, p=means)
     return samples
 
 
 def sample_hiddens(rbm, vis):
     means = RBMBase.ProbHidCondOnVis(rbm, vis)
-    return sample(means), means
+    samples = sample(means)
+    return samples, means
 
 
 def sample_visibles(rbm, hid):
     means = RBMBase.ProbVisCondOnHid(rbm, hid)
-    return sample(means), means
+    samples = sample(means)
+    return samples, means
 
 
 ## Main course
-def MCMC(rbm, init, iterations=1, StartMode="visible"):
+def MCMC(rbm, init, iterations=1, StartMode="hidden"):
     if StartMode == "visible":
     # In this first mode we assume that we are starting from the visible samples. E.g. in
     # the case of binary RBM, we should be starting with binary samples.
@@ -40,7 +39,7 @@ def MCMC(rbm, init, iterations=1, StartMode="visible"):
         vis_samples, vis_means = sample_visibles(rbm, hid_samples)          # Sample the visible units from true distribution
         hid_samples, hid_means = sample_hiddens(rbm, vis_samples)           # Update the hidden unit means, a NMF-ish approach
 
-    return vis_samples, hid_samples, vis_means, hid_means
+    return vis_samples, vis_means, hid_samples, hid_means
 
 
 

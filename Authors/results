@@ -1,84 +1,40 @@
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -280.126, normalized MSE     -0.218
-Training: LL   -543.427, normalized LL     -0.423, MSE   -282.417, normalized MSE     -0.220
-EMF LLValidation: LL   -422.686, normalized LL     -0.329, MSE   -280.126, normalized MSE     -0.218
-Training: LL   -423.777, normalized LL     -0.330, MSE   -282.417, normalized MSE     -0.220
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -85.548, normalized MSE     -0.067
-Training: LL   -543.427, normalized LL     -0.423, MSE    -90.909, normalized MSE     -0.071
-EMF LLValidation: LL   -104.649, normalized LL     -0.082, MSE    -85.548, normalized MSE     -0.067
-Training: LL   -108.491, normalized LL     -0.084, MSE    -90.909, normalized MSE     -0.071
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -79.699, normalized MSE     -0.062
-Training: LL   -543.427, normalized LL     -0.423, MSE    -77.895, normalized MSE     -0.061
-EMF LLValidation: LL    -96.549, normalized LL     -0.075, MSE    -79.699, normalized MSE     -0.062
-Training: LL    -93.603, normalized LL     -0.073, MSE    -77.895, normalized MSE     -0.061
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -78.769, normalized MSE     -0.061
-Training: LL   -543.427, normalized LL     -0.423, MSE    -78.624, normalized MSE     -0.061
-EMF LLValidation: LL    -97.781, normalized LL     -0.076, MSE    -78.769, normalized MSE     -0.061
-Training: LL    -96.842, normalized LL     -0.075, MSE    -78.624, normalized MSE     -0.061
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -84.000, normalized MSE     -0.065
-Training: LL   -543.427, normalized LL     -0.423, MSE    -77.663, normalized MSE     -0.060
-EMF LLValidation: LL   -101.234, normalized LL     -0.079, MSE    -84.000, normalized MSE     -0.065
-Training: LL    -94.385, normalized LL     -0.074, MSE    -77.663, normalized MSE     -0.060
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -87.967, normalized MSE     -0.069
-Training: LL   -543.427, normalized LL     -0.423, MSE    -77.940, normalized MSE     -0.061
-EMF LLValidation: LL   -104.062, normalized LL     -0.081, MSE    -87.967, normalized MSE     -0.069
-Training: LL    -93.091, normalized LL     -0.073, MSE    -77.940, normalized MSE     -0.061
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -93.485, normalized MSE     -0.073
-Training: LL   -543.427, normalized LL     -0.423, MSE    -84.019, normalized MSE     -0.065
-EMF LLValidation: LL   -108.509, normalized LL     -0.085, MSE    -93.485, normalized MSE     -0.073
-Training: LL    -98.272, normalized LL     -0.077, MSE    -84.019, normalized MSE     -0.065
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -96.677, normalized MSE     -0.075
-Training: LL   -543.427, normalized LL     -0.423, MSE    -84.134, normalized MSE     -0.066
-EMF LLValidation: LL   -112.141, normalized LL     -0.087, MSE    -96.677, normalized MSE     -0.075
-Training: LL    -99.215, normalized LL     -0.077, MSE    -84.134, normalized MSE     -0.066
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE    -98.891, normalized MSE     -0.077
-Training: LL   -543.427, normalized LL     -0.423, MSE    -78.769, normalized MSE     -0.061
-EMF LLValidation: LL   -113.890, normalized LL     -0.089, MSE    -98.891, normalized MSE     -0.077
-Training: LL    -92.679, normalized LL     -0.072, MSE    -78.769, normalized MSE     -0.061
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -103.993, normalized MSE     -0.081
-Training: LL   -543.427, normalized LL     -0.423, MSE    -83.493, normalized MSE     -0.065
-EMF LLValidation: LL   -119.126, normalized LL     -0.093, MSE   -103.993, normalized MSE     -0.081
-Training: LL    -97.596, normalized LL     -0.076, MSE    -83.493, normalized MSE     -0.065
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -109.885, normalized MSE     -0.086
-Training: LL   -543.427, normalized LL     -0.423, MSE    -84.679, normalized MSE     -0.066
-EMF LLValidation: LL   -125.524, normalized LL     -0.098, MSE   -109.885, normalized MSE     -0.086
-Training: LL    -99.131, normalized LL     -0.077, MSE    -84.679, normalized MSE     -0.066
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -112.955, normalized MSE     -0.088
-Training: LL   -543.427, normalized LL     -0.423, MSE    -90.929, normalized MSE     -0.071
-EMF LLValidation: LL   -128.570, normalized LL     -0.100, MSE   -112.955, normalized MSE     -0.088
-Training: LL   -105.524, normalized LL     -0.082, MSE    -90.929, normalized MSE     -0.071
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -129.678, normalized MSE     -0.101
-Training: LL   -543.427, normalized LL     -0.423, MSE    -97.863, normalized MSE     -0.076
-EMF LLValidation: LL   -145.500, normalized LL     -0.113, MSE   -129.678, normalized MSE     -0.101
-Training: LL   -113.079, normalized LL     -0.088, MSE    -97.863, normalized MSE     -0.076
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -131.569, normalized MSE     -0.102
-Training: LL   -543.427, normalized LL     -0.423, MSE    -96.685, normalized MSE     -0.075
-EMF LLValidation: LL   -147.647, normalized LL     -0.115, MSE   -131.569, normalized MSE     -0.102
-Training: LL   -112.634, normalized LL     -0.088, MSE    -96.685, normalized MSE     -0.075
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -137.891, normalized MSE     -0.107
-Training: LL   -543.427, normalized LL     -0.423, MSE    -99.379, normalized MSE     -0.077
-EMF LLValidation: LL   -154.426, normalized LL     -0.120, MSE   -137.891, normalized MSE     -0.107
-Training: LL   -115.814, normalized LL     -0.090, MSE    -99.379, normalized MSE     -0.077
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -141.050, normalized MSE     -0.110
-Training: LL   -543.427, normalized LL     -0.423, MSE   -101.524, normalized MSE     -0.079
-EMF LLValidation: LL   -158.200, normalized LL     -0.123, MSE   -141.050, normalized MSE     -0.110
-Training: LL   -118.864, normalized LL     -0.093, MSE   -101.524, normalized MSE     -0.079
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -144.113, normalized MSE     -0.112
-Training: LL   -543.427, normalized LL     -0.423, MSE   -109.580, normalized MSE     -0.085
-EMF LLValidation: LL   -161.380, normalized LL     -0.126, MSE   -144.113, normalized MSE     -0.112
-Training: LL   -127.179, normalized LL     -0.099, MSE   -109.580, normalized MSE     -0.085
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -148.602, normalized MSE     -0.116
-Training: LL   -543.427, normalized LL     -0.423, MSE   -109.015, normalized MSE     -0.085
-EMF LLValidation: LL   -166.507, normalized LL     -0.130, MSE   -148.602, normalized MSE     -0.116
-Training: LL   -127.682, normalized LL     -0.099, MSE   -109.015, normalized MSE     -0.085
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -150.187, normalized MSE     -0.117
-Training: LL   -543.427, normalized LL     -0.423, MSE   -111.064, normalized MSE     -0.086
-EMF LLValidation: LL   -168.006, normalized LL     -0.131, MSE   -150.187, normalized MSE     -0.117
-Training: LL   -130.321, normalized LL     -0.101, MSE   -111.064, normalized MSE     -0.086
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -170.973, normalized MSE     -0.133
-Training: LL   -543.427, normalized LL     -0.423, MSE   -128.644, normalized MSE     -0.100
-EMF LLValidation: LL   -189.146, normalized LL     -0.147, MSE   -170.973, normalized MSE     -0.133
-Training: LL   -148.409, normalized LL     -0.116, MSE   -128.644, normalized MSE     -0.100
-Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -256.650, normalized MSE     -0.200
-Training: LL   -543.427, normalized LL     -0.423, MSE   -257.238, normalized MSE     -0.200
-EMF LLValidation: LL   -374.995, normalized LL     -0.292, MSE   -256.650, normalized MSE     -0.200
-Training: LL   -373.387, normalized LL     -0.291, MSE   -257.238, normalized MSE     -0.200
+Pseudo LLPseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -305.242, normalized MSE     -0.238
+Training: LL   -543.427, normalized LL     -0.423, MSE   -304.477, normalized MSE     -0.237
+EMF LLValidation: LL   -439.116, normalized LL     -0.342, MSE   -305.242, normalized MSE     -0.238
+Training: LL   -437.496, normalized LL     -0.341, MSE   -304.477, normalized MSE     -0.237
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -186.181, normalized MSE     -0.145
+Training: LL   -543.427, normalized LL     -0.423, MSE   -173.309, normalized MSE     -0.135
+EMF LLValidation: LL   -188.091, normalized LL     -0.146, MSE   -186.181, normalized MSE     -0.145
+Training: LL   -175.108, normalized LL     -0.136, MSE   -173.309, normalized MSE     -0.135
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -192.513, normalized MSE     -0.150
+Training: LL   -543.427, normalized LL     -0.423, MSE   -171.732, normalized MSE     -0.134
+EMF LLValidation: LL   -194.627, normalized LL     -0.152, MSE   -192.513, normalized MSE     -0.150
+Training: LL   -174.424, normalized LL     -0.136, MSE   -171.732, normalized MSE     -0.134
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -198.620, normalized MSE     -0.155
+Training: LL   -543.427, normalized LL     -0.423, MSE   -166.826, normalized MSE     -0.130
+EMF LLValidation: LL   -201.496, normalized LL     -0.157, MSE   -198.620, normalized MSE     -0.155
+Training: LL   -170.348, normalized LL     -0.133, MSE   -166.826, normalized MSE     -0.130
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -207.326, normalized MSE     -0.161
+Training: LL   -543.427, normalized LL     -0.423, MSE   -165.651, normalized MSE     -0.129
+EMF LLValidation: LL   -210.326, normalized LL     -0.164, MSE   -207.326, normalized MSE     -0.161
+Training: LL   -169.885, normalized LL     -0.132, MSE   -165.651, normalized MSE     -0.129
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -212.204, normalized MSE     -0.165
+Training: LL   -543.427, normalized LL     -0.423, MSE   -160.556, normalized MSE     -0.125
+EMF LLValidation: LL   -216.943, normalized LL     -0.169, MSE   -212.204, normalized MSE     -0.165
+Training: LL   -167.112, normalized LL     -0.130, MSE   -160.556, normalized MSE     -0.125
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -209.555, normalized MSE     -0.163
+Training: LL   -543.427, normalized LL     -0.423, MSE   -147.621, normalized MSE     -0.115
+EMF LLValidation: LL   -215.625, normalized LL     -0.168, MSE   -209.555, normalized MSE     -0.163
+Training: LL   -156.596, normalized LL     -0.122, MSE   -147.621, normalized MSE     -0.115
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -210.857, normalized MSE     -0.164
+Training: LL   -543.427, normalized LL     -0.423, MSE   -149.136, normalized MSE     -0.116
+EMF LLValidation: LL   -218.476, normalized LL     -0.170, MSE   -210.857, normalized MSE     -0.164
+Training: LL   -159.903, normalized LL     -0.125, MSE   -149.136, normalized MSE     -0.116
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -221.553, normalized MSE     -0.173
+Training: LL   -543.427, normalized LL     -0.423, MSE   -159.042, normalized MSE     -0.124
+EMF LLValidation: LL   -228.497, normalized LL     -0.178, MSE   -221.553, normalized MSE     -0.173
+Training: LL   -169.671, normalized LL     -0.132, MSE   -159.042, normalized MSE     -0.124
+Pseudo LLValidation: LL   -543.427, normalized LL     -0.423, MSE   -234.464, normalized MSE     -0.183
+Training: LL   -543.427, normalized LL     -0.423, MSE   -161.042, normalized MSE     -0.125
+EMF LLValidation: LL   -241.776, normalized LL     -0.188, MSE   -234.464, normalized MSE     -0.183
+Training: LL   -172.406, normalized LL     -0.134, MSE   -161.042, normalized MSE     -0.125
