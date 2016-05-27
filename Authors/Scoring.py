@@ -6,7 +6,7 @@ import copy
 
 
 def free_energy(rbm, vis):
-    vb = np.dot(rbm.vbias.T, vis)  #sum(vis .* rbm.vbias, 1)
+    vb = np.dot(rbm.vbias.T, vis)
     Wx_b_log = np.sum(np.log(1 + np.exp(rbm.hbias + np.dot(rbm.W, vis))), axis=0)
     return - vb - Wx_b_log
 
@@ -31,11 +31,6 @@ def recon_error(rbm, vis):
     vis_rec = RBMBase.ProbVisCondOnHid(rbm, RBMBase.ProbHidCondOnVis(rbm, vis))
     # Get the total error over the whole tested visible set,
     # here, as MSE # change the difference!
-
-    # MSE
-    # dif = vis_rec - vis
-    # mse = np.sum(dif ** 2, 0)
-    # Cross-Entropy
     mse = np.sum(vis * np.log(vis_rec) + (1 - vis) * np.log(1 - vis_rec), 0)
 
     return mse

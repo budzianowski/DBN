@@ -7,6 +7,7 @@ import numpy as np
 import time
 import copy
 
+
 def calculate_weight_gradient(rbm, h_pos, v_pos, h_neg, v_neg, lr, approx="CD"):
     ## Stubtract step buffer from positive-phase to get gradient
     #gemm!('N', 'T', lr, h_pos, v_pos, -1.0, rbm.dW)         # dW <- LearnRate*<h_pos,v_pos> - dW
@@ -83,43 +84,45 @@ def get_negative_samples(rbm, vis_init, hid_init, approx, iterations):
 
 def fit_batch(rbm, vis,
                     persistent=True, lr=0.1, NormalizationApproxIter=1,
-                    weight_decay="none", decay_magnitude=0.01, approx="CD"):
+                    weight_decay=None, decay_magnitude=0.01, approx="CD"):
 
     # Determine how to acquire the positive samples based upon the persistence mode.
     v_pos = copy.deepcopy(vis)
     h_samples, h_means = SamplingGibbs.sample_hiddens(rbm, v_pos)
 
-    # For start - upgraded it
-    if rbm.persistent_chain_hid is None:
-        rbm.persistent_chain_hid = h_samples
-        rbm.persistent_chain_vis = copy.deepcopy(vis)
-
     # Set starting points in the case of persistence
     if persistent:
-        if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
+        if rbm.persistent_chain_hid is None:
+            # if we just initialize
+            rbm.persistent_chain_hid = copy.deepcopy(h_samples)
+            rbm.persistent_chain_vis = copy.deepcopy(vis)
+            h_init = rbm.persistent_chain_hid
             v_init = rbm.persistent_chain_vis
-            h_init = rbm.persistent_chain_hid
-        if "CD" in approx:
-            v_init = v_pos
-            h_init = rbm.persistent_chain_hid
+        else:
+            if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
+                v_init = rbm.persistent_chain_vis
+                h_init = rbm.persistent_chain_hid
+            if "CD" in approx:
+                v_init = copy.deepcopy(vis)
+                h_init = rbm.persistent_chain_hid
     else:
         if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-            v_init = v_pos
+            v_init = copy.deepcopy(vis)
             h_init = h_means
         if "CD" in approx:
-            v_init = v_pos               # A dummy setting
+            v_init = copy.deepcopy(vis)
             h_init = h_samples
 
-    # Calculate the negative samples according to the desired approximation mode
+    # Calculate the negative samples according to the desired approximation mode # TODO means samples use means for learning
     v_neg, h_neg = get_negative_samples(rbm, v_init, h_init, approx, NormalizationApproxIter)
 
     # If we are in persistent mode, update the chain accordingly
     if persistent:
         rbm.persistent_chain_vis = v_neg
-        rbm.persistent_chain_hid = h_neg
+        rbm.persistent_chain_hid = h_neg  # here needs to be sample
 
     # Update on weights
-    calculate_weight_gradient(rbm, h_samples, v_pos, h_neg, v_neg, lr, approx=approx)
+    calculate_weight_gradient(rbm, h_means, v_pos, h_neg, v_neg, lr, approx=approx)
 
     if weight_decay == "l2":
         regularize_weight_gradient(rbm, lr, L2Penalty=decay_magnitude)
@@ -165,20 +168,19 @@ def fit_batch(rbm, vis,
 
 
 def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, NormalizationApproxIter=1,
-             weight_decay="none", decay_magnitude=0.01,
-             monitor_every=5, monitor_vis=False, approx="CD",
-             persistent_start=3, save_progress=False):
+             weight_decay="none", decay_magnitude=0.01, approx="CD",
+             persistent_start=3):
 
     assert 0 <= data.all() <= 1
     n_features = data.shape[0]  # dimension of data
     n_samples = data.shape[1]   # number of samples
     n_hidden = rbm.W.shape[0]  # size of hidden layer
 
-    #lr /= batch_size  # Scale the learning rate by the batch size
-
+    lr /= batch_size
     batch_order = np.arange(int(n_samples / batch_size))
     for itr in range(n_epochs):
         print('Iteration {0}'.format(itr))
+
         # Check to see if we can use persistence at this epoch
         use_persistent = True if itr >= persistent_start else False
 
