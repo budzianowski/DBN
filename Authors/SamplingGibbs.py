@@ -33,14 +33,12 @@ def MCMC(rbm, init, iterations=1, StartMode="hidden"):
     # samples. Because of this, we increment the iteration count by 1
         hid_samples = init
         hid_means = init
-        #iterations += 1
 
     for ii in range(iterations):
         vis_samples, vis_means = sample_visibles(rbm, hid_samples)          # Sample the visible units from true distribution
         hid_samples, hid_means = sample_hiddens(rbm, vis_samples)           # Update the hidden unit means, a NMF-ish approach
 
     return vis_samples, vis_means, hid_samples, hid_means
-
 
 
 ## MAIN COURSE
