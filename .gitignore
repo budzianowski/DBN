@@ -3,4 +3,5 @@
 *.attr
 *.log
 notes
-Trash
+Trash/
+Authors/.idea/
