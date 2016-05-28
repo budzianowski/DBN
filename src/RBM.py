@@ -1,11 +1,13 @@
 import numpy as np
 from scipy.special import expit  # fast sigmoid
-
-from scipy.special import expit
 import SamplingEMF
 import SamplingGibbs
-import copy
 
+import copy
+try:
+    import cPickle as pickle
+except:
+    import pickle
 
 """
     # Boltzmann.RBM{V,H} (RBMBase.jl)
@@ -29,46 +31,51 @@ import copy
 """
 
 class RBM(object):
-    def __init__(self, n_vis, n_hid, sigma=0.01, momentum=0.0, TrainData=None, wiseStart=False, batchSize=100):
+    def __init__(self, params=None, n_vis=784, n_hid=500, sigma=0.01, momentum=0.0, TrainData=None, wiseStart=False):
 
-        # Initialize the weighting matrix by drawing from an iid Gaussian
-        # of the specified standard deviation.
-        if wiseStart:
-            self.W = np.random.uniform(
-                    low=-4 * np.sqrt(6. / (n_hid + n_vis)),
-                    high=4 * np.sqrt(6. / (n_hid + n_vis)),
-                    size=(n_hid, n_vis)
-                )
-        else:
-            self.W = np.random.normal(0, sigma, (n_hid, n_vis))
-
-        self.W2 = np.random.normal(0, sigma, (n_hid, n_vis))
-        self.W3 = np.random.normal(0, sigma, (n_hid, n_vis))
-
-        self.hbias = np.zeros((n_hid, 1))
-
-        self.dW = np.zeros((n_hid, n_vis))
-        self.dW_prev = np.zeros((n_hid, n_vis))
-
-        self.persistent_chain_vis = None
-        self.persistent_chain_hid = None
-
-        self.eps = 1e-8  # Some "tiny" value, used to enforce min/max boundary conditions
+        self.eps = 1e-6  # Some "tiny" value, used to enforce min/max boundary conditions
         self.momentum = momentum
-        self.idxs = 0  # index for computing proxy LL
 
-        # If the user specifies the training dataset, it can be useful to
-        # initialize the visible biases according to the empirical expected
-        # feature values of the training data.
-        # TODO: Generalize this biasing. Currently, the biasing is only written for
-        #       the case of binary RBMs.
+        if params is None:
+            # Initialize the weighting matrix by drawing from an iid Gaussian
+            # of the specified standard deviation.
+            if wiseStart:
+                self.W = np.random.uniform(
+                        low=-4 * np.sqrt(6. / (n_hid + n_vis)),
+                        high=4 * np.sqrt(6. / (n_hid + n_vis)),
+                        size=(n_hid, n_vis)
+                    )
+            else:
+                self.W = np.random.normal(0, sigma, (n_hid, n_vis))
 
-        # Initialization of visual bias - Hinton's recommendation
-        self.vbias = np.zeros((n_vis, 1))
-        if TrainData is not None:
-            temp = np.mean(TrainData, 1)
-            np.clip(temp, self.eps, 1 - self.eps, out=temp)
-            self.vbias = np.log(temp / (1 - temp)).reshape((n_vis, 1))
+            self.W2 = np.random.normal(0, sigma, (n_hid, n_vis))
+            self.W3 = np.random.normal(0, sigma, (n_hid, n_vis))
+
+            self.hbias = np.zeros((n_hid, 1))
+
+            self.dW = np.zeros((n_hid, n_vis))
+            self.dW_prev = np.zeros((n_hid, n_vis))
+
+            self.persistent_chain_vis = None
+            self.persistent_chain_hid = None
+
+            # TODO: Generalize this biasing. Currently, the biasing is only written for the case of binary RBMs.
+            # Initialization of visual bias - Hinton's recommendation
+            self.vbias = np.zeros((n_vis, 1))
+            if TrainData is not None:
+                temp = np.mean(TrainData, 1)
+                np.clip(temp, self.eps, 1 - self.eps, out=temp)
+                self.vbias = np.log(temp / (1 - temp)).reshape((n_vis, 1))
+        else:
+            self.W                      = params[0]
+            self.W2                     = params[1]
+            self.W3                     = params[2]
+            self.vbias                  = params[3]
+            self.hbias                  = params[4]
+            self.dW                     = params[5]
+            self.dW_prev                = params[6]
+            self.persistent_chain_vis   = params[7]
+            self.persistent_chain_hid   = params[8]
 
     def passHidToVis(self, hid):
         return np.dot(self.W.T, hid) + self.vbias
@@ -98,24 +105,21 @@ class RBM(object):
         fe_corrupted = self.free_energy(vis_corrupted)
 
         logPL = n_feat * np.log(expit(fe_corrupted - fe))
-
         return logPL
 
     def recon_error(self, vis):
         # Fully forward MF operation to get back to visible samples
         vis_rec = self.probVisCondOnHid(self.probHidCondOnVis(vis))
         # Get the total error over the whole tested visible set,
-        # here, as MSE # change the difference!
+        # here, as MSE
         mse = np.sum(vis * np.log(vis_rec) + (1 - vis) * np.log(1 - vis_rec), 0)
-
         return mse
 
     def score_samples_TAP(self, vis, n_iter=5, approx="tap2"):
         m_vis, m_hid = SamplingEMF.iter_mag(self, vis, iterations=n_iter, approx=approx)
-        eps = 1e-6
         # clipping to compute entropy
-        m_vis = np.clip(m_vis, eps, 1 - eps)
-        m_hid = np.clip(m_hid, eps, 1 - eps)
+        m_vis = np.clip(m_vis, self.eps, 1 - self.eps)
+        m_hid = np.clip(m_hid, self.eps, 1 - self.eps)
 
         m_vis2 = m_vis ** 2
         m_hid2 = m_hid ** 2
@@ -137,10 +141,30 @@ class RBM(object):
 
         return -fe + fe_tap
 
-# # TODO: check it
-# def PinField!(rbm:,pinning_field::Vec{Float64})
-#     pos_inf_locations = pinning_field > 0
-#     neg_inf_locations = pinning_field < 0
-#
-#     rbm.vbias(pos_inf_locations) =  Inf
-#     rbm.vbias(neg_inf_locations) = -Inf
+    def save(self, file_name):
+        print('Saving model to: {0}'.format(file_name))
+
+        with open(file_name, 'wb') as f:
+            pickle.dump(self.W, f)
+            pickle.dump(self.W2, f)
+            pickle.dump(self.W3, f)
+            pickle.dump(self.vbias, f)
+            pickle.dump(self.hbias, f)
+            pickle.dump(self.dW, f)
+            pickle.dump(self.dW_prev, f)
+            pickle.dump(self.persistent_chain_vis, f)
+            pickle.dump(self.persistent_chain_hid, f)
+
+    @staticmethod
+    def load(file_name):
+        print('Loading model form : {0}'.format(file_name))
+        params = []
+        with open(file_name, 'rb') as f:
+            while True:
+                try:
+                    p = pickle.load(f)
+                    params.append(p)
+                except EOFError:
+                    break
+        return params
+

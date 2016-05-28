@@ -66,6 +66,7 @@ def main():
     TrainSet = utils.binarize(TrainSet, threshold=0.001).T    # Create binary data
     ValidSet = utils.binarize(ValidSet, threshold=0.001).T    # Create binary data
 
+    load_file = 'test'
     if len(load_file) == 0:
         print('Initializing model')
         model = RBM.RBM(n_vis=visibleUnits, n_hid=hiddenUnits,
@@ -88,10 +89,44 @@ def main():
                      save_file        = save_file
         )
     else:
+        # place for plotting with learned structure
+        # TODO - stacked RBMs
+        import PIL.Image as Image
+        import plotting
+
+        import SamplingGibbs
         params = RBM.RBM.load(load_file)
         model = RBM.RBM(params=params)
-        print(model.W.shape, model.vbias.shape, model.hbias.shape)
 
+        n_samples = 10
+        n_chains = 20
+        image_data = np.zeros(
+            (29 * n_samples + 1, 29 * n_chains - 1),
+            dtype='uint8'
+        )
+
+
+        for idx in range(n_samples):
+            # generate `plot_every` intermediate samples that we discard,
+            # because successive samples in the chain are too correlated
+            #vis_mf = ValidSet[:, 0:n_chains].T
+            vis_mf = np.zeros((ValidSet[:, 0:n_chains]).shape)
+
+            for ii in range(n_chains):
+                vis_samples, vis_means, temp1, temp2 = SamplingGibbs.MCMC(model, ValidSet[:, ii:(ii+1)], iterations=100, StartMode="visible")
+                vis_mf[:, ii] = np.copy(vis_samples).reshape((784))
+
+            print(' ... plotting sample %d' % idx)
+            image_data[29 * idx:29 * idx + 28, :] = plotting.tile_raster_images(
+                X=vis_mf.T,
+                img_shape=(28, 28),
+                tile_shape=(1, n_chains),
+                tile_spacing=(1, 1)
+            )
+
+        # construct image
+        image = Image.fromarray(image_data)
+        image.save('samples.png')
 
 def get_arg(arg, args, default, type_):
     arg = '--'+arg
