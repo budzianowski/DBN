@@ -167,7 +167,7 @@ def fit_batch(rbm, vis,
 
 def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, NormalizationApproxIter=1,
              weight_decay="none", decay_magnitude=0.01, approx="CD",
-             persistent_start=3, trace_file=None):
+             persistent_start=3, trace_file=None, save_file=None):
 
     assert 0 <= data.all() <= 1
     n_features = data.shape[0]  # dimension of data
@@ -176,10 +176,13 @@ def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, Normalizatio
 
     lr /= batch_size
     batch_order = np.arange(int(n_samples / batch_size))
+
     if trace_file is not '':
         with open(trace_file, 'w') as f:
             f.write('train: LL, normLL, EMF, normEMF, MSE, normMSE, valid: LL, normLL, EMF, normEMF, MSE, normMSE,\n')
-            
+    else:
+        print('train: LL, normLL, EMF, normEMF, MSE, normMSE, valid: LL, normLL, EMF, normEMF, MSE, normMSE')
+
     for itr in range(n_epochs):
         print('Iteration {0}'.format(itr))
 
@@ -189,7 +192,7 @@ def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, Normalizatio
         if trace_file is not '':
             saveResults(trace_file, rbm, data, ValidSet, n_hidden, n_features)
         else:
-            printResults(rbm, data, ValidSet, approx, n_hidden, n_features)
+            printResults(rbm, data, ValidSet, n_hidden, n_features)
 
         for index in batch_order:
             if index % 100 == 0:
@@ -202,6 +205,10 @@ def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, Normalizatio
                       decay_magnitude=decay_magnitude,
                       lr=lr, approx=approx
             )
+
+    # saving parameters
+    if save_file:
+        rbm.save(save_file)
 
     return rbm
 
@@ -228,43 +235,25 @@ def saveResults(trace_file, rbm, trainSet, validSet, n_hidden, n_features):
         )
 
 
-def printResults(rbm, data, ValidSet, approx, n_hidden, n_features):
-    if "CD" in approx:
-        print("Pseudo LL")
-        meanLL = np.mean(rbm.score_samples(ValidSet[:, 0:10000]))
-        normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(rbm.recon_error(ValidSet[:, 0:10000]))
-        normMSE = meanMSE/(n_hidden + n_features)
-        print('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-        meanLL = np.mean(rbm.score_samples(data[:, 0:10000]))
-        normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(rbm.recon_error(data[:, 0:10000]))
-        normMSE = meanMSE/(n_hidden + n_features)
-        print('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-        print("EMF LL")
-        meanLL = np.mean(rbm.score_samples_TAP(ValidSet[:, 0:10000]))
-        normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(rbm.recon_error(ValidSet[:, 0:10000]))
-        normMSE = meanMSE/(n_hidden + n_features)
-        print('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-        meanLL = np.mean(rbm.score_samples_TAP(data[:, 0:10000]))
-        normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(rbm.recon_error(data[:, 0:10000]))
-        normMSE = meanMSE/(n_hidden + n_features)
-        print('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-    else:
-        meanLL = np.mean(rbm.score_samples_TAP(ValidSet[:, 0:10000]))
-        normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(rbm.recon_error(ValidSet[:, 0:10000]))
-        normMSE = meanMSE/(n_hidden + n_features)
-        print('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-        meanLL = np.mean(rbm.score_samples_TAP(data[:, 0:10000]))
-        normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(rbm.recon_error(data[:, 0:10000]))
-        normMSE = meanMSE/(n_hidden + n_features)
-        print('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
+def printResults(rbm, trainSet, validSet, n_hidden, n_features):
+    N = n_hidden + n_features
+    tmeanLL = np.mean(rbm.score_samples(trainSet[:, 0:10000]))
+    tnormLL = tmeanLL / N
+    tEMF = np.mean(rbm.score_samples_TAP(trainSet[:, 0:10000]))
+    tnormEMF = tEMF / N
+    tmeanMSE = np.mean(rbm.recon_error(trainSet[:, 0:10000]))
+    tnormMSE = tmeanMSE / N
 
+    vmeanLL = np.mean(rbm.score_samples(validSet[:, 0:10000]))
+    vnormLL = vmeanLL / N
+    vEMF = np.mean(rbm.score_samples_TAP(validSet[:, 0:10000]))
+    vnormEMF = vEMF / N
+    vmeanMSE = np.mean(rbm.recon_error(validSet[:, 0:10000]))
+    vnormMSE = vmeanMSE/ N
 
+    print('{0:5.3f}, {1:5.3f}, {2:5.3f}, {3:5.3f}, {4:5.3f}, {5:5.3f}, {6:5.3f}, {7:5.3f}, {8:5.3f}, {9:5.3f}, {10:5.3f}, {11:5.3f}\n'.format( \
+        tmeanLL, tnormLL, tEMF, tnormEMF, tmeanMSE, tnormMSE, vmeanLL, vnormLL, vEMF, vnormEMF, vmeanMSE, vnormMSE)
+    )
 # def generate(rbm, vis_init, approx, SamplingIterations):
 #     Nsamples = vis_init.shape[1]
 #     Nhid     = rbm.hbias.shape[0]

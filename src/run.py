@@ -14,23 +14,22 @@ try:
 except:
     import pickle
 
-
+                     # RBM parameters
 command_line_args = {'epochs': (50, int),
                      'visibleUnits': (784, int),
                      'hiddenUnits': (500, int),
                      'approxMethod': ('CD', str),
                      'approxSteps': (1, int),
                      'persistStart': (100, int),
-
+                     # Learning parameters
                      'batchSize': (100, int),
                      'learnRate': (0.005, float),
                      'momentum': (0.0, float),
                      'decayMagnitude': (0.0, float),
                      'decayType': ('l1', str),
                      'sigma': (0.001, float),
-
+                     # I/O settings
                      'trace_file': ('', str),          #if set, trace information will be written about number of training
-
                      'save_file': ('', str),           #if set will train model and save it to this file
                      'load_file': ('', str),
                      }
@@ -54,8 +53,9 @@ def main():
     sigma          = args['sigma']
     batchSize      = args['batchSize']
 
-    trace_file = args['trace_file'] # saving results
-    save_file = args['save_file']  # path for parameters
+    trace_file     = args['trace_file']  # saving results
+    save_file      = args['save_file']  # saving parameters
+    load_file      = args['load_file']  # loading parameters
 
     print('Loading data')
     with gzip.open('../data/mnist.pkl.gz', 'r') as f:
@@ -66,29 +66,33 @@ def main():
     TrainSet = utils.binarize(TrainSet, threshold=0.001).T    # Create binary data
     ValidSet = utils.binarize(ValidSet, threshold=0.001).T    # Create binary data
 
-    print('Initializing model')
-    rbm = RBM.RBM(visibleUnits, hiddenUnits,
-                  momentum  = momentum,
-                  sigma     = sigma,
-                  TrainData = TrainSet,
-                  wiseStart = True,
-                  batchSize = batchSize
-                  )
+    if len(load_file) == 0:
+        print('Initializing model')
+        model = RBM.RBM(n_vis=visibleUnits, n_hid=hiddenUnits,
+                      momentum  = momentum,
+                      sigma     = sigma,
+                      TrainData = TrainSet,
+                      wiseStart = True,
+        )
+        print('Start of training')
+        Training.fit(model, TrainSet, ValidSet,
+                     n_epochs         = epochs,
+                     weight_decay     = decayType,
+                     decay_magnitude  = decayMagnitude,
+                     lr               = learnRate,
+                     batch_size       = batchSize,
+                     NormalizationApproxIter = approxSteps,
+                     approx           = approxMethod,
+                     persistent_start = persistStart,
+                     trace_file       = trace_file,
+                     save_file        = save_file
+        )
+    else:
+        params = RBM.RBM.load(load_file)
+        model = RBM.RBM(params=params)
+        print(model.W.shape, model.vbias.shape, model.hbias.shape)
 
-    print('Start of training')
-    Training.fit(rbm, TrainSet, ValidSet,
-                 n_epochs         = epochs,
-                 weight_decay     = decayType,
-                 decay_magnitude  = decayMagnitude,
-                 lr               = learnRate,
-                 NormalizationApproxIter = approxSteps,
-                 approx           = approxMethod,
-                 persistent_start = persistStart,
-                 trace_file = trace_file
-    )
 
-
-# TODO move it to utils
 def get_arg(arg, args, default, type_):
     arg = '--'+arg
     if arg in args:
@@ -132,6 +136,7 @@ def print_args(args):
     for (k, v) in args.items():
         print('\t{0}: {1}'.format(k, v))
     print('--------------------------------------')
+
 
 if __name__ == '__main__':
     main()
