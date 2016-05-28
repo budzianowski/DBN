@@ -1,10 +1,9 @@
-import SamplingEMF as SamplingEMF
-import SamplingGibbs as SamplingGibbs
-import Scoring as Scoring
-import RBMBase as RBMBase
-import utils
+import SamplingEMF
+import SamplingGibbs
+import RBM
 import numpy as np
 import time
+import copy
 
 
 def calculate_weight_gradient(rbm, h_pos, v_pos, h_neg, v_neg, lr, approx="CD"):
@@ -71,57 +70,57 @@ def update_weights(rbm, approx):
 
 def get_negative_samples(rbm, vis_init, hid_init, approx, iterations):
     if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-        v_neg, h_neg = SamplingEMF.equilibrate(rbm, vis_init, hid_init, iterations=iterations, approx=approx)
+        v_samples, h_samples = SamplingEMF.equilibrate(rbm, vis_init, hid_init, iterations=iterations, approx=approx)
 
     if "CD" in approx:
         # In the case of Gibbs/MCMC sampling, we will take the binary visible samples as the negative
         # visible samples, and the expectation (means) for the negative hidden samples.
-        v_neg, temp1, temp2, h_neg = SamplingGibbs.MCMC(rbm, hid_init, iterations=iterations, StartMode="hidden")
+        v_samples, v_means, h_samples, h_means = SamplingGibbs.MCMC(rbm, hid_init, iterations=iterations, StartMode="hidden")
 
-    return v_neg, h_neg
+    return v_samples, h_samples
 
 
 def fit_batch(rbm, vis,
                     persistent=True, lr=0.1, NormalizationApproxIter=1,
-                    weight_decay="none", decay_magnitude=0.01, approx="CD"):
-    # vis == batch!
-    # Determine how to acquire the positive samples based upon the persistence mode.
-    v_pos = vis
+                    weight_decay=None, decay_magnitude=0.01, approx="CD"):
 
-    #h_samples, h_pos = SamplingGibbs.sample_hiddens(rbm, v_pos)
-    # change 1 Hinton page 6
+    # Determine how to acquire the positive samples based upon the persistence mode.
+    v_pos = copy.deepcopy(vis)
     h_samples, h_means = SamplingGibbs.sample_hiddens(rbm, v_pos)
 
     # Set starting points in the case of persistence
     if persistent:
-        if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-            v_init = rbm.persistent_chain_vis
+        if rbm.persistent_chain_hid is None:
+            # if we just initialize
+            rbm.persistent_chain_hid = copy.deepcopy(h_samples)
+            rbm.persistent_chain_vis = copy.deepcopy(vis)
             h_init = rbm.persistent_chain_hid
-
-        if "CD" in approx:
-            v_init = v_pos               # A dummy setting TODO check
-            h_init, temp = SamplingGibbs.sample_hiddens(rbm, rbm.persistent_chain_vis)
+            v_init = rbm.persistent_chain_vis
+        else:
+            if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
+                v_init = rbm.persistent_chain_vis
+                h_init = rbm.persistent_chain_hid
+            if "CD" in approx:
+                v_init = copy.deepcopy(vis)
+                h_init = rbm.persistent_chain_hid
     else:
         if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-            v_init = vis
+            v_init = copy.deepcopy(vis)
             h_init = h_means
-
         if "CD" in approx:
-            v_init = vis               # A dummy setting
-            #h_init = h_samples
-            # change 1 Hinton page 6
-            h_init = h_samples  # now they are samples
+            v_init = copy.deepcopy(vis)
+            h_init = h_samples
 
-    # Calculate the negative samples according to the desired approximation mode
+    # Calculate the negative samples according to the desired approximation mode # TODO means samples use means for learning
     v_neg, h_neg = get_negative_samples(rbm, v_init, h_init, approx, NormalizationApproxIter)
 
     # If we are in persistent mode, update the chain accordingly
     if persistent:
         rbm.persistent_chain_vis = v_neg
-        rbm.persistent_chain_hid = h_neg
+        rbm.persistent_chain_hid = h_neg  # here needs to be sample
 
     # Update on weights
-    calculate_weight_gradient(rbm, h_samples, v_pos, h_neg, v_neg, lr, approx=approx)
+    calculate_weight_gradient(rbm, h_means, v_pos, h_neg, v_neg, lr, approx=approx)
 
     if weight_decay == "l2":
         regularize_weight_gradient(rbm, lr, L2Penalty=decay_magnitude)
@@ -166,32 +165,31 @@ def fit_batch(rbm, vis,
      """
 
 
-def fit(rbm, data, ValidSet,
-             persistent=True, lr=0.001, n_epochs=10, batch_size=100, NormalizationApproxIter=1,
-             weight_decay="none", decay_magnitude=0.01,
-             monitor_every=5, monitor_vis=False, approx="CD",
-             persistent_start=3, save_progress=False):
+def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, NormalizationApproxIter=1,
+             weight_decay="none", decay_magnitude=0.01, approx="CD",
+             persistent_start=3, trace_file=None):
 
-    # TODO: This line needs to be changed to accomodate real-valued units
     assert 0 <= data.all() <= 1
     n_features = data.shape[0]  # dimension of data
     n_samples = data.shape[1]   # number of samples
     n_hidden = rbm.W.shape[0]  # size of hidden layer
 
-    lr /= batch_size  # Scale the learning rate by the batch size
-
-    # Random initialization of the persistent chains
-    rbm.persistent_chain_vis, temp = utils.random_columns(data, batch_size)
-    rbm.persistent_chain_hid = RBMBase.ProbHidCondOnVis(rbm, rbm.persistent_chain_vis)
-
-    use_persistent = False
+    lr /= batch_size
     batch_order = np.arange(int(n_samples / batch_size))
+    if trace_file is not '':
+        with open(trace_file, 'w') as f:
+            f.write('train: LL, normLL, EMF, normEMF, MSE, normMSE, valid: LL, normLL, EMF, normEMF, MSE, normMSE,\n')
+            
     for itr in range(n_epochs):
         print('Iteration {0}'.format(itr))
-        # Check to see if we can use persistence at this epoch
-        use_persistent = True if itr > persistent_start else False
 
-        printResults(rbm, data, ValidSet, approx, n_hidden, n_features)
+        # Check to see if we can use persistence at this epoch
+        use_persistent = True if itr >= persistent_start else False
+
+        if trace_file is not '':
+            saveResults(trace_file, rbm, data, ValidSet, n_hidden, n_features)
+        else:
+            printResults(rbm, data, ValidSet, approx, n_hidden, n_features)
 
         for index in batch_order:
             if index % 100 == 0:
@@ -202,49 +200,69 @@ def fit(rbm, data, ValidSet,
                       NormalizationApproxIter=NormalizationApproxIter,
                       weight_decay=weight_decay,
                       decay_magnitude=decay_magnitude,
-                      lr=lr, approx=approx)
+                      lr=lr, approx=approx
+            )
 
     return rbm
 
 
+def saveResults(trace_file, rbm, trainSet, validSet, n_hidden, n_features):
+    with open(trace_file, 'a') as f:
+        N = n_hidden + n_features
+        tmeanLL = np.mean(rbm.score_samples(trainSet[:, 0:10000]))
+        tnormLL = tmeanLL / N
+        tEMF = np.mean(rbm.score_samples_TAP(trainSet[:, 0:10000]))
+        tnormEMF = tEMF / N
+        tmeanMSE = np.mean(rbm.recon_error(trainSet[:, 0:10000]))
+        tnormMSE = tmeanMSE / N
+
+        vmeanLL = np.mean(rbm.score_samples(validSet[:, 0:10000]))
+        vnormLL = vmeanLL / N
+        vEMF = np.mean(rbm.score_samples_TAP(validSet[:, 0:10000]))
+        vnormEMF = vEMF / N
+        vmeanMSE = np.mean(rbm.recon_error(validSet[:, 0:10000]))
+        vnormMSE = vmeanMSE/ N
+
+        f.write('{0:5.3f}, {1:5.3f}, {2:5.3f}, {3:5.3f}, {4:5.3f}, {5:5.3f}, {6:5.3f}, {7:5.3f}, {8:5.3f}, {9:5.3f}, {10:5.3f}, {11:5.3f}\n'.format(\
+                tmeanLL, tnormLL, tEMF, tnormEMF, tmeanMSE, tnormMSE, vmeanLL, vnormLL, vEMF, vnormEMF, vmeanMSE, vnormMSE)
+        )
+
+
 def printResults(rbm, data, ValidSet, approx, n_hidden, n_features):
     if "CD" in approx:
-        with open('results', 'a') as f:
-            f.write("Pseudo LL")
-            meanLL = np.mean(Scoring.score_samples(rbm, ValidSet[:, 0:1000]))
-            normLL = meanLL/(n_hidden + n_features)
-            meanMSE = np.mean(Scoring.recon_error(rbm, ValidSet[:, 0:1000]))
-            normMSE = meanMSE/(n_hidden + n_features)
-            f.write('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}\n'.format(meanLL, normLL, meanMSE, normMSE))
-            meanLL = np.mean(Scoring.score_samples(rbm, data[:, 0:1000]))
-            normLL = meanLL/(n_hidden + n_features)
-            meanMSE = np.mean(Scoring.recon_error(rbm, data[:, 0:1000]))
-            normMSE = meanMSE/(n_hidden + n_features)
-            f.write('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}\n'.format(meanLL, normLL, meanMSE, normMSE))
-            f.write("EMF LL")
-            meanLL = np.mean(Scoring.score_samples_TAP(rbm, ValidSet[:, 0:1000]))
-            normLL = meanLL/(n_hidden + n_features)
-            meanMSE = np.mean(Scoring.recon_error(rbm, ValidSet[:, 0:1000]))
-            normMSE = meanMSE/(n_hidden + n_features)
-            f.write('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}\n'.format(meanLL, normLL, meanMSE, normMSE))
-            meanLL = np.mean(Scoring.score_samples_TAP(rbm, data[:, 0:1000]))
-            normLL = meanLL/(n_hidden + n_features)
-            meanMSE = np.mean(Scoring.recon_error(rbm, data[:, 0:1000]))
-            normMSE = meanMSE/(n_hidden + n_features)
-            f.write('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}\n'.format(meanLL, normLL, meanMSE, normMSE))
-    else:
-        meanLL = np.mean(Scoring.score_samples_TAP(rbm, ValidSet[:, 0:1000]))
+        print("Pseudo LL")
+        meanLL = np.mean(rbm.score_samples(ValidSet[:, 0:10000]))
         normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(Scoring.recon_error(rbm, ValidSet[:, 0:1000]))
+        meanMSE = np.mean(rbm.recon_error(ValidSet[:, 0:10000]))
         normMSE = meanMSE/(n_hidden + n_features)
         print('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-        meanLL = np.mean(Scoring.score_samples_TAP(rbm, data[:, 0:1000]))
+        meanLL = np.mean(rbm.score_samples(data[:, 0:10000]))
         normLL = meanLL/(n_hidden + n_features)
-        meanMSE = np.mean(Scoring.recon_error(rbm, data[:, 0:1000]))
+        meanMSE = np.mean(rbm.recon_error(data[:, 0:10000]))
         normMSE = meanMSE/(n_hidden + n_features)
         print('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
-
-
+        print("EMF LL")
+        meanLL = np.mean(rbm.score_samples_TAP(ValidSet[:, 0:10000]))
+        normLL = meanLL/(n_hidden + n_features)
+        meanMSE = np.mean(rbm.recon_error(ValidSet[:, 0:10000]))
+        normMSE = meanMSE/(n_hidden + n_features)
+        print('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
+        meanLL = np.mean(rbm.score_samples_TAP(data[:, 0:10000]))
+        normLL = meanLL/(n_hidden + n_features)
+        meanMSE = np.mean(rbm.recon_error(data[:, 0:10000]))
+        normMSE = meanMSE/(n_hidden + n_features)
+        print('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
+    else:
+        meanLL = np.mean(rbm.score_samples_TAP(ValidSet[:, 0:10000]))
+        normLL = meanLL/(n_hidden + n_features)
+        meanMSE = np.mean(rbm.recon_error(ValidSet[:, 0:10000]))
+        normMSE = meanMSE/(n_hidden + n_features)
+        print('Validation: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
+        meanLL = np.mean(rbm.score_samples_TAP(data[:, 0:10000]))
+        normLL = meanLL/(n_hidden + n_features)
+        meanMSE = np.mean(rbm.recon_error(data[:, 0:10000]))
+        normMSE = meanMSE/(n_hidden + n_features)
+        print('Training: LL {0:10.3f}, normalized LL {1:10.3f}, MSE {2:10.3f}, normalized MSE {3:10.3f}'.format(meanLL, normLL, meanMSE, normMSE))
 
 
 # def generate(rbm, vis_init, approx, SamplingIterations):

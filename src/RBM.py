@@ -1,6 +1,12 @@
 import numpy as np
 from scipy.special import expit  # fast sigmoid
 
+from scipy.special import expit
+import SamplingEMF
+import SamplingGibbs
+import copy
+
+
 """
     # Boltzmann.RBM{V,H} (RBMBase.jl)
     ## Description
@@ -44,7 +50,7 @@ class RBM(object):
         self.dW = np.zeros((n_hid, n_vis))
         self.dW_prev = np.zeros((n_hid, n_vis))
 
-        self.persistent_chain_vis = None #np.zeros((n_vis, batchSize)) # TODO should be size of the batch
+        self.persistent_chain_vis = None
         self.persistent_chain_hid = None
 
         self.eps = 1e-8  # Some "tiny" value, used to enforce min/max boundary conditions
@@ -64,22 +70,72 @@ class RBM(object):
             np.clip(temp, self.eps, 1 - self.eps, out=temp)
             self.vbias = np.log(temp / (1 - temp)).reshape((n_vis, 1))
 
+    def passHidToVis(self, hid):
+        return np.dot(self.W.T, hid) + self.vbias
 
-def PassHidToVis(rbm, hid):
-    return np.dot(rbm.W.T, hid) + rbm.vbias
+    def passVisToHid(self, vis):
+        return np.dot(self.W, vis) + self.hbias
 
+    def probHidCondOnVis(self, vis):
+        return expit(self.passVisToHid(vis))
 
-def PassVisToHid(rbm, vis):
-    return np.dot(rbm.W, vis) + rbm.hbias
+    def probVisCondOnHid(self, hid):
+        return expit(self.passHidToVis(hid))
 
+    def free_energy(self, vis):
+        vb = np.dot(self.vbias.T, vis)
+        Wx_b_log = np.sum(np.log(1 + np.exp(self.hbias + np.dot(self.W, vis))), axis=0)
+        return - vb - Wx_b_log
 
-def ProbHidCondOnVis(rbm, vis):
-    return expit(PassVisToHid(rbm, vis))
+    def score_samples(self, vis):
+        n_feat, n_samples = vis.shape
+        vis_corrupted = copy.deepcopy(vis)
+        idxs = np.random.random_integers(0, n_feat - 1, n_samples)
+        for (i, j) in zip(idxs, range(n_samples)):  # corruption of particular bit in a given (j) sample
+            vis_corrupted[i, j] = 1 - vis_corrupted[i, j]
 
+        fe = self.free_energy(vis)
+        fe_corrupted = self.free_energy(vis_corrupted)
 
-def ProbVisCondOnHid(rbm, hid):
-    return expit(PassHidToVis(rbm, hid))
+        logPL = n_feat * np.log(expit(fe_corrupted - fe))
 
+        return logPL
+
+    def recon_error(self, vis):
+        # Fully forward MF operation to get back to visible samples
+        vis_rec = self.probVisCondOnHid(self.probHidCondOnVis(vis))
+        # Get the total error over the whole tested visible set,
+        # here, as MSE # change the difference!
+        mse = np.sum(vis * np.log(vis_rec) + (1 - vis) * np.log(1 - vis_rec), 0)
+
+        return mse
+
+    def score_samples_TAP(self, vis, n_iter=5, approx="tap2"):
+        m_vis, m_hid = SamplingEMF.iter_mag(self, vis, iterations=n_iter, approx=approx)
+        eps = 1e-6
+        # clipping to compute entropy
+        m_vis = np.clip(m_vis, eps, 1 - eps)
+        m_hid = np.clip(m_hid, eps, 1 - eps)
+
+        m_vis2 = m_vis ** 2
+        m_hid2 = m_hid ** 2
+
+        Entropy = np.sum(m_vis * np.log(m_vis) + (1.0 - m_vis) * np.log(1.0 - m_vis), 0) \
+                  + np.sum(m_hid * np.log(m_hid) + (1.0 - m_hid) * np.log(1.0 - m_hid), 0)
+        Naive = np.sum(self.vbias * m_vis, 0) + np.sum(self.hbias * m_hid, 0) + \
+                np.sum(m_hid * np.dot(self.W, m_vis), 0)
+        Onsager = 0.5 * np.sum((m_hid-m_hid2) * np.dot(self.W2, m_vis-m_vis2), 0)
+
+        fe_tap = Entropy - Naive - Onsager
+
+        if "tap3" in approx:
+            # TODO third term
+            pass
+            fe_tap += 0
+
+        fe = self.free_energy(vis)
+
+        return -fe + fe_tap
 
 # # TODO: check it
 # def PinField!(rbm:,pinning_field::Vec{Float64})
