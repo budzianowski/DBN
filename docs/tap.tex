@@ -1,0 +1,455 @@
+\documentclass[12pt,a4paper]{article}
+%twocolumn
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{lmodern}
+\newcounter{defcounter}
+\setcounter{defcounter}{0}
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+\geometry{margin=2cm} % for example, change the margins to 2 inches all round
+
+\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indenet
+\usepackage{graphicx}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{basicstyle=\ttfamily,
+ backgroundcolor=\color{backcolour},   
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+%getting the dots
+\usepackage{tocloft}
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+%%%Definitions
+\newcommand{\bet}{\boldsymbol{\beta}}
+\newcommand{\xx}{\widetilde{\boldsymbol{x}}^{(n)}}
+
+\usepackage{float}
+%\usepackage{multirow}
+
+%% Theorems
+\newtheorem{theorem}{Theorem}
+ 
+
+% no linebreaks after subsection!
+%\usepackage{titlesec}
+%\titleformat{\subsection}[runin]
+%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\begin{document}
+%Interactions between McKay and this
+%$$ \lambda_i(\beta) = \alpha_i$$
+
+\section{Intro}
+Define variational free energy with a set of external auxiliary fields (Lagrange multipliers):
+$$ - \beta G = \ln \sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j +\beta \sum_i  a_i s_i  + \sum_i \lambda_i (\beta) (s_i - m_i) \right)$$
+We are interested in expanding  $-\beta G(\beta, \mathbf{m})$ around $\beta =0$ where the spins are entirely controlled by their auxiliary fields:
+$$-\beta G = -(\beta G)_{\beta=0} - \left( \frac{\partial (\beta G)}{\partial \beta}\right)_{\beta = 0}  \beta - \left( \frac{\partial^2 (\beta G)}{\partial \beta^2}\right)_{\beta = 0}  \frac{\beta^2}{2} - ...$$
+At $\beta = 0$ the spins are uncorrelated (where $\mathbb{E}$ refers to the average configuration under the Boltzmann measure):
+\begin{align}
+\begin{split}
+ m_i = \mathbb{E}_{\beta =0}(s_i) = \frac{\exp(\lambda_i(0))}{\exp(\lambda_i(0)) + 1}= \text{sigmoid}(\lambda_i(0))
+\label{eq:mi}
+\end{split}
+\end{align}
+and
+\begin{align}
+\begin{split}
+ -(\beta G)_{\beta =0 } = & \ln \sum_{\mathbf{s}} \exp \left( \sum_i \lambda_i (0) (s_i - m_i) \right) \\
+ = & \ln \left\lbrace \sum_{s_1}  \exp \left( \lambda_1 (0) (s_1 - m_1) \right) ... \sum_{s_n}  \exp \left(\lambda_n (0) (s_n - m_n) \right) \right\rbrace \\
+ = &\ln \left\lbrace (\exp(\lambda_i(0)) +1)\exp(-\lambda_1(0)m_1) ... (\exp(\lambda_i(0)) +1)\exp(-\lambda_1(0)m_n) \right\rbrace \\
+ = & \sum_i \left( \ln \left[ 1 + \left( \frac{m_i}{1-m_i}\right) \right] - \lambda_i(0)m_i  \right)
+\end{split}
+\end{align}
+Using \ref{eq:mi}, we obtain:
+$$\lambda_i(0) = \text{logit} (m_i) = \ln \left( \frac{m_i}{1-m_i} \right)$$
+and thus:
+\begin{align*}
+\begin{split}
+ -(\beta G)_{\beta =0 } = & \sum_i \left\lbrace  \ln \left( \frac{1}{1 -m_i}  \right) - m_i\ln \left(\frac{m_i}{1- m_i} \right)   \right\rbrace\\
+ = & - \sum_i \left[m_i\ln (m_i) +  (1 - m_i)\ln \left( 1-m_i \right)\right]  
+ \end{split}
+\end{align*}
+ Yedida and Georges showed how to create the Taylor expansion beyond $O(\beta^2)$ (TODO referring to MF and TAP variant) (derivation in Appendix):
+\begin{align*}
+\begin{split}
+-\beta G = & - \sum_i \left[m_i\ln (m_i) +  (1 - m_i)\ln \left( 1-m_i \right)\right]  \\
+& + \beta \sum_{(ij)} w_{ij} m_i m_j + \beta \sum_i a_i m_i\\
+& + \frac{\beta^2}{2} \sum_{(ij)} w_{ij}^2 (m_i - m_i^2)(m_j-m_j^2)\\
+& + \frac{2\beta^3}{3} \sum_{(ij)} w_{ij}^3 (m_i - m_i^2)(\frac{1}{2} - m_i)(m_j - m_j^2)(\frac{1}{2} - m_j)
+\end{split}
+\end{align*}
+
+\section*{Appendix}
+Lets define
+energy as:
+\begin{align}
+\begin{split}
+E = -\sum_{ij} w_{ij}s_i s_j - \sum_i a_i s_i
+\end{split}
+\end{align}
+and introduce the following operator:
+\begin{align}
+\begin{split}
+U \equiv E - \mathbb{E}(E) - \sum_i \frac{\partial \lambda_i (\beta)}{\partial \beta} (s_i - m_i)
+\label{eq:Uoperator}
+\end{split}
+\end{align}
+which poses useful property:
+$$\mathbb{E}(U) = 0$$
+For any other operator $O$ we then have:
+\begin{align}
+\begin{split}
+ \frac{\partial \mathbb{E}(O)}{\partial \beta}  =   \mathbb{E} \left(\frac{\partial O}{\partial \beta} \right) - \mathbb{E}(OU)
+ \label{eq:obeta}
+\end{split}
+\end{align}
+Now, the first derivative from the Taylor expansion is:
+\begin{align*}
+\begin{split}
+\frac{\partial (\beta G)}{\partial \beta} = &
+\dfrac{\sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j +  \beta \sum_i a_is_i+ \sum_i \lambda_i (\beta) (s_i - m_i) \right) \left(\sum_{(ij)} w_{ij} s_i s_j +  \sum_i a_is_i + \sum_i \frac{\partial \lambda_i(\beta)}{\partial \beta} (s_i - m_i) \right) }
+{\sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j + \sum_i a_is_i + \sum_i \lambda_i (\beta) (s_i - m_i) \right)} \\
+ = & \sum_{(ij)} w_{ij} \mathbb{E}(  s_i s_j) +  \sum_i a_i  \mathbb{E}( s_i) + \frac{\partial \lambda_i(\beta)}{\partial \beta} \sum_i \mathbb{E}(
+ s_i - m_i ) \\
+\end{split}
+\end{align*}
+In the case of $\beta = 0$ we have:
+$$ \left. \frac{\partial (\beta G)}{\partial \beta}\right|_{\beta = 0} = \sum_{(ij)} w_{ij} m_i m_j +  \sum_i a_i m_i $$
+Using \ref{eq:obeta} we obtain:
+\begin{align}
+\begin{split}
+\frac{\partial m_i}{\partial \beta} = 0 = \frac{\partial \mathbb{E}(s_i)}{\partial \beta}  =   \mathbb{E} \left(\frac{\partial s_i}{\partial \beta} \right) - \mathbb{E}(s_iU) =- \mathbb{E}(s_iU)  =- \mathbb{E}(U(s_i - m_i)) 
+\end{split}
+\end{align}
+Thus:
+\begin{align}
+\begin{split}
+\frac{\partial U}{\partial \beta}  =  ~&\frac{\partial H}{\partial \beta} - \frac{\partial \mathbb{E}(H)}{\partial \beta} - \sum_i \frac{\partial^2 \lambda_i (\beta)}{\partial \beta^2} (s_i - m_i)\\
+= ~& \mathbb{E}(U^2) - \sum_i \frac{\partial^2 \lambda_i (\beta)}{\partial \beta^2} (s_i - m_i)
+\end{split}
+\end{align}
+The second derivative has the form:
+\begin{align}
+\begin{split}
+\frac{\partial^2 U}{\partial \beta^2}  =  ~& 2 \mathbb{E}\left(\frac{\partial U}{\partial \beta}U  \right) - \mathbb{E}(U^3) - \sum_i \frac{\partial^3 \lambda_i (\beta)}{\partial \beta^3} (s_i - m_i) \\
+= ~& - \mathbb{E}(U^3) - \sum_i \frac{\partial^3 \lambda_i (\beta)}{\partial \beta^3} (s_i - m_i)
+\end{split}
+\end{align}
+Coming back to our expansion of free energy using formulas derived above we now can calculate:
+\begin{align}
+\begin{split}
+ \frac{\partial (\beta G)}{\partial \beta} = \mathbb{E}(E) - \sum_i \frac{\partial\lambda_i (\beta)}{\partial \beta}\mathbb{E}(s_i - m_i) = \mathbb{E}(E) 
+\end{split}
+\end{align}
+and:
+\begin{align}
+\begin{split}
+ \frac{\partial^2 (\beta G)}{\partial \beta^2} = &~ \mathbb{E}\left( \frac{\partial E}{\partial \beta} \right) - \mathbb{E}(EU) = - \mathbb{E}(U^2)\\
+\\
+ \frac{\partial^3 (\beta G)}{\partial \beta^3}= &~ - 2\mathbb{E}\left( U \frac{\partial U}{\partial \beta} \right) + \mathbb{E}(U^3)  = \mathbb{E}(U^3)  \\
+ \\
+  \frac{\partial^4 (\beta G)}{\partial \beta^4}= &~ 3\mathbb{E}\left( U^2 \frac{\partial U}{\partial \beta} \right) - \mathbb{E}(U^4)  = 3\left(\mathbb{E}(U^2)\right)^2 -3\sum_i \frac{\partial^2 \lambda_i (\beta)}{\partial \beta^2}\mathbb{E}(U^2(s_i-m_i))- \mathbb{E}(U^4) 
+  \label{eq:higherOrders}
+\end{split}
+\end{align}
+TS was considered around point $\beta =0$. Using derivations from above we obtain again a 'naive' term:
+\begin{align}
+\begin{split}
+\left. \frac{\partial (\beta G)}{\partial \beta} \right|_{\beta =0} = \mathbb{E} _{\beta = 0}(E) = - \sum_{(ij)} w_{ij} m_i m_j - \sum_i a_i m_i = - \frac{1}{2} \sum_i \sum_j w_{ij}m_i m_j - \sum_i a_i m_i
+\end{split}
+\end{align}
+Consider now 
+\begin{align}
+\begin{split}
+\left.\frac{\partial (\beta G)}{\partial m_i \partial \beta}\right|_{\beta = 0} = 
+- \sum_{j \neq i} w_{ij} m_j - a_i
+\end{split}
+\end{align}
+On the other hand:
+\begin{align}
+\begin{split}
+\left. \frac{\partial (\beta G)}{\partial m_i \partial \beta}\right|_{\beta = 0} = \left. \frac{\partial (\beta G)}{\partial \beta \partial m_i }\right|_{\beta = 0} = \frac{\partial}{\partial \beta} \mathbb{E} (\lambda_i(\beta)) =  \left. \frac{\partial \lambda_i (\beta)}{\partial \beta}\right|_{\beta =0}
+ \label{eq:maxwell}
+ \end{split}
+\end{align}
+Substituting  \ref{eq:maxwell} into  \ref{eq:Uoperator} gives us:
+\begin{align}
+\begin{split}
+U_{\beta = 0} = & -\sum_{(ij)} w_{ij}s_is_j -\sum_i a_i s_i + \frac{1}{2} \sum_i \sum_j w_{ij} m_i m_j + \sum_i a_i m_i + \sum_i \left(\sum_{j \neq i} w_{ij} m_j  + a_i\right)(s_i - m_i ) \\
+= & -\sum_{(ij)} w_{ij}s_i s_j - \frac{1}{2}\sum_{(ij)} w_{ij} m_i m_j + \sum_i \sum_{j \neq i} w_{ij} s_i m_j \\
+= & - \sum_{(ij)} w_{ij} (s_i - m_i)(s_j- m_j) = - \sum_l w_l y_l
+ \end{split}
+\end{align}
+where $y_l$ stands for the 'link' operator $w_l = w_{ij}$ and $y_l = (s_i -m_i)(s_j-m_j)$ which poses useful properties:
+\begin{align}
+\begin{split}
+\mathbb{E}(y_l)_{\beta =0} = & ~\mathbb{E}(s_i s_j) -m_j\mathbb{E}(s_i) - m_i\mathbb{E}(s_j) + m_i m_j = 0 \\
+\mathbb{E}(y_l(s_i-m_i))_{\beta =0} = & ~ m_j - m_j -m_i^2m_j + m_i^2m_j \\
+ & ~ - m_i^2m_j + m_i^2m_j + m_i^2m_j - m_i^2m_j \\
+ = &~ 0
+ \end{split}
+\end{align}
+Finally, if $k \neq l$ then:
+$$\mathbb{E}(y_k y_l)= \mathbb{E}(y_k)\mathbb{E}(y_l)=0$$
+while for $k = l$ we have:
+\begin{align}
+\begin{split}
+\mathbb{E}((s_i-m_1)^2(s_j-m_j)^2)= & ~m_im_j - 2m_im_j^2 +m_im_j^2 - 2m_i^2m_j + 4m_1^2m_j^2\\
+& - 2m_i^2m_j^2 + m_i^2m_j -2m_i^2m_j^2 + m_i^2m_j^2 \\
+= & ~ (m_i -m_i^2)(m_j-m_j^2)
+\label{eq:Yoperator}
+ \end{split}
+\end{align}
+Using properties from \ref{eq:Yoperator} in equations \ref{eq:higherOrders} we can obtain:
+\begin{align*}
+\begin{split}
+\left. \frac{\partial^2 (\beta G)}{\partial \beta^2}\right|_{\beta = 0} = & -\mathbb{E}(U^2)_{\beta =0}\\
+= & - \sum_{l_i l_2} w_{l_i}w_{l_2} \mathbb{E}_{\beta = 0} (y_{l_1}y_{l_2} ) \\
+= & - \sum_{(i,j)} w_{ij}^2 (m_i-m_i^2)(m_j-m_j^2)
+\end{split}
+\end{align*}
+which yields the TAP-Onsager term.
+
+%Following approach from \ref{eq:maxwell} we have:
+%\begin{align*}
+%\begin{split}
+%\left.\frac{\partial^2 \lambda_i (\beta)}{\partial \beta^2}\right|_{\beta =0} = \left.\frac{\partial^3 (\beta G)}{\partial m_i \partial \beta^2}\right|_{\beta = 0} = 2m_i \sum_{j \neq i} w_{ij}^2(1-m_j^2)
+%\end{split}
+%\end{align*}
+
+To obtain the next term for the Taylor expansion we need to compute $\mathbb{E}(y_{l_1} y_{l_2} y_{l_3})$ term and by definition the structure of the RBM model doesn't admit triangles in its corresponding factor graphs. Thus, we need to consider only the case when $l_1 = l_2 = l_3$:
+\begin{align}
+\begin{split}
+\mathbb{E}((s_i-m_1)^3(s_j-m_j)^3)= & ~m_i m_j -3m_i m_j^2 +2 m_i m_j^2 + 2m_im_j^3 -3 m_i^2 m_j 
+ + 2 m_i^3 m_j \\
+ & + 9 m_i^2m_j^2 - 6m_i^3 m_j^2 - 6 m_i^2 m_j^3 + 4m_i^3m_j^3 
+ \\
+  = &~ 4(m_i - m_i^2)(\frac{1}{2} - m_i)(m_j - m_j^2)(\frac{1}{2} - m_j),
+ \end{split}
+\end{align}
+which gives the third term:
+\begin{align*}
+\begin{split}
+\left. \frac{\partial^3 (\beta G)}{\partial \beta^3}\right|_{\beta = 0} = \frac{2\beta^3}{3} \sum_{(ij)} w_{ij}^3 (m_i - m_i^2)(\frac{1}{2} - m_i)(m_j - m_j^2)(\frac{1}{2} - m_j).
+\end{split}
+\end{align*}
+\end{document}
+
+\section{GB-RBMs}
+\begin{align}
+\begin{split}
+E = -\sum_{ij} w_{ij}\frac{s_i}{\sigma_i} s_j - \sum_i \frac{(s_i - a_i)^2}{2\sigma_i^2}  - \sum_j b_j s_j 
+\end{split}
+\end{align}
+
+\begin{align}
+\begin{split}
+\left. \frac{\partial (\beta G)}{\partial \beta} \right|_{\beta =0} = &~ \mathbb{E} _{\beta = 0}(E) = - \sum_{(ij)} w_{ij} \frac{m_i}{\sigma_i} m_j  - \sum_i \frac{1}{\sigma^2_i} \mathbb{E}(s_i^2 +2a_i s_i + a_i^2) - \sum_j b_j m_j\\
+=& ~ - \frac{1}{2} \sum_i \sum_j w_{ij}\frac{m_i}{\sigma_i}  m_j  - \sum_i \frac{1}{\sigma^2_i}\left(\sigma^2_i+ m_i^2 + 2a_im_i+a_i^2 \right) - \sum_jb_j m_j
+\end{split}
+\end{align}
+
+Hinton: In many applications, it is much easier to first normalise each component of the data to have zero mean and unit variance and then to use noise free reconstructions with the variance set to 1. The reconstructed value of a Gaussian visible unit is then equal to its top down input from the binary hidden units plus its bias.\\
+
+(Divide lagrange multipliers on two stages? or all gaussians?)
+Consider now 
+\begin{align}
+\begin{split}
+\left.\frac{\partial (\beta G)}{\partial m_i \partial \beta}\right|_{\beta = 0} = 
+- \sum_{j \neq i} w_{ij} \frac{m_j}{\sigma_i} - 2 \frac{m_i}{\sigma_i^2} + \frac{2a_i}{\sigma_i^2}
+\end{split}
+\end{align}
+On the other hand:
+\begin{align}
+\begin{split}
+\left. \frac{\partial (\beta G)}{\partial m_i \partial \beta}\right|_{\beta = 0} = \left. \frac{\partial (\beta G)}{\partial \beta \partial m_i }\right|_{\beta = 0} = \frac{\partial}{\partial \beta} \mathbb{E} (\lambda_i(\beta)) =  \left. \frac{\partial \lambda_i (\beta)}{\partial \beta}\right|_{\beta =0}
+ \label{eq:maxwell}
+ \end{split}
+\end{align}
+Substituting  \ref{eq:maxwell} into  \ref{eq:Uoperator} gives us A.12:
+\begin{align}
+\begin{split}
+U_{\beta = 0} = & -\sum_{(ij)} w_{ij}s_is_j -\sum_i a_i s_i + \frac{1}{2} \sum_i \sum_j w_{ij} m_i m_j + \sum_i a_i m_i + \sum_i \left(\sum_{j \neq i} w_{ij} m_j  + a_i\right)(s_i - m_i ) \\
+= & -\sum_{(ij)} w_{ij}s_i s_j - \frac{1}{2}\sum_{(ij)} w_{ij} m_i m_j + \sum_i \sum_{j \neq i} w_{ij} s_i m_j \\
+= & - \sum_{(ij)} w_{ij} (s_i - m_i)(s_j- m_j) = - \sum_l w_l y_l
+ \end{split}
+\end{align}
+\subsection{Normalised real-valued variables}
+$\mathbb{E}(s_i) = 0$, $\text{Var}(s_i) = \mathbb{E}(s_i^2) - \mathbb{E}^2(s_i) = 1$, $\mathbb{E}(s_i^2) = 1$
+
+\begin{align}
+\begin{split}
+E = -\sum_{ij} w_{ij}s_i s_j - \sum_i s_i^2 - \sum_j b_j s_j
+\end{split}
+\end{align}
+Everything is similar as in the original model:
+\begin{align}
+\begin{split}
+\left. \frac{\partial (\beta G)}{\partial \beta} \right|_{\beta =0} = & \mathbb{E} _{\beta = 0}(E) = - \sum_{(ij)} w_{ij} m_i m_j - \sum_i \mathbb{E}( s_i^2)  -  \sum_j b_j m_j\\
+=& \sum_{(ij)} w_{ij} m_i m_j - N -  \sum_j b_j m_j
+\end{split}
+\end{align}
+
+
+\subsection{Variance set to 1}
+\begin{align}
+\begin{split}
+E = -\sum_{ij} w_{ij}s_i s_j - \sum_i (s_i - a_i)^2 - \sum_j a_j s_j
+\end{split}
+\end{align}
+
+$\text{Var}(v_i) =\mathbb{E}(v_i^2) - \mathbb{E}(v_i)^2 = 1$
+Everything similar besides:
+\begin{align}
+\begin{split}
+\left. \frac{\partial (\beta G)}{\partial \beta} \right|_{\beta =0} = & \mathbb{E} _{\beta = 0}(E) = - \sum_{(ij)} w_{ij} m_i m_j  - \sum_i \mathbb{E}(v_i^2 +2b_i v_i + b_i^2) - \sum_j b_j m_j\\
+=& ~ - \frac{1}{2} \sum_i \sum_j w_{ij}m_i m_j  - \sum_i \left(1 + m_i^2 + 2a_im_i+a_i^2 \right) - \sum_jb_j m_j
+\end{split}
+\end{align}
+
+Consider now 
+\begin{align}
+\begin{split}
+\left.\frac{\partial (\beta G)}{\partial m_i \partial \beta}\right|_{\beta = 0} = 
+- \sum_{j \neq i} w_{ij} m_j -2 m_i - 2a_i 
+\end{split}
+\end{align}
+
+NOT TRUE!
+\begin{align}
+\begin{split}
+U_{\beta = 0} = & -\sum_{(ij)} w_{ij}s_is_j -\sum_i a_i s_i + \frac{1}{2} \sum_i \sum_j w_{ij} m_i m_j + \sum_i a_i m_i + \sum_i \left(\sum_{j \neq i} w_{ij} m_j  +2 m_i +2a_i \right)(s_i - m_i ) \\
+= & -\sum_{(ij)} w_{ij}s_i s_j - \frac{1}{2}\sum_{(ij)} w_{ij} m_i m_j + \sum_i \sum_{j \neq i} w_{ij} s_i m_j \\
+= & - \sum_{(ij)} w_{ij} (s_i - m_i)(s_j- m_j) = - \sum_l w_l y_l
+ \end{split}
+\end{align}
+
+\section{RBMs}
+\subsection{Intro}
+$$ E (\mathbf{v,h}) = - \sum_i a_i v_i - \sum_j b_j h_j - \sum_{i,j} v_i w_{ij}h_j$$
+
+$$ P(\mathbf{v, h}) = \frac{1}{Z} e^{-E(\mathbf{v,h})}
+$$
+
+$$ Z  =  \sum_{\mathbf{v,h}} e^{-E(\mathbf{v,h})} $$
+
+$$ F = - \ln Z $$
+
+$$ F^c (\mathbf{v}) = \ln \left( \sum_{\mathbf{h}} e^{-E(\mathbf{v,h})} \right)= \ln \left( \sum_{h_1} e^{-E(\mathbf{v},h_1)}  ...  \sum_{h_n} e^{-E(\mathbf{v},h_n)} \right) \\$$
+
+$$\mathcal{L} = \ln P(\mathbf{v}) = F^c(\mathbf{v}) - F$$
+where $F$ is the \emph{free energy} of the RBM.
+\subsection{Derivation}
+Eq. 7. 
+Set $\beta = 1$ and multiply by $-1$:
+\begin{align*}
+\begin{split}
+G(\mathbf{m^v},\mathbf{m^h}) ~\simeq & ~H(\mathbf{m^v}, \mathbf{m^h}) \\
+&  - \sum_i a_i m_i^v - \sum_j b_j m_j^h \\
+ & - \sum_{i,j} \left( 
+ m_i^v w_{ij} m_j^h +  \frac{w_{ij}^2}{2}(m_i^v - (m_i^v)^2)(m_j^h - (m_j^h)^2) 
+  \right) \\
+    &  - \sum_{i,j} \left( 
+ \frac{2w_{ij}^3}{3}(m_i^v - (m_i^v)^2)(\frac{1}{2} - m_i^v)(m_j^h - (m_j^h)^2)(\frac{1}{2} - m_j^h)  \right) \\
+     &  - \sum_{i,j, k} \left( 
+w_{ij}w_{jk}w_{ki}(m_i^v - (m_i^v)^2)(m_j^v - (m_j^v)^2)(m_k^v - (m_k^v)^2)  \right) \\
+\label{eq:expansionRBM}
+\end{split}
+\end{align*}
+Denote the last four lines of equation \cite{eq:expansionRBM} by $m$.
+
+\subsection{Gradients}
+Eq. 8. The stationary condition:
+$$ \frac{\partial G}{\partial m_i^v} = \frac{m_i^v}{m_i^v} + \ln m_i - \frac{1 - m_i^v}{1 - m_i^v} - \ln (1 - m_i^v) -m$$
+By setting it to stationary condition we obtain:
+$$ \ln \left(\frac{m_i^v}{1 - m_i^v} \right) = m$$
+$$ m_i^v = \frac{\exp(m)}{1 + \exp(m)} = \text{sigmoid}(m)$$
+Similar condition can be obtained for $\mathbf{m}^h$.
+
+Eq. 11. Gradients:
+
+$$w_{ij}^{t+1} = w_{ij}^{t} + \eta \triangle w_{ij}^{t+1}$$
+
+$$ \triangle w_{ij}^{t+1} \propto \frac{\partial \mathcal{L}}{\partial w_{ij}} \simeq -\frac{\partial F}{\partial w_{ij}} - \frac{\partial F^{EMF}}{\partial w_{ij}}$$
+
+\begin{align*}
+\begin{split}
+\frac{\partial F^{EMF}}{\partial w_{ij}} = & -m_i^v m_j^h - w_{ij}^t(m_i^v - (m_i^v)^2)(m_j^h - (m_j^h)^2) \\
+ & - 2w_{ij}^2 (m_i^v - (m_i^v)^2)(\frac{1}{2} - m_i^v)(m_j^h - (m_j^h)^2)(\frac{1}{2} - m_j^h) \\
+  &  - \sum_{k} \left( 
+w_{jk}w_{ki}(m_i^v - (m_i^v)^2)(m_j^v - (m_j^v)^2)(m_k^v - (m_k^v)^2)  \right) \\
+\end{split}
+\end{align*}
+
+$$\frac{\partial \mathcal{L}}{\partial a_i} = \frac{\partial F^{EMF}}{\partial a_i} = -m_i^v$$
+
+$$\frac{\partial \mathcal{L}}{\partial b_j} = \frac{\partial F^{EMF}}{\partial b_j} = -m_j^h$$
+
+
+
+\section{Implementation details}
+1. In the case of a fixed point algorithms is usually better to use damped updates \cite{murphy2012machine} of the form:
+$$ m_i^{t} = (1- \lambda) m_i^{t-1} + \lambda(update) TODO),$$
+for $0 <\lambda<1$.
+
+2. Gibbs free energy p.19 Yedidia
+\end{document}
+
+\section{s [-1 1]}
+
+\begin{align}
+\begin{split}
+ m_i = \mathbb{E}_{\beta =0}(s_i) = \frac{\sum_{s_i = \pm 1 } s_i \exp(\lambda_i (0)s_i )  
+\exp(-\lambda_i (0)m_i ) }{\sum_{s_i = \pm 1 } \exp(\lambda_i (0)s_i ) \exp(-\lambda_i (0)m_i )} =
+\tanh (\lambda_i (0))
+\label{eq:mi}
+\end{split}
+\end{align}
+
+\begin{align}
+\begin{split}
+ -(\beta G)_{\beta =0 } = & \ln \sum_{\mathbf{s}} \exp \left( \sum_i \lambda_i (0) (s_i - m_i) \right) \\
+ = & \ln \left\lbrace \sum_{s_1}  \exp \left( \lambda_1 (0) (s_1 - m_1) \right) ... \sum_{s_n}  \exp \left(\lambda_n (0) (s_n - m_n) \right) \right\rbrace \\
+ = &\ln \left\lbrace 2 \cosh (\lambda_1(0))2\exp(-\lambda_1(0)m_1) ... 2 \cosh (\lambda_n(0))2\exp(-\lambda_n(0)m_n) \right\rbrace \\
+ = & \sum_i \left( \ln \left[ \cosh(\lambda_i(0)) \right] - \lambda_i(0)m_i + 2\ln(2)  \right)
+\end{split}
+\end{align}
+
+Using \ref{eq:mi}, we obtain:
+$$\text{arctanh}(m_i) = \frac{1}{2}\ln \left(\frac{ 1 +m_i}{1- m_i} \right)$$
+and thus:
+\begin{align*}
+\begin{split}
+ -(\beta G)_{\beta =0 } = & \sum_i \left\lbrace  \ln \left( \frac{1}{\sqrt{1 - m_i^2}}  \right) - \frac{m_i}{2}\ln \left(\frac{ 1 +m_i}{1- m_i} \right)  + 2\ln(2) \right\rbrace\\
+ = & - \sum_i \left[ \frac{1 + m_i}{2}\ln \left( \frac{1 + m_i}{2} \right) +  \frac{1 - m_i}{2}\ln \left( \frac{1 - m_i}{2} \right)\right]  
+ \end{split}
+\end{align*}
+which is true for $-1 <m_i < 1$.\\
+
+
+\begin{align}
+\begin{split}
+\mathbb{E}((s_i-m_1)^2(s_j-m_j)^2)= & ~1 - 2m_j^2 +m_j^2 - 2m_i^2 + 4m_1^2m_j^2\\
+& - 2m_i^2m_j^2 + m_i^2 -2m_i^2m_j^2 + m_i^2m_j^2 \\
+= & ~ (1-m_i^2)(1-m_j^2)
+\label{eq:Yoperator}
+ \end{split}
+\end{align}

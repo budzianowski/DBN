@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 #
+"""This module provides an interface for running
+basic experiments on MNIST dataset.
+"""
 
 import utils
 import Training
@@ -113,7 +116,7 @@ def main():
             vis_mf = np.zeros((ValidSet[:, 0:n_chains]).shape)
 
             for ii in range(n_chains):
-                vis_samples, vis_means, temp1, temp2 = SamplingGibbs.MCMC(model, ValidSet[:, ii:(ii+1)], iterations=100, StartMode="visible")
+                vis_samples, vis_means, temp1, temp2 = SamplingGibbs.MCMC(model, ValidSet[:, ii:(ii+1)], iterations=1000, StartMode="visible")
                 vis_mf[:, ii] = np.copy(vis_samples).reshape((784))
 
             print(' ... plotting sample %d' % idx)

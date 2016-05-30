@@ -9,29 +9,38 @@ try:
 except:
     import pickle
 
-"""
-    # Boltzmann.RBM{V,H} (RBMBase.jl)
-    ## Description
-        A structure for containing all of the restricted Boltzmann Machine (RBM)
-        model parameters. Besides just the model parameters (couplings, biases),
-        the structure also contains variables which are pertinent to the RBM training
-        procedure.
-    ## Structure
-        - `W::Matrix{Float64}`:       The matrix of coupling parameters (RBM model parameter)
-        - `W2::Matrix{Float64}`:      The square of `W` (used for EMF learning)
-        - `W3::Matrix{Float64}`:      The cube of `W` (used for EMF learning)
-        - `vbias::Vector{Float64}`:   The visible unit biases (RBM model parameter)
-        - `hbias::Vector{Float64}`:   The hidden unit biases (RBM model parameter)
-        - `dW::Matrix{Float64}`:      The current gradient on the coupling parameters (used for RBM training)
-        - `dW_prev::Matrix{Float64}`: The last gradient on the coupling parmaters (used for RBM training)
-        - `persistent_chain_vis::Matrix{Float64}`: Visible fantasy particles (used for RBM persistent mode training)
-        - `persistent_chain_hid::Matrix{Float64}`: Hidden fantasy particles (used for RBM persistent mode training)
-        - `momentum::Float64`:        Amount of last gradient to add to the current gradient (used for RBM training)
-        - `VisShape::Tuple{Int,Int}`: Final output shape of the visible units
+
+"""Module with main class of a package RBM which enables to define and
+compute basic statistics for the restricted Boltzmann structure.
 """
 
+
 class RBM(object):
+    """Restricted Boltzmann Machine (RBM)"""
     def __init__(self, params=None, n_vis=784, n_hid=500, sigma=0.01, momentum=0.0, TrainData=None, wiseStart=False):
+        """
+        RBM constructor. Defines the parameters of the model along with
+        basic operations for inferring hidden from visible (and vice-versa),
+        as well as for computing model statistics.
+
+        :param params: if model is loaded stores all weights values.
+
+        :param n_vis: number of visible units
+
+        :param n_hid: number of hidden units
+
+        :arg W: matrix of coupling parameters
+
+        :arg hbias: hidden bias vector
+
+        :arg vbias: visible bias vector
+
+        :arg dW: current gradient on the coupling parameters
+
+        :arg persistent_chain_hid: hidden persistent chain
+
+        :arg persistent_chain_vis: visible persistent chain
+        """
 
         self.eps = 1e-6  # Some "tiny" value, used to enforce min/max boundary conditions
         self.momentum = momentum
@@ -78,23 +87,31 @@ class RBM(object):
             self.persistent_chain_hid   = params[8]
 
     def passHidToVis(self, hid):
+        """ This function propagates the hidden units activation downwards to
+        the visible units """
         return np.dot(self.W.T, hid) + self.vbias
 
     def passVisToHid(self, vis):
+        """ Propagates the visible units activation upwards to
+        the hidden units """
         return np.dot(self.W, vis) + self.hbias
 
     def probHidCondOnVis(self, vis):
+        """ Function to compute probability p(h|v) """
         return expit(self.passVisToHid(vis))
 
     def probVisCondOnHid(self, hid):
+        """ Function to compute probability p(v|h) """
         return expit(self.passHidToVis(hid))
 
     def free_energy(self, vis):
+        """ Computes the clamped free energy """
         vb = np.dot(self.vbias.T, vis)
         Wx_b_log = np.sum(np.log(1 + np.exp(self.hbias + np.dot(self.W, vis))), axis=0)
         return - vb - Wx_b_log
 
     def score_samples(self, vis):
+        """ Computes proxy LL """
         n_feat, n_samples = vis.shape
         vis_corrupted = copy.deepcopy(vis)
         idxs = np.random.random_integers(0, n_feat - 1, n_samples)
@@ -108,6 +125,7 @@ class RBM(object):
         return logPL
 
     def recon_error(self, vis):
+        """ Computes reconstruction error """
         # Fully forward MF operation to get back to visible samples
         vis_rec = self.probVisCondOnHid(self.probHidCondOnVis(vis))
         # Get the total error over the whole tested visible set,
@@ -116,6 +134,7 @@ class RBM(object):
         return mse
 
     def score_samples_TAP(self, vis, n_iter=5, approx="tap2"):
+        """ Computes Gibbs free energy """
         m_vis, m_hid = SamplingEMF.iter_mag(self, vis, iterations=n_iter, approx=approx)
         # clipping to compute entropy
         m_vis = np.clip(m_vis, self.eps, 1 - self.eps)
@@ -142,6 +161,7 @@ class RBM(object):
         return -fe + fe_tap
 
     def save(self, file_name):
+        """ Function to save all main parameters """
         print('Saving model to: {0}'.format(file_name))
 
         with open(file_name, 'wb') as f:
@@ -157,6 +177,7 @@ class RBM(object):
 
     @staticmethod
     def load(file_name):
+        """ Function to load paramaters from numpy pickle """
         print('Loading model form : {0}'.format(file_name))
         params = []
         with open(file_name, 'rb') as f:
