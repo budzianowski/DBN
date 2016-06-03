@@ -1,4 +1,11 @@
 Python library for unsupervised training of Deep Restricted Bolztmann Machines using two different approaches.
 
-MIT license.
+To run the MNIST experiment just type:
 
+python3 run.py
+
+from src folder with additional command line args specified as --argument value, for example:
+
+python3 run.py --epochs 50 --hiddenUnits 500
+
+The code is MIT licensed.
