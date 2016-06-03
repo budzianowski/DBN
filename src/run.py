@@ -17,11 +17,12 @@ try:
 except:
     import pickle
 
+
                      # RBM parameters
 command_line_args = {'epochs': (50, int),
                      'visibleUnits': (784, int),
                      'hiddenUnits': (500, int),
-                     'approxMethod': ('CD', str),
+                     'approxMethod': ('CD', str),  # CD, naive, tap2 or tap3
                      'approxSteps': (1, int),
                      'persistStart': (100, int),
                      # Learning parameters
@@ -47,6 +48,7 @@ def main():
     visibleUnits   = args['visibleUnits']
     hiddenUnits    = args['hiddenUnits']
     approxMethod   = args['approxMethod']
+    #if approxMethod not in ['tap2', 'tap3', 'naive', 'CD'] TODO - raise some error ala physics
     approxSteps    = args['approxSteps']
     learnRate      = args['learnRate']
     persistStart   = args['persistStart']
@@ -69,13 +71,12 @@ def main():
     TrainSet = utils.binarize(TrainSet, threshold=0.001).T    # Create binary data
     ValidSet = utils.binarize(ValidSet, threshold=0.001).T    # Create binary data
 
-    load_file = 'test'
     if len(load_file) == 0:
         print('Initializing model')
         model = RBM.RBM(n_vis=visibleUnits, n_hid=hiddenUnits,
                       momentum  = momentum,
                       sigma     = sigma,
-                      TrainData = TrainSet,
+                      trainData = TrainSet,
                       wiseStart = True,
         )
         print('Start of training')
@@ -93,43 +94,39 @@ def main():
         )
     else:
         # place for plotting with learned structure
-        # TODO - stacked RBMs
-        import PIL.Image as Image
         import plotting
-
-        import SamplingGibbs
         params = RBM.RBM.load(load_file)
         model = RBM.RBM(params=params)
 
-        n_samples = 10
-        n_chains = 20
-        image_data = np.zeros(
-            (29 * n_samples + 1, 29 * n_chains - 1),
-            dtype='uint8'
-        )
+        print(np.mean(model.score_samples_TAP(ValidSet[:, 0:5000], approx='CD'))/(784+500))
+        print('approx naive')
+        print(np.mean(model.score_samples_TAP(ValidSet[:, 0:5000], approx='naive'))/(784+500))
+        print('approx tap2')
+        print(np.mean(model.score_samples_TAP(ValidSet[:, 0:5000], approx='tap2'))/(784+500))
+        print('approx tap3')
+        print(np.mean(model.score_samples_TAP(ValidSet[:, 0:5000], approx='tap3'))/(784+500))
 
+        # plotting.plotFilters(model)
+        #
+        # n_chains = 15  # how many different chains we want to plot
+        # n_samples = 10  # how many samples from a given chain you want to see
+        # iterations = 1000  # how many Gibbs steps before each sample should be taken
+        # plotting.plotSamples(approxMethod, model, ValidSet, n_samples, n_chains, iterations)
 
-        for idx in range(n_samples):
-            # generate `plot_every` intermediate samples that we discard,
-            # because successive samples in the chain are too correlated
-            #vis_mf = ValidSet[:, 0:n_chains].T
-            vis_mf = np.zeros((ValidSet[:, 0:n_chains]).shape)
-
-            for ii in range(n_chains):
-                vis_samples, vis_means, temp1, temp2 = SamplingGibbs.MCMC(model, ValidSet[:, ii:(ii+1)], iterations=1000, StartMode="visible")
-                vis_mf[:, ii] = np.copy(vis_samples).reshape((784))
-
-            print(' ... plotting sample %d' % idx)
-            image_data[29 * idx:29 * idx + 28, :] = plotting.tile_raster_images(
-                X=vis_mf.T,
-                img_shape=(28, 28),
-                tile_shape=(1, n_chains),
-                tile_spacing=(1, 1)
-            )
-
-        # construct image
-        image = Image.fromarray(image_data)
-        image.save('samples.png')
+        #
+        # plt.matshow(model.W[0:1, :].reshape(28, 28), fignum=99, cmap=plt.cm.gray)
+        # plt.savefig('t1.pdf')
+        # image = model.generate(ValidSet[:, 0:1], approxMethod, 1000).reshape(28, 28)
+        # plt.matshow(image, fignum=99, cmap=plt.cm.gray)
+        # plt.savefig('t2.pdf')
+        # image = model.generate(ValidSet[:, 0:1], approxMethod, 2000).reshape(28, 28)
+        # plt.matshow(image, fignum=97, cmap=plt.cm.gray)
+        # plt.savefig('t3.pdf')
+        # image = model.generate(ValidSet[:, 0:1], approxMethod, 3000).reshape(28, 28)
+        # plt.matshow(image, fignum=98, cmap=plt.cm.gray)
+        # plt.savefig('t4.pdf')
+        #image = Image.fromarray(image)
+        #image.save('samples.pdf')
 
 def get_arg(arg, args, default, type_):
     arg = '--'+arg

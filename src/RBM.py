@@ -17,7 +17,7 @@ compute basic statistics for the restricted Boltzmann structure.
 
 class RBM(object):
     """Restricted Boltzmann Machine (RBM)"""
-    def __init__(self, params=None, n_vis=784, n_hid=500, sigma=0.01, momentum=0.0, TrainData=None, wiseStart=False):
+    def __init__(self, params=None, n_vis=784, n_hid=500, sigma=0.01, momentum=0.0, trainData=None, wiseStart=False):
         """
         RBM constructor. Defines the parameters of the model along with
         basic operations for inferring hidden from visible (and vice-versa),
@@ -71,8 +71,8 @@ class RBM(object):
             # TODO: Generalize this biasing. Currently, the biasing is only written for the case of binary RBMs.
             # Initialization of visual bias - Hinton's recommendation
             self.vbias = np.zeros((n_vis, 1))
-            if TrainData is not None:
-                temp = np.mean(TrainData, 1)
+            if trainData is not None:
+                temp = np.mean(trainData, 1)
                 np.clip(temp, self.eps, 1 - self.eps, out=temp)
                 self.vbias = np.log(temp / (1 - temp)).reshape((n_vis, 1))
         else:
@@ -107,8 +107,8 @@ class RBM(object):
     def free_energy(self, vis):
         """ Computes the clamped free energy """
         vb = np.dot(self.vbias.T, vis)
-        Wx_b_log = np.sum(np.log(1 + np.exp(self.hbias + np.dot(self.W, vis))), axis=0)
-        return - vb - Wx_b_log
+        Wv_b = np.sum(np.log(1 + np.exp(np.dot(self.W, vis) + self.hbias)), axis=0)
+        return - vb - Wv_b
 
     def score_samples(self, vis):
         """ Computes proxy LL """
@@ -120,7 +120,6 @@ class RBM(object):
 
         fe = self.free_energy(vis)
         fe_corrupted = self.free_energy(vis_corrupted)
-
         logPL = n_feat * np.log(expit(fe_corrupted - fe))
         return logPL
 
@@ -133,8 +132,10 @@ class RBM(object):
         mse = np.sum(vis * np.log(vis_rec) + (1 - vis) * np.log(1 - vis_rec), 0)
         return mse
 
-    def score_samples_TAP(self, vis, n_iter=5, approx="tap2"):
+    def score_samples_TAP(self, vis, n_iter=10, approx="tap2"):
         """ Computes Gibbs free energy """
+        # here we need to specify what is what
+        print(approx)
         m_vis, m_hid = SamplingEMF.iter_mag(self, vis, iterations=n_iter, approx=approx)
         # clipping to compute entropy
         m_vis = np.clip(m_vis, self.eps, 1 - self.eps)
@@ -143,6 +144,7 @@ class RBM(object):
         m_vis2 = m_vis ** 2
         m_hid2 = m_hid ** 2
 
+        # this we score always
         Entropy = np.sum(m_vis * np.log(m_vis) + (1.0 - m_vis) * np.log(1.0 - m_vis), 0) \
                   + np.sum(m_hid * np.log(m_hid) + (1.0 - m_hid) * np.log(1.0 - m_hid), 0)
         Naive = np.sum(self.vbias * m_vis, 0) + np.sum(self.hbias * m_hid, 0) + \
@@ -151,10 +153,10 @@ class RBM(object):
 
         fe_tap = Entropy - Naive - Onsager
 
-        if "tap3" in approx:
-            # TODO third term
-            pass
-            fe_tap += 0
+        # if "tap3" in approx:
+        #     visible = (m_vis-m_vis2) * (0.5 - m_vis)
+        #     hidden = (m_hid-m_hid2) * (0.5 - m_hid)
+        #     fe_tap -= (2.0 / 3.0) * np.sum(hidden * np.dot(self.W3, visible), 0)
 
         fe = self.free_energy(vis)
 
@@ -189,3 +191,17 @@ class RBM(object):
                     break
         return params
 
+    def generate(self, vis_init, approx, iterations):
+        n_samples = vis_init.shape[1]
+        n_hidden = self.hbias.shape[0]
+        hid_init = np.zeros((n_hidden, n_samples))
+
+        if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
+            vis_mag, hid_mag = SamplingEMF.equilibrate(self, vis_init, hid_init, iterations=iterations, approx=approx)
+
+        if "CD" in approx:
+            vis_samples, vis_means, hid_mag, hid_means = SamplingGibbs.MCMC(self, vis_init, iterations=iterations, StartMode="visible")
+
+        samples, temp = SamplingGibbs.sample_visibles(self, hid_mag)
+
+        return samples

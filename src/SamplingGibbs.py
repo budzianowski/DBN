@@ -1,4 +1,4 @@
-### Base definitions for Gibbs sampling
+""" Base definitions for Gibbs sampling"""
 import numpy as np
 
 
@@ -19,7 +19,7 @@ def sample_visibles(rbm, hid):
     return samples, means
 
 
-## Main course
+# 'Main course'
 def MCMC(rbm, init, iterations=1, StartMode="hidden"):
     if StartMode == "visible":
     # In this first mode we assume that we are starting from the visible samples. E.g. in
