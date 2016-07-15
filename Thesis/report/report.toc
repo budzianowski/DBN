@@ -1,0 +1,95 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1}Introduction}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2}Extended Mean Field Approximation}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1}Graphical models as Markov Random Fields}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Boltzmann distribution}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3}Statistical Perspective}{3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4}Mean Field Approximation}{3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.5}Extended Mean Field Approximation}{3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.6}Marginal polytope - bounds for the partition function}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.7}Boltzmann Machine}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {2.7.1}Approximator for any distribution}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.8}RBMs}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {2.8.1}Exploiting the RBM structure}{6}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3}Evaluation on the toy models}{8}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1}Adaptation of TAP to RBM}{8}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2}Schedule of updates}{9}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.1}Asynchronous}{9}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.2}Sequential}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.3}Parallel}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3}Toy models}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.3.1}Grid toy model}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.3.2}RBM toy model}{11}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Learning of Boltzmann Machines}{13}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1}Usupervised learning}{13}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2}Unsupervised Pre-training of Neural Networks}{13}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3}Training of Boltzmann Machines}{13}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.4}MCMC Sampling}{14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.5}Contrastive Divergence}{14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.5.1}Persistent CD}{14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.6}Learning in the TAP case}{14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.6.1}Gradients}{14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.7}Approximating the likelihood}{14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.7.1}Pseudo approximation}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.8}Real scale model}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.8.1}MNIST data set}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.9}Comparison}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5}Chapter 4 - Applications}{16}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1}Updates }{16}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2}AIS vs TAP}{16}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.2.1}Annealed Importance Sampling (AIS)}{16}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.2.2}Comparison}{18}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.3}Deep RBM}{18}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4}Semi RBM}{19}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.4.1}Exploiting the SRBM structure}{19}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.5}Boltzmann Machine}{19}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.6}GBRBM}{19}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6}Conclusions}{19}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7}Appendix}{19}

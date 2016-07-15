@@ -1,0 +1,104 @@
+\documentclass[a4paper]{article}
+%twocolumn
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{lmodern}
+\usepackage{subfiles}
+\usepackage{algorithm}
+\usepackage{tikz}
+\usepackage{cleveref}
+\usepackage{mathtools}
+\usepackage[backend=biber]{biblatex}
+\usepackage{cleveref}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{algpseudocode}
+\newcounter{defcounter}
+\setcounter{defcounter}{0}
+
+\usetikzlibrary{shapes.geometric,arrows,chains,matrix,positioning,scopes,calc}
+\tikzstyle{mybox} = [draw=white, rectangle]
+\definecolor{darkblue}{rgb}{0,0.08,0.45}
+\definecolor{blue}{rgb}{0,0,1}
+\usetikzlibrary{fit,positioning}
+
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+\geometry{margin=2cm} % for example, change the margins to 2 inches all round
+
+% paragraph line 
+\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indenet
+\usepackage{graphicx}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{basicstyle=\ttfamily,
+ backgroundcolor=\color{backcolour},   
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+%getting the dots
+\usepackage{tocloft}
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{mydef}{Definition}
+
+% no linebreaks after subsection!
+\usepackage{titlesec}
+
+\bibliography{bio}
+
+\begin{document}
+\begin{center}
+\Large{\textsc{
+University of Cambridge}}\\
+\vspace{.5cm}
+\large\textbf{Thesis}\\
+\vspace{.5cm}
+\large{Paweł Budzianowski, pfb30, Clare Hall College}\\
+\end{center} 
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+%\subfile{../introduction/introduction.tex}
+
+\section{Extended Mean Field Approximation}
+\subfile{../chap1/chap1.tex}
+
+\section{Evaluation on the toy models}
+\subfile{../chap2/chap2.tex}
+
+\section{Learning of Boltzmann Machines}
+\subfile{../chap3/chap3.tex}
+
+\section{Chapter 4 - Applications}
+\subfile{../chap4/chap4.tex}
+
+\section{Conclusions}
+%\subfile{../conclusion/conclusion.tex}
+
+\section{Appendix}
+%\subfile{../introduction/introduction.tex}
+
+
+\printbibliography
+
+\end{document}
+
