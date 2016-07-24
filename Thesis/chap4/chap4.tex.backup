@@ -114,7 +114,7 @@ p(h^B) & =
 \end{algorithm}
 
 \subsubsection{Comparison}
-Two models were estimated with $5$ of magnetizations to compare the quality of the approximation of the variational free energy. Figure \ref{fig:AISTAP2}} presents the estimates of \ref{eq:freeEnergy} for the \verb|TAP2| and \verb|TAP3| models along with AIS estimates for different numbers of runs.
+Two models were estimated with $5$ of magnetizations to compare the quality of the approximation of the variational free energy. Figure \ref{fig:AISTAP2} presents the estimates of \ref{eq:freeEnergy} for the \verb|TAP2| and \verb|TAP3| models along with AIS estimates for different numbers of runs.
 
 \begin{figure}[!htb]
  %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
@@ -141,29 +141,36 @@ p(\mathbf{x}, \mathbf{h}^1, \mathbf{h}^2,..., \mathbf{h}^l) = p(\mathbf{x}| \mat
 P(\mathbf{h}^{l-2}|\mathbf{h}^{l-1})P(\mathbf{h}^{l-1}|\mathbf{h}^{l}).
 \end{split}
 \end{align}
-It was shown that adding an extra layer always improves a lower bound \ref{eq:lowerbound\?} on the training data
-if the number of feature detectors per layer is sufficiently large and the weights are initialized correctly. Figure \ref{fig:DBN} depicts the examplary deep belief network.
-DBNs can be formed using a greedy layer-wise unsupervised training of stacked RBMs -- lgorithm \ref{alg:DBN} presents how the process
+It was shown that adding an extra layers always improve a lower bound \ref{eq:lowerboundhowtodefine} on the training data
+if the number of feature detectors per layer is sufficiently large and the weights are initialized correctly. It was empirically
+proven that Figure \ref{fig:DBN} depicts the exemplary deep belief network.
+DBNs can be formed using a greedy layer-wise unsupervised training of stacked RBMs -- algorithm \ref{alg:DBN} presents how the process
 folows:
 http://www.yann-ollivier.org/rech/publs/deeptrain.pdf - show the picture 
 \begin{algorithm}[!bthp]
 \caption{Learning Deep Belief Nets.}
 \label{alg:DBN}
 \begin{algorithmic}
-\State {Train the first layer as an RBM, learning $P(\mathbf{x = h^{0}, h^1}}$}
+\State {Train the first layer as an RBM, learning $P(\mathbf{x = h^{0}, h^1}$}
 \For{$l \in \{2,..., L\} $} 
-\State {Pass the mean activities $\mathbf{x}^l = P(\mathbf{h^{l}| \mathbf{h^{l-1}} }$ which become a representation of the input at 
-the layer $l$.}
+\State {Pass the mean activities $\mathbf{x}^l = P(\mathbf{h^{l}| \mathbf{h^{l-1}} }$ which become a representation of the input at the layer $l$.}
 \State {Train the $l$-th layer treating it as an RBM with $\mathbf{x}^l$ as an input. }
+\EndFor
 \end{algorithmic}
 \end{algorithm}
 This simple and intuitive algorithm proved to be an effective way of pretraining deep structures which laid the foundations
-of the resurgence of deep neural networks. Originally, the building blocks are trained following Constrastive Divergence 
-procedure. However, the positive results obtained using extended mean-field approximation suggests that we may 
+of the resurgence of deep neural networks. Originally, the building blocks are trained following constrastive divergence 
+procedure.  However, the positive results obtained using extended mean-field approximation 
+suggests that we may 
 follow this procedure 
 
-After pretraining multiple layers of feature detectors, the model can be ``unfolded'' to form an autoencoder structures 
-where the decoder network uses transposed weigths of the encoder network. Figure \ref{drbm} presents the reconstructions produced
+ The guarantee that we improve the bound is no longer valid if the size of subsequent hidden layers is not large enough
+ however it was empiracally proven that such approach still can learn an effective generative model. After pretraining multiple layers of feature detectors, the model can be ``unfolded'' to form an autoencoder structures 
+where the decoder network uses transposed weigths of the encoder network. At this stage, such network might be considered
+as feed forward deep neural architecture and might be used as a starting point for supervised fine-tuning with respect to any
+training criterion that depends on the learnt representation \ref{bengio2007greedy}. 
+
+The Figure \ref{drbm} presents the reconstructions produced
 by the $25$-dimensional deep autoencoder
 
 \begin{figure}[!htb]
@@ -172,11 +179,16 @@ by the $25$-dimensional deep autoencoder
   \caption[1]{DRBM TAP2 TAP3 PCD}
 \end{figure}
 
+Figure \ref{mse} shows the mean squared error on training and validation data sets for different methods for pre-training the RBMs.
 
+\begin{figure}[!htb]
+ %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
+\label{fig:mse}
+  \caption[1]{MSE TAP2 TAP3 PCD on training and validation data set}
+\end{figure}
 \subsection{Semi RBM}
-
+SEE IF IT IS WORTH IT.
 \subsubsection{Exploiting the SRBM structure}
-
 Clamped free energy can be written in the form:
 \begin{align}
 \begin{split}
@@ -186,13 +198,4 @@ Clamped free energy can be written in the form:
 \label{eq:freeEnergy}
 \end{split}
 \end{align}
-\subsection{Boltzmann Machine}
-$$ E (\mathbf{v,h}) = - \sum_i a_i v_i - \sum_j b_j h_j - \sum_{i,j} v_i w_{ij}h_j = -\frac{1}{2} \mathbf{v}^T \mathbf{V}  \mathbf{v} - \frac{1}{2} \mathbf{h}^T  \mathbf{J} \mathbf{h} - \mathbf{h}^T \mathbf{W}  \mathbf{v} $$
-
-This approximation this time will be used two times, first for $P(\mathbf{h}| \mathbf{v})$ and the second time for the variational free energy.
-We have:
-$$ KL \left(Q(\mathbf{h}| \mathbf{v}) \| P(\mathbf{h}| \mathbf{v}) \right)$$
-
-
-\subsection{GBRBM}
 \end{document}

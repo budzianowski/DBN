@@ -1965,8 +1965,19 @@
   </bcf:bibdata>
   <bcf:section number="0">
     <bcf:citekey order="1">tieleman2008training</bcf:citekey>
-    <bcf:citekey order="2">dayan1999unsupervised</bcf:citekey>
-    <bcf:citekey order="3">besag1972nearest</bcf:citekey>
-    <bcf:citekey order="4">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="2">robbins1951stochastic</bcf:citekey>
+    <bcf:citekey order="3">bottou1998online</bcf:citekey>
+    <bcf:citekey order="4">hinton2002training</bcf:citekey>
+    <bcf:citekey order="5">hinton2002training</bcf:citekey>
+    <bcf:citekey order="6">fischer2012introduction</bcf:citekey>
+    <bcf:citekey order="7">tieleman2008training</bcf:citekey>
+    <bcf:citekey order="8">neal1992connectionist</bcf:citekey>
+    <bcf:citekey order="9">besag1972nearest</bcf:citekey>
+    <bcf:citekey order="10">lecun1998</bcf:citekey>
+    <bcf:citekey order="11">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="12">salakhutdinov2008learning</bcf:citekey>
+    <bcf:citekey order="13">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="14">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="15">gabrie2015training</bcf:citekey>
   </bcf:section>
 </bcf:controlfile>

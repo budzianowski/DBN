@@ -1962,33 +1962,50 @@
   <!-- SECTION 0 -->
   <bcf:bibdata section="0">
     <bcf:datasource type="file" datatype="bibtex">bio.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex">bio.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">koller2009probabilistic</bcf:citekey>
+    <bcf:citekey order="1">yedidia2001idiosyncratic</bcf:citekey>
     <bcf:citekey order="2">yedidia2001idiosyncratic</bcf:citekey>
-    <bcf:citekey order="3">yedidia2001idiosyncratic</bcf:citekey>
-    <bcf:citekey order="4">opper2001advanced</bcf:citekey>
-    <bcf:citekey order="5">yedidia2001idiosyncratic</bcf:citekey>
-    <bcf:citekey order="6">plefka1982convergence</bcf:citekey>
-    <bcf:citekey order="7">ackley1985learning</bcf:citekey>
-    <bcf:citekey order="8">georges1991expand</bcf:citekey>
-    <bcf:citekey order="9">gabrie2015training</bcf:citekey>
-    <bcf:citekey order="10">welling2002new</bcf:citekey>
-    <bcf:citekey order="11">gabrie2015training</bcf:citekey>
-    <bcf:citekey order="12">murphy2012machine</bcf:citekey>
-    <bcf:citekey order="13">welling2002new</bcf:citekey>
-    <bcf:citekey order="14">bolthausen2014iterative</bcf:citekey>
-    <bcf:citekey order="15">tieleman2008training</bcf:citekey>
-    <bcf:citekey order="16">dayan1999unsupervised</bcf:citekey>
-    <bcf:citekey order="17">besag1972nearest</bcf:citekey>
-    <bcf:citekey order="18">gabrie2015training</bcf:citekey>
-    <bcf:citekey order="19">minka2005divergence</bcf:citekey>
-    <bcf:citekey order="20">jarzynski1997nonequilibrium</bcf:citekey>
-    <bcf:citekey order="21">neal2001annealed</bcf:citekey>
-    <bcf:citekey order="22">salakhutdinov2008learning</bcf:citekey>
-    <bcf:citekey order="23">neal2001annealed</bcf:citekey>
-    <bcf:citekey order="24">salakhutdinov2008quantitative</bcf:citekey>
-    <bcf:citekey order="25">hinton2006reducing</bcf:citekey>
+    <bcf:citekey order="3">opper2001advanced</bcf:citekey>
+    <bcf:citekey order="4">wainwright2008graphical</bcf:citekey>
+    <bcf:citekey order="5">kirkpatrick1978infinite</bcf:citekey>
+    <bcf:citekey order="6">georges1991expand</bcf:citekey>
+    <bcf:citekey order="7">georges1991expand</bcf:citekey>
+    <bcf:citekey order="8">yedidia2001idiosyncratic</bcf:citekey>
+    <bcf:citekey order="9">plefka1982convergence</bcf:citekey>
+    <bcf:citekey order="10">ackley1985learning</bcf:citekey>
+    <bcf:citekey order="11">fischer2012introduction</bcf:citekey>
+    <bcf:citekey order="12">le2008representational</bcf:citekey>
+    <bcf:citekey order="13">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="14">welling2002new</bcf:citekey>
+    <bcf:citekey order="15">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="16">murphy2012machine</bcf:citekey>
+    <bcf:citekey order="17">welling2002new</bcf:citekey>
+    <bcf:citekey order="18">bolthausen2014iterative</bcf:citekey>
+    <bcf:citekey order="19">tieleman2008training</bcf:citekey>
+    <bcf:citekey order="20">robbins1951stochastic</bcf:citekey>
+    <bcf:citekey order="21">bottou1998online</bcf:citekey>
+    <bcf:citekey order="22">hinton2002training</bcf:citekey>
+    <bcf:citekey order="23">hinton2002training</bcf:citekey>
+    <bcf:citekey order="24">fischer2012introduction</bcf:citekey>
+    <bcf:citekey order="25">tieleman2008training</bcf:citekey>
+    <bcf:citekey order="26">neal1992connectionist</bcf:citekey>
+    <bcf:citekey order="27">besag1972nearest</bcf:citekey>
+    <bcf:citekey order="28">lecun1998</bcf:citekey>
+    <bcf:citekey order="29">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="30">salakhutdinov2008learning</bcf:citekey>
+    <bcf:citekey order="31">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="32">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="33">gabrie2015training</bcf:citekey>
+    <bcf:citekey order="34">minka2005divergence</bcf:citekey>
+    <bcf:citekey order="35">jarzynski1997nonequilibrium</bcf:citekey>
+    <bcf:citekey order="36">neal2001annealed</bcf:citekey>
+    <bcf:citekey order="37">salakhutdinov2008learning</bcf:citekey>
+    <bcf:citekey order="38">neal2001annealed</bcf:citekey>
+    <bcf:citekey order="39">salakhutdinov2008quantitative</bcf:citekey>
+    <bcf:citekey order="40">hinton2006reducing</bcf:citekey>
+    <bcf:citekey order="41">montufar2010refinements</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" type="entry" label="nty">
   <bcf:sorting>

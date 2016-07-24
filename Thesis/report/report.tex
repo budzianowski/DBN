@@ -1,23 +1,29 @@
 \documentclass[a4paper]{article}
 %twocolumn
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+
+% bibliography - delete bbl aux files when you see problems
+%\usepackage[backend=biber]{biblatex}
+%\bibliography{bio}
+\usepackage[numbers]{natbib}
+
+
 \usepackage{lmodern}
 \usepackage{subfiles}
 \usepackage{algorithm}
 \usepackage{tikz}
-\usepackage{cleveref}
+%\usepackage{cleveref}
 \usepackage{mathtools}
-\usepackage[backend=biber]{biblatex}
-\usepackage{cleveref}
-\usepackage{float}
+%\usepackage{float}
 \usepackage{multirow}
 \usepackage{algpseudocode}
 \newcounter{defcounter}
 \setcounter{defcounter}{0}
+
 
 \usetikzlibrary{shapes.geometric,arrows,chains,matrix,positioning,scopes,calc}
 \tikzstyle{mybox} = [draw=white, rectangle]
@@ -33,20 +39,20 @@
 
 % paragraph line 
 \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indenet
-\usepackage{graphicx}
+%\usepackage{graphicx}
 
-\usepackage{xcolor}
+%\usepackage{xcolor}
 \usepackage{listings}
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-\lstset{basicstyle=\ttfamily,
- backgroundcolor=\color{backcolour},   
-  showstringspaces=false,
-  commentstyle=\color{red},
-  keywordstyle=\color{blue}
-}
+%\definecolor{codegreen}{rgb}{0,0.6,0}
+%\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+%\definecolor{codepurple}{rgb}{0.58,0,0.82}
+%\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+%\lstset{basicstyle=\ttfamily,
+% backgroundcolor=\color{backcolour},   
+%  showstringspaces=false,
+%  commentstyle=\color{red},
+%  keywordstyle=\color{blue}
+%}
 
 %getting the dots
 \usepackage{tocloft}
@@ -61,7 +67,8 @@
 % no linebreaks after subsection!
 \usepackage{titlesec}
 
-\bibliography{bio}
+
+
 
 \begin{document}
 \begin{center}
@@ -74,31 +81,48 @@ University of Cambridge}}\\
 \end{center} 
 
 \tableofcontents
-\newpage
 
+\newpage
 \section{Introduction}
 %\subfile{../introduction/introduction.tex}
 
-\section{Extended Mean Field Approximation}
+\newpage
+\section{Extended mean field approximation}
 \subfile{../chap1/chap1.tex}
 
+\newpage
 \section{Evaluation on the toy models}
-\subfile{../chap2/chap2.tex}
+%\subfile{../chap2/chap2.tex}
 
-\section{Learning of Boltzmann Machines}
+\newpage
+\section{Learning of Boltzmann machines}
 \subfile{../chap3/chap3.tex}
 
+\newpage
 \section{Chapter 4 - Applications}
-\subfile{../chap4/chap4.tex}
+%\subfile{../chap4/chap4.tex}
 
+\newpage
 \section{Conclusions}
 %\subfile{../conclusion/conclusion.tex}
 
+
+
+
+\newpage
 \section{Appendix}
-%\subfile{../introduction/introduction.tex}
+%\subfile{../appendix/appendix.tex}
 
 
-\printbibliography
+%\printbibliography
 
+%\bibliography{bio}
+%\bibliographystyle{ieeetr}
+
+\bibliographystyle{plainnat}
+\bibliography{bio}
 \end{document}
+
+
+
 

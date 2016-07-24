@@ -144,12 +144,33 @@
   publisher={APS}
 }
 
+@techreport{lecun1998,
+  title={The MNIST database of handwritten digits},
+  author={LeCun, Yann and Cortes, Corinna},
+  year={1998}
+}
+
+@article{robbins1951stochastic,
+  title={A stochastic approximation method},
+  author={Robbins, Herbert and Monro, Sutton},
+  journal={The annals of mathematical statistics},
+  pages={400--407},
+  year={1951},
+  publisher={JSTOR}
+}
+
+
 @techreport{salakhutdinov2008learning,
   title={Learning and evaluating Boltzmann machines},
   author={Salakhutdinov, Ruslan},
   year={2008}
 }
 
+@article{bengio2007greedy,
+  title={Greedy layer-wise training of deep networks},
+  author={Bengio, Yoshua and Lamblin, Pascal and Popovici, Dan and Larochelle, Hugo and others},
+  year={2007}
+}
 
 @inproceedings{salakhutdinov2008quantitative,
   title={On the quantitative analysis of deep belief networks},

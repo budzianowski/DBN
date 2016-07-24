@@ -1,0 +1,117 @@
+\begin{thebibliography}{18}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ackley et~al.(1985)Ackley, Hinton, and Sejnowski]{ackley1985learning}
+David~H Ackley, Geoffrey~E Hinton, and Terrence~J Sejnowski.
+\newblock A learning algorithm for boltzmann machines.
+\newblock \emph{Cognitive science}, 9\penalty0 (1):\penalty0 147--169, 1985.
+
+\bibitem[Besag(1972)]{besag1972nearest}
+Julian~E Besag.
+\newblock Nearest-neighbour systems and the auto-logistic model for binary
+  data.
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, pages 75--83, 1972.
+
+\bibitem[Bottou()]{bottou1998online}
+L{\'e}on Bottou.
+\newblock Online learning and stochastic approximations.
+\newblock \emph{On-line learning in neural networks}, 17\penalty0 (9):\penalty0
+  142.
+
+\bibitem[Fischer and Igel(2012)]{fischer2012introduction}
+Asja Fischer and Christian Igel.
+\newblock An introduction to restricted boltzmann machines.
+\newblock In \emph{Iberoamerican Congress on Pattern Recognition}, pages
+  14--36. Springer, 2012.
+
+\bibitem[Gabri{\'e} et~al.(2015)Gabri{\'e}, Tramel, and
+  Krzakala]{gabrie2015training}
+Marylou Gabri{\'e}, Eric~W Tramel, and Florent Krzakala.
+\newblock Training restricted boltzmann machine via the
+  thouless-anderson-palmer free energy.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  640--648, 2015.
+
+\bibitem[Georges and Yedidia(1991)]{georges1991expand}
+Antoine Georges and Jonathan~S Yedidia.
+\newblock How to expand around mean-field theory using high-temperature
+  expansions.
+\newblock \emph{Journal of Physics A: Mathematical and General}, 24\penalty0
+  (9):\penalty0 2173, 1991.
+
+\bibitem[Hinton(2002)]{hinton2002training}
+Geoffrey~E Hinton.
+\newblock Training products of experts by minimizing contrastive divergence.
+\newblock \emph{Neural computation}, 14\penalty0 (8):\penalty0 1771--1800,
+  2002.
+
+\bibitem[Kirkpatrick and Sherrington(1978)]{kirkpatrick1978infinite}
+Scott Kirkpatrick and David Sherrington.
+\newblock Infinite-ranged models of spin-glasses.
+\newblock \emph{Physical Review B}, 17\penalty0 (11):\penalty0 4384, 1978.
+
+\bibitem[Le~Roux and Bengio(2008)]{le2008representational}
+Nicolas Le~Roux and Yoshua Bengio.
+\newblock Representational power of restricted boltzmann machines and deep
+  belief networks.
+\newblock \emph{Neural computation}, 20\penalty0 (6):\penalty0 1631--1649,
+  2008.
+
+\bibitem[LeCun and Cortes(1998)]{lecun1998}
+Yann LeCun and Corinna Cortes.
+\newblock The mnist database of handwritten digits.
+\newblock Technical report, 1998.
+
+\bibitem[Neal(1992)]{neal1992connectionist}
+Radford~M Neal.
+\newblock Connectionist learning of belief networks.
+\newblock \emph{Artificial intelligence}, 56\penalty0 (1):\penalty0 71--113,
+  1992.
+
+\bibitem[Opper and Saad(2001)]{opper2001advanced}
+Manfred Opper and David Saad.
+\newblock \emph{Advanced mean field methods: Theory and practice}.
+\newblock MIT press, 2001.
+
+\bibitem[Plefka(1982)]{plefka1982convergence}
+T~Plefka.
+\newblock Convergence condition of the tap equation for the infinite-ranged
+  ising spin glass model.
+\newblock \emph{Journal of Physics A: Mathematical and general}, 15\penalty0
+  (6):\penalty0 1971, 1982.
+
+\bibitem[Robbins and Monro(1951)]{robbins1951stochastic}
+Herbert Robbins and Sutton Monro.
+\newblock A stochastic approximation method.
+\newblock \emph{The annals of mathematical statistics}, pages 400--407, 1951.
+
+\bibitem[Salakhutdinov(2008)]{salakhutdinov2008learning}
+Ruslan Salakhutdinov.
+\newblock Learning and evaluating boltzmann machines.
+\newblock Technical report, 2008.
+
+\bibitem[Tieleman(2008)]{tieleman2008training}
+Tijmen Tieleman.
+\newblock Training restricted boltzmann machines using approximations to the
+  likelihood gradient.
+\newblock In \emph{Proceedings of the 25th international conference on Machine
+  learning}, pages 1064--1071. ACM, 2008.
+
+\bibitem[Wainwright and Jordan(2008)]{wainwright2008graphical}
+Martin~J Wainwright and Michael~I Jordan.
+\newblock Graphical models, exponential families, and variational inference.
+\newblock \emph{Foundations and Trends{\textregistered} in Machine Learning},
+  1\penalty0 (1-2):\penalty0 1--305, 2008.
+
+\bibitem[Yedidia(2001)]{yedidia2001idiosyncratic}
+Jonathan Yedidia.
+\newblock An idiosyncratic journey beyond mean field theory.
+\newblock \emph{Advanced mean field methods: Theory and practice}, pages
+  21--36, 2001.
+
+\end{thebibliography}

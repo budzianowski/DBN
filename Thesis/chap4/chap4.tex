@@ -3,7 +3,8 @@
 \begin{document}
 
 \subsection{Updates }
-In the chapter $3$ different schedules of updates were analysed on the toy model where the parameters of the model were known a priori and no substantial discrepancies were observed in terms of the quality of approximation. However, in the case of the \verb|MNIST| data set estimated magnetizations allow us to perform learning of unknown parameters. Thus, in this case we combine uncertainty related to both magnetizations and parameters -- this may lead to substantial differences in performance. Figure 
+In the chapter $3$ different schedules of updates were analysed on the toy model where the parameters of the model were known a priori and no substantial discrepancies were observed in terms of the quality of approximation. 
+However, in the case of the \verb|MNIST| data set estimated magnetizations allow us to perform learning of unknown parameters. Thus, in this case we combine uncertainty related to both magnetizations and parameters -- this may lead to substantial differences in performance. Figure 
 
 \begin{figure}[!htb]
  %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
@@ -23,9 +24,17 @@ In the chapter $3$ different schedules of updates were analysed on the toy model
   \caption[1]{updatesTAP3}
 \end{figure}
 
+\subsection{Generated samples from the models}
+
 \subsection{AIS vs TAP}
 Make several runs of AIS to get reasonable approximation!
-
+For  all  models  we  also  used  1,000
+spaced  uniformly  from  0  to  0.5,  4,000
+spaced  uniformly
+from 0.5 to 0.9,  and 5,000
+spaced uniformly from 0.9 to 1.0,  with a total of 10,000 inter
+mediate
+distributions. 
 
 \subsubsection{Annealed Importance Sampling (AIS)}
 
@@ -122,15 +131,19 @@ Two models were estimated with $5$ of magnetizations to compare the quality of t
   \caption[1]{AIS for TAP2 and TAP3}
 \end{figure}
 TAP2, TAP3
-
+3 or 10 steps of magnetization!
 
 \subsection{Deep RBM}
+\subsubsection{Unsupervised Pre-training of Neural Networks}
+add Erham here
+
 renormalization group
 erham
 In the previous chapter it was argued that the unsupervised pre-training . 
 science
 Deep learning methods
 
+\subsubsection{Deep belief nets}
 Following the approach from 
 The breakthrough to effective training strategies for deep architectures came in 2006 with the CD algorithm for training
 Deep Belief networks (DBN) \cite{hinton2006reducing}. DBNs are generative graphical models with many hidden layers of hidden
@@ -164,32 +177,118 @@ procedure.  However, the positive results obtained using extended mean-field app
 suggests that we may 
 follow this procedure 
 
+\cite{montufar2010refinements}
+\begin{theorem} [Guido-Ay, 2010] Let $n = \frac{2^b}{2} + b$, $b \in \mathbb{N}$, $b \geqslant 1$. A DBN containing $\frac{2^n}{2(n-b)}$ hidden layers of size $n$ is a universal approximator of distributions on $\{0,1 \}^n$.
+\end{theorem}
+
  The guarantee that we improve the bound is no longer valid if the size of subsequent hidden layers is not large enough
  however it was empiracally proven that such approach still can learn an effective generative model. After pretraining multiple layers of feature detectors, the model can be ``unfolded'' to form an autoencoder structures 
 where the decoder network uses transposed weigths of the encoder network. At this stage, such network might be considered
 as feed forward deep neural architecture and might be used as a starting point for supervised fine-tuning with respect to any
-training criterion that depends on the learnt representation \ref{bengio2007greedy}. 
+training criterion that depends on the learnt representation \ref{bengio2007greedy}.
+ 
+ \def\layersep{2.5cm}
+\begin{figure}[!h]
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+    \tikzstyle{input neuron}=[neuron, fill=blue!50];
+    \tikzstyle{output neuron}=[neuron, fill=red!50];
+    \tikzstyle{hidden neuron}=[neuron, fill=blue!50];
+     \tikzstyle{shidden neuron}=[neuron, fill=blue!50];
+          \tikzstyle{thidden neuron}=[neuron, fill=black!50];
+    \tikzstyle{annot} = [text width=4em, text centered]
 
-The Figure \ref{drbm} presents the reconstructions produced
-by the $25$-dimensional deep autoencoder
+    % Draw the input layer nodes
+    \foreach \name / \y in {1,...,3}
+    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}       
+     \node[input neuron, pin=left:Input \#\y] (I-\name) at (0,-\y) {};
 
+    % Draw the hidden layer nodes
+    \foreach \name / \y in {1,...,4}
+        \path[yshift=0.5cm]
+            node[hidden neuron] (H-\name) at (\layersep,-\y cm) {};
+
+    % Draw the SECOND hidden layer nodes
+    \foreach \name / \y in {1,...,4}
+        \path[yshift=0.5cm]
+            node[shidden neuron] (S-\name) at (2*\layersep,-\y cm) {};
+            
+            
+    % Draw the THIRD hidden layer nodes
+    \foreach \name / \y in {1,...,4}
+        \path[yshift=0.5cm]
+            node[thidden neuron] (T-\name) at (3*\layersep,-\y cm) {};
+
+%    % Draw the output layer node
+%    \node[output neuron,pin={[pin edge={->}]right:Output}, right of=S-3] (O) {};
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+    \foreach \source in {1,...,3}
+        \foreach \dest in {1,...,4}
+            \path (I-\source) edge (H-\dest);
+            
+% Connect every node in the hidden layer with every node in the
+    % SECOND hidden layer.
+    \foreach \source in {1,...,4}
+        \foreach \dest in {1,...,4}
+            \path (H-\source) edge (S-\dest);
+
+% Connect every node in the hidden layer with every node in the
+    % SECOND hidden layer.
+    \foreach \source in {1,...,4}
+        \foreach \dest in {1,...,4}
+            \path (S-\source) edge (T-\dest);
+            
+%    % Connect every node in the hidden layer with the output layer
+%    \foreach \source in {1,...,5}
+%        \path (H-\source) edge (O);
+
+    % Annotate the layers
+    \node[annot,above of=H-1, node distance=1cm] (hl) {1th Hidden layer};
+    \node[annot,left of=hl] {Input layer};
+        \node[annot,above of=S-1, node distance=1cm] (hl) {2nd Hidden layer};
+    \node[annot,above of=T-1, node distance=1cm] (hl) {3rd Hidden layer};
+\end{tikzpicture}
+  \label{fig:neuralnet}
+  \caption[1]{dsd}
+\end{center}
+\end{figure}
+
+\subsubsection{Reconstructions analysis}
+Figure \ref{drbm} presents the reconstructions of randomly chosen samples from the validation data set produced by deep autoencoders trained with four different methods of pre-training DBNs. The autoencoder consists of three hidden layers of sizes $500$, $250$ and $25$ accordingly. The reconstructions created by \verb|PTAP2| and \verb|PTAP3| are of similar quality as \verb|PCD|. 
+
+
+TODO - learn model long and maybe on samples to get 2 dimensions.
 \begin{figure}[!htb]
  %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
 \label{fig:drbm}
   \caption[1]{DRBM TAP2 TAP3 PCD}
 \end{figure}
 
-Figure \ref{mse} shows the mean squared error on training and validation data sets for different methods for pre-training the RBMs.
+The average squared errors on training and validation data sets (Figure \ref{mse}) confirms the visual assessment of reconstructions. The mean field obtains the highest score while TAP2 and TAP3's scores are slightly higher then with training DBN using PCD approach. 
 
 \begin{figure}[!htb]
  %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
 \label{fig:mse}
-  \caption[1]{MSE TAP2 TAP3 PCD on training and validation data set}
+  \caption[1]{shows the mean squared error on training and validation data sets for different methods for pre-training the RBMs.}
 \end{figure}
+
+TAP2 0.0515471685931
+MF 0.0610472665952
+TAP3 0.0511828595047
+PCD 0.048851695881
+
+Those results confirms the observations from the previous chapter and shows that additional higher-order approximations substantially improves the quality of learned magnetizations which in turns helps learning a better model.
+
+\end{document}
+
+
 \subsection{Semi RBM}
-
+SEE IF IT IS WORTH IT.
 \subsubsection{Exploiting the SRBM structure}
-
 Clamped free energy can be written in the form:
 \begin{align}
 \begin{split}
@@ -199,13 +298,3 @@ Clamped free energy can be written in the form:
 \label{eq:freeEnergy}
 \end{split}
 \end{align}
-\subsection{Boltzmann Machine}
-$$ E (\mathbf{v,h}) = - \sum_i a_i v_i - \sum_j b_j h_j - \sum_{i,j} v_i w_{ij}h_j = -\frac{1}{2} \mathbf{v}^T \mathbf{V}  \mathbf{v} - \frac{1}{2} \mathbf{h}^T  \mathbf{J} \mathbf{h} - \mathbf{h}^T \mathbf{W}  \mathbf{v} $$
-
-This approximation this time will be used two times, first for $P(\mathbf{h}| \mathbf{v})$ and the second time for the variational free energy.
-We have:
-$$ KL \left(Q(\mathbf{h}| \mathbf{v}) \| P(\mathbf{h}| \mathbf{v}) \right)$$
-
-
-\subsection{GBRBM}
-\end{document}

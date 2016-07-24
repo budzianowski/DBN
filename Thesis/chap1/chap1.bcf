@@ -1964,13 +1964,17 @@
     <bcf:datasource type="file" datatype="bibtex">bio.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">koller2009probabilistic</bcf:citekey>
+    <bcf:citekey order="1">yedidia2001idiosyncratic</bcf:citekey>
     <bcf:citekey order="2">yedidia2001idiosyncratic</bcf:citekey>
-    <bcf:citekey order="3">yedidia2001idiosyncratic</bcf:citekey>
-    <bcf:citekey order="4">opper2001advanced</bcf:citekey>
-    <bcf:citekey order="5">yedidia2001idiosyncratic</bcf:citekey>
-    <bcf:citekey order="6">plefka1982convergence</bcf:citekey>
-    <bcf:citekey order="7">ackley1985learning</bcf:citekey>
-    <bcf:citekey order="8">georges1991expand</bcf:citekey>
+    <bcf:citekey order="3">opper2001advanced</bcf:citekey>
+    <bcf:citekey order="4">wainwright2008graphical</bcf:citekey>
+    <bcf:citekey order="5">kirkpatrick1978infinite</bcf:citekey>
+    <bcf:citekey order="6">georges1991expand</bcf:citekey>
+    <bcf:citekey order="7">georges1991expand</bcf:citekey>
+    <bcf:citekey order="8">yedidia2001idiosyncratic</bcf:citekey>
+    <bcf:citekey order="9">plefka1982convergence</bcf:citekey>
+    <bcf:citekey order="10">ackley1985learning</bcf:citekey>
+    <bcf:citekey order="11">fischer2012introduction</bcf:citekey>
+    <bcf:citekey order="12">le2008representational</bcf:citekey>
   </bcf:section>
 </bcf:controlfile>
