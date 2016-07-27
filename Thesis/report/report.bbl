@@ -1,4 +1,4 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{21}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -16,6 +16,13 @@ Julian~E Besag.
   data.
 \newblock \emph{Journal of the Royal Statistical Society. Series B
   (Methodological)}, pages 75--83, 1972.
+
+\bibitem[Bolthausen(2014)]{bolthausen2014iterative}
+Erwin Bolthausen.
+\newblock An iterative construction of solutions of the tap equations for the
+  sherrington--kirkpatrick model.
+\newblock \emph{Communications in Mathematical Physics}, 325\penalty0
+  (1):\penalty0 333--366, 2014.
 
 \bibitem[Bottou()]{bottou1998online}
 L{\'e}on Bottou.
@@ -67,6 +74,11 @@ Yann LeCun and Corinna Cortes.
 \newblock The mnist database of handwritten digits.
 \newblock Technical report, 1998.
 
+\bibitem[Murphy(2012)]{murphy2012machine}
+Kevin~P Murphy.
+\newblock \emph{Machine learning: a probabilistic perspective}.
+\newblock MIT Press, 2012.
+
 \bibitem[Neal(1992)]{neal1992connectionist}
 Radford~M Neal.
 \newblock Connectionist learning of belief networks.
@@ -107,6 +119,12 @@ Martin~J Wainwright and Michael~I Jordan.
 \newblock Graphical models, exponential families, and variational inference.
 \newblock \emph{Foundations and Trends{\textregistered} in Machine Learning},
   1\penalty0 (1-2):\penalty0 1--305, 2008.
+
+\bibitem[Welling and Hinton(2002)]{welling2002new}
+Max Welling and Geoffrey~E Hinton.
+\newblock A new learning algorithm for mean field boltzmann machines.
+\newblock In \emph{International Conference on Artificial Neural Networks},
+  pages 351--357. Springer, 2002.
 
 \bibitem[Yedidia(2001)]{yedidia2001idiosyncratic}
 Jonathan Yedidia.

@@ -15,11 +15,11 @@
 \citation{wainwright2008graphical}
 \citation{kirkpatrick1978infinite}
 \citation{georges1991expand}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Mean field approximation}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}(Naive) Mean field approximation}{5}}
 \newlabel{eq:freeEnergyMF}{{7}{5}}
 \newlabel{eq:freeEnergyMF2}{{10}{5}}
 \newlabel{eq:MFupdates}{{11}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Extended mean field approximation}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Extended mean field approximation (EMF)}{5}}
 \newlabel{eq:constraint}{{14}{5}}
 \newlabel{eq:minimum}{{15}{5}}
 \citation{georges1991expand}
@@ -43,73 +43,144 @@
 \newlabel{eq:phv}{{25}{8}}
 \newlabel{eq:pvh}{{26}{8}}
 \newlabel{eq:clampedFreeEnergy}{{27}{9}}
+\citation{gabrie2015training}
+\citation{welling2002new}
+\citation{gabrie2015training}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Evaluation on the toy models}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Adaptation of EMF to RBM}{10}}
+\newlabel{eq:expansionRBM}{{28}{10}}
+\newlabel{eq:selfConst}{{30}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Schedule of updates}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Asynchronously}{11}}
+\newlabel{eq:asynch}{{31}{11}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Sequentially}{11}}
+\newlabel{eq:sequential}{{32}{11}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Parallelly}{11}}
+\citation{murphy2012machine}
+\citation{gabrie2015training}
+\citation{welling2002new}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 1}}{12}}
+\newlabel{fig:updates}{{2}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Toy models}{12}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Grid toy model}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 1}}{12}}
+\newlabel{fig:grid}{{3}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 1}}{13}}
+\newlabel{fig:gridModel}{{4}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 1}}{13}}
+\newlabel{fig:gridModelCoup}{{5}{13}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}RBM toy model}{13}}
+\citation{welling2002new}
+\newlabel{fig:rbmSame}{{3.3.2}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces 1}}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces 1}}{14}}
+\newlabel{fig:rbmRandom}{{7}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces 1}}{15}}
+\newlabel{fig:gridModelSigns}{{8}{15}}
 \citation{tieleman2008training}
 \citation{robbins1951stochastic}
 \citation{bottou1998online}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Learning of Boltzmann machines}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Unsupervised learning}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Training of Boltzmann Machines}{11}}
-\newlabel{eq:sgd}{{30}{11}}
-\newlabel{eq:loglikelihood}{{31}{11}}
-\newlabel{eq:gradient}{{32}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Learning of Boltzmann machines}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Unsupervised learning}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Training of Boltzmann Machines}{16}}
+\newlabel{eq:sgd}{{36}{16}}
+\newlabel{eq:loglikelihood}{{37}{16}}
+\newlabel{eq:gradient}{{38}{16}}
 \citation{hinton2002training}
 \citation{hinton2002training}
 \citation{fischer2012introduction}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Monte Carlo methods}{12}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Markov chain Monte Carlo}{12}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Gibbs sampling}{12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Contrastive Divergence}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Monte Carlo methods}{17}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Markov chain Monte Carlo}{17}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Gibbs sampling}{17}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Contrastive Divergence}{17}}
 \citation{tieleman2008training}
 \citation{neal1992connectionist}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 1}}{13}}
-\newlabel{fig:gibbsSampling}{{2}{13}}
-\newlabel{eq:gradientCD}{{33}{13}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Persistent contrastive divergence}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Learning using extended mean field approximation}{13}}
-\newlabel{eq:emfLL}{{34}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 1}}{18}}
+\newlabel{fig:gibbsSampling}{{9}{18}}
+\newlabel{eq:gradientCD}{{39}{18}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Persistent contrastive divergence}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Learning using extended mean field approximation}{18}}
+\newlabel{eq:emfLL}{{40}{18}}
 \citation{besag1972nearest}
 \citation{lecun1998}
 \citation{gabrie2015training}
 \citation{salakhutdinov2008learning}
 \citation{gabrie2015training}
 \citation{gabrie2015training}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Approximating the log-likelihood}{14}}
-\newlabel{eq:pseudoLL}{{39}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Real scale model -- MNIST data set}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Comparison of both approaches}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Approximating the log-likelihood}{19}}
+\newlabel{eq:pseudoLL}{{45}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Real scale model -- MNIST data set}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Comparison of both approaches}{19}}
 \citation{gabrie2015training}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 1}}{15}}
-\newlabel{fig:validLL}{{3}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 1}}{16}}
-\newlabel{fig:PvalidLL}{{4}{16}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Chapter 4 - Applications}{16}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 1}}{20}}
+\newlabel{fig:validLL}{{10}{20}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Generated samples from the models}{20}}
+\citation{minka2005divergence}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 1}}{21}}
+\newlabel{fig:PvalidLL}{{11}{21}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Chapter 4 - Applications}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Comparison of schedules of updates}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Evaluation of EMF approximation}{21}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Annealed Importance Sampling }{21}}
+\newlabel{eq:ratioSIS}{{48}{21}}
+\citation{jarzynski1997nonequilibrium}
+\citation{neal2001annealed}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces 1}}{22}}
+\newlabel{fig:particles}{{12}{22}}
+\citation{salakhutdinov2008learning}
+\citation{neal2001annealed}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces 1}}{23}}
+\newlabel{fig:updatesLL}{{13}{23}}
+\citation{salakhutdinov2008quantitative}
+\citation{salakhutdinov2008learning}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Annealed Importance Sampling.}}{24}}
+\newlabel{alg:vae}{{1}{24}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Comparison}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Deep RBM}{24}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Unsupervised Pre-training of Neural Networks}{24}}
+\citation{hinton2006reducing}
+\citation{montufar2010refinements}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces 1}}{25}}
+\newlabel{fig:AISTAP2}{{14}{25}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Deep belief nets}{25}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Learning Deep Belief Nets.}}{25}}
+\newlabel{alg:DBN}{{2}{25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces 1}}{26}}
+\newlabel{fig:DBN}{{5.3.2}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Reconstructions analysis}{26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces 1}}{26}}
+\newlabel{fig:drbm}{{16}{26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces 1}}{27}}
+\newlabel{fig:mse}{{17}{27}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{28}}
 \citation{georges1991expand}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix}{18}}
-\newlabel{eq:Uoperator}{{42}{18}}
-\newlabel{eq:obeta}{{43}{18}}
-\newlabel{eq:naive}{{47}{18}}
-\newlabel{eq:higherOrders}{{48}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix}{29}}
+\newlabel{eq:Uoperator}{{56}{29}}
+\newlabel{eq:obeta}{{57}{29}}
+\newlabel{eq:naive}{{61}{29}}
+\newlabel{eq:higherOrders}{{62}{29}}
 \bibstyle{plainnat}
 \bibdata{bio}
 \bibcite{ackley1985learning}{{1}{1985}{{Ackley et~al.}}{{Ackley, Hinton, and Sejnowski}}}
-\newlabel{eq:maxwell}{{51}{19}}
-\newlabel{eq:Yoperator}{{54}{19}}
+\newlabel{eq:maxwell}{{65}{30}}
+\newlabel{eq:Yoperator}{{68}{30}}
 \bibcite{besag1972nearest}{{2}{1972}{{Besag}}{{}}}
-\bibcite{bottou1998online}{{3}{}{{Bottou}}{{}}}
-\bibcite{fischer2012introduction}{{4}{2012}{{Fischer and Igel}}{{}}}
-\bibcite{gabrie2015training}{{5}{2015}{{Gabri{\'e} et~al.}}{{Gabri{\'e}, Tramel, and Krzakala}}}
-\bibcite{georges1991expand}{{6}{1991}{{Georges and Yedidia}}{{}}}
-\bibcite{hinton2002training}{{7}{2002}{{Hinton}}{{}}}
-\bibcite{kirkpatrick1978infinite}{{8}{1978}{{Kirkpatrick and Sherrington}}{{}}}
-\bibcite{le2008representational}{{9}{2008}{{Le~Roux and Bengio}}{{}}}
-\bibcite{lecun1998}{{10}{1998}{{LeCun and Cortes}}{{}}}
-\bibcite{neal1992connectionist}{{11}{1992}{{Neal}}{{}}}
-\bibcite{opper2001advanced}{{12}{2001}{{Opper and Saad}}{{}}}
-\bibcite{plefka1982convergence}{{13}{1982}{{Plefka}}{{}}}
-\bibcite{robbins1951stochastic}{{14}{1951}{{Robbins and Monro}}{{}}}
-\bibcite{salakhutdinov2008learning}{{15}{2008}{{Salakhutdinov}}{{}}}
-\bibcite{tieleman2008training}{{16}{2008}{{Tieleman}}{{}}}
-\bibcite{wainwright2008graphical}{{17}{2008}{{Wainwright and Jordan}}{{}}}
-\bibcite{yedidia2001idiosyncratic}{{18}{2001}{{Yedidia}}{{}}}
+\bibcite{bolthausen2014iterative}{{3}{2014}{{Bolthausen}}{{}}}
+\bibcite{bottou1998online}{{4}{}{{Bottou}}{{}}}
+\bibcite{fischer2012introduction}{{5}{2012}{{Fischer and Igel}}{{}}}
+\bibcite{gabrie2015training}{{6}{2015}{{Gabri{\'e} et~al.}}{{Gabri{\'e}, Tramel, and Krzakala}}}
+\bibcite{georges1991expand}{{7}{1991}{{Georges and Yedidia}}{{}}}
+\bibcite{hinton2002training}{{8}{2002}{{Hinton}}{{}}}
+\bibcite{kirkpatrick1978infinite}{{9}{1978}{{Kirkpatrick and Sherrington}}{{}}}
+\bibcite{le2008representational}{{10}{2008}{{Le~Roux and Bengio}}{{}}}
+\bibcite{lecun1998}{{11}{1998}{{LeCun and Cortes}}{{}}}
+\bibcite{murphy2012machine}{{12}{2012}{{Murphy}}{{}}}
+\bibcite{neal1992connectionist}{{13}{1992}{{Neal}}{{}}}
+\bibcite{opper2001advanced}{{14}{2001}{{Opper and Saad}}{{}}}
+\bibcite{plefka1982convergence}{{15}{1982}{{Plefka}}{{}}}
+\bibcite{robbins1951stochastic}{{16}{1951}{{Robbins and Monro}}{{}}}
+\bibcite{salakhutdinov2008learning}{{17}{2008}{{Salakhutdinov}}{{}}}
+\bibcite{tieleman2008training}{{18}{2008}{{Tieleman}}{{}}}
+\bibcite{wainwright2008graphical}{{19}{2008}{{Wainwright and Jordan}}{{}}}
+\bibcite{welling2002new}{{20}{2002}{{Welling and Hinton}}{{}}}
+\bibcite{yedidia2001idiosyncratic}{{21}{2001}{{Yedidia}}{{}}}

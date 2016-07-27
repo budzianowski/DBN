@@ -70,15 +70,15 @@ KL(Q || P)  = \mathbb{E}_{Q}\left( \ln \frac{Q}{P} \right) = \sum_{\mathbf{s}} Q
 \end{equation}
 The $KL$-divergence is a non-symmetric measure of the difference between two distributions which is always non-negative. Substituting $P$ from \ref{eq:distribution} into the previous equation yields:
 $$ KL(Q||P) = \ln Z + \frac{1}{T}\mathbb{E}[Q] - H[Q]$$
-where $H$ stands for entropy of the distribution $Q$, $\ln Z$ is the \emph{free energy} and $\mathbb{E}[Q] = \sum_{\mathbf{s}} Q(\mathbf{s})E(\mathbf{s})$ is called the \emph{variational energy} \cite{opper2001advanced}. The partition function $Z$ doesn't depend on $Q$ and we need to only focus on minimizing the variational free energy:
+where $H$ stands for entropy of the distribution $Q$, $\ln Z$ is the \emph{free energy} and $\mathbb{E}[Q] = \sum_{\mathbf{s}} Q(\mathbf{s})E(\mathbf{s})$ is called the \emph{variational energy} where $\mathbb{E}$ refers to the average configuration under the Boltzmann measure \cite{opper2001advanced}. The partition function $Z$ doesn't depend on $Q$ and we need to only focus on minimizing the variational free energy:
 \begin{align}
 \begin{split}
-F[Q] \equiv \mathbb{E}[Q] - TH[Q].
+F[Q]  \coloneqq \mathbb{E}[Q] - TH[Q].
 \label{eq:gibbsFreeEnergy}
 \end{split}
 \end{align}
 At equilibrium i.e. when the approximate distribution would equal the desired one the KL-divergence is $0$ and the variational free energy is equal to the Helmholtz free energy defined by 
-$F \equiv -T \ln Z$. 
+$\mathcal{F} \coloneqq -T \ln Z$. 
 
 %In next two sections, we will analyse two approximations 
 % On the other hand we have (TODO: derive):
@@ -87,8 +87,8 @@ $F \equiv -T \ln Z$.
 %$$
 %Thus, minimizing KL-term is equivalent to maximizing $F$ which is commonly known as a free energy.
 
-\subsection{Mean field approximation}
-The most widely used approximation to the family of models defined in \ref{eq:distribution} is the mean field approximation which is obtained by taking as an approximator the family of distribution that factorizes, i.e.
+\subsection{(Naive) Mean field approximation}
+The most widely used approximation to the family of models defined in \ref{eq:distribution} is the mean field approximation which is obtained by taking as an approximator the family of distribution that factorizes as following:
 \begin{align}
 \begin{split}
 Q(\mathbf{s}) = \prod_i q_i(s_i)
@@ -104,16 +104,16 @@ F^{MF} = - \sum_{(ij)} \sum_{s_i, s_j} w_{ij} q_i(x_i)q_j(x_j) - \sum_{i}\sum_{s
 and the energy for a single spin is:
 \begin{align}
 \begin{split}
-E(s_i) = - \theta_i s_i - \sum_j  w_{ij} s_i m_j
+E(s_i) = - \theta_i s_i - s_i \sum_j  w_{ij} m_j
 \end{split}
 \end{align}
 where neighbour spins are replaced by certain effective mean fields which are defined as:
  \begin{align}
 \begin{split}
-m_i = \mathbb{E}_{q_i} (s_i), ~~ i \in \{1, ..., N\}
+m_i = \mathbb{E}_{q_i} (s_i), ~~ i \in \{1, ..., N\}.
 \end{split}
 \end{align}
-where $\mathbb{E}$ refers to the average configuration under the Boltzmann measure. In terms of magnetizations, \ref{eq:freeEnergyMF} becomes:
+ In terms of magnetizations, \ref{eq:freeEnergyMF} becomes:
 \begin{align}
 \begin{split}
 F^{MF} = - \sum_{(ij)} w_{ij} m_i m_j - \sum_{i} \theta_i m_i  + T\sum_i \left[ m_i \ln m_i + (1-m_i)\ln(1-m_i) \right].
@@ -139,11 +139,11 @@ Additionally, the variational mean field approximation yields an upper bound on 
 where the middle inequality follows from the concavity of the log function and application of Jensen's inequality. We arrive at the bound by reversing the inequality:
 \begin{align}
 \begin{split}
-F = - T \ln Z \leqslant \mathbb{E}[Q] - TH[Q] = F[Q].
+\mathcal{F} = - T \ln Z \leqslant \mathbb{E}[Q] - TH[Q] = F[Q].
 \end{split}
 \end{align}
  %This is known as the \emph{mean field free energy}
-\subsection{Extended mean field approximation}
+\subsection{Extended mean field approximation (EMF)}
 At the expense of loosing the rigorous upper bound on the Helmholtz free energy, we might consider a different approximation for the magnetization dependent variational free energy \cite{georges1991expand}. We will minimize \ref{eq:gibbsFreeEnergy} where instead of assuming $Q$ to be a product distribution we require that magnetizations has appropriate values, i.e.:
 \begin{align}
 \begin{split}
@@ -231,6 +231,8 @@ and as it was observed earlier, at $\beta =0$ the spins are independent and the 
  \end{split}
 \end{align}
 Vomparing \ref{eq:firstterm} and \ref{eq:entropy} with \ref{eq:freeEnergyMF2} we can see that we have already recovered the simple mean field approximation. Yedida and Georges \cite{georges1991expand} showed how to continue this expansion to the arbitrarily high order (derivation in Appendix). However, in next chapters the expansion only up to the third order will be used:
+
+TODO ADDD ONSAGER TAP NAMES
 \begin{align*}
 \begin{split}
 -\beta F^{EMF} = & - \sum_i \left[m_i\ln (m_i) +  (1 - m_i)\ln \left( 1-m_i \right)\right]  \\
@@ -338,6 +340,7 @@ The graph of an RBM has connections between visible and hidden units but not bet
         % Annotate the layers
     \node[annot,above of=H-1, node distance=1.2cm] (hl) {Hidden layer};
     \node[annot,left of=hl] {Input layer};
+    
 \end{tikzpicture}
 \end{center}
 \endminipage\hfill

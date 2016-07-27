@@ -1,43 +1,40 @@
 \documentclass[../report/report.tex]{subfiles}
-
 \begin{document}
+\subsection{Comparison of schedules of updates}
+In the chapter $2$ different schedules of updates were analysed on the toy model where the parameters of the model were known a priori and no substantial discrepancies were observed in terms of the quality of approximation between asynchronous and parallel schedules. Taking into consideration the performance of the sequential updates on the toy models, this schedule wasn't considered in the evaluation on the real data set.
 
-\subsection{Updates }
-In the chapter $3$ different schedules of updates were analysed on the toy model where the parameters of the model were known a priori and no substantial discrepancies were observed in terms of the quality of approximation. 
-However, in the case of the \verb|MNIST| data set estimated magnetizations allow us to perform learning of unknown parameters. Thus, in this case we combine uncertainty related to both magnetizations and parameters -- this may lead to substantial differences in performance. Figure 
-
-\begin{figure}[!htb]
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
-\label{fig:updatesTAP2}
-  \caption[1]{updatesTAP2}
-\end{figure}
+In the case of the MNIST data set estimated magnetizations allow us to perform learning of unknown parameters. Thus, in this case we combine uncertainty related to both magnetizations and parameters -- this may lead to substantial differences in performance. Figure 
+TODO
 
 \begin{figure}[!htb]
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
-\label{fig:updatesMF}
-  \caption[1]{updatesMF}
+\minipage{0.50\linewidth}%
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/updatesMFLL.pdf}
+\endminipage 
+\minipage{0.50\linewidth}  
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/updatesMFEMF.pdf}
+\endminipage\hfill
+
+\minipage{0.50\linewidth}%
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/updatesTAP2LL.pdf}
+\endminipage 
+\minipage{0.50\linewidth}  
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/updatesTAP2EMF.pdf}
+\endminipage\hfill
+
+\minipage{0.50\linewidth}%
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/updatesTAP3LL.pdf}
+\endminipage 
+\minipage{0.50\linewidth}  
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/updatesTAP3EMF.pdf}
+\endminipage\hfill
+  \caption[1]{Per-sample pseudo log-likelihood (left) and EMF log-likelihood (right) on the validation set of the MNIST data set divided by number of all units in the model ($1284$) across first $50$ training epochs for RBMs models trained with different schedule and number of updates. Error bars shows the standard deviations of $10$ trained models using a particular version of training.}
+  \label{fig:updatesLL}
 \end{figure}
 
-\begin{figure}[!htb]
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
-\label{fig:updatesTAP3}
-  \caption[1]{updatesTAP3}
-\end{figure}
+Only with the naive mean field approximation, we can observe that the parallel schedule provides slightly better results in terms of the approximated log-likelihood. In general, there are no significant differences between two considered schedules. Moreover, it seems that small number of fixed point iterations doesn't deteriorate the performance. This suggests that asynchronous updates with only $3$ iterative updates of magnetizations yields consistently competitive results at the same time being the most computationally inexpensive form of schedule.
 
-\subsection{Generated samples from the models}
-
-\subsection{AIS vs TAP}
-Make several runs of AIS to get reasonable approximation!
-For  all  models  we  also  used  1,000
-spaced  uniformly  from  0  to  0.5,  4,000
-spaced  uniformly
-from 0.5 to 0.9,  and 5,000
-spaced uniformly from 0.9 to 1.0,  with a total of 10,000 inter
-mediate
-distributions. 
-
-\subsubsection{Annealed Importance Sampling (AIS)}
-
+\subsection{Evaluation of EMF approximation}
+\subsubsection{Annealed Importance Sampling }
 The most widely used technique is based on a very simple identity. Assume we have two distributions $p_A= \frac{1}{Z_A}p_A^*(\mathbf{x})$, $p_B= \frac{1}{Z_B}p_B^*(\mathbf{x})$ where $p^*(\dot)$ denotes unnormalized distribution and $Z_A, Z_B$ are partition functions. Assuming that a proposal $p_A$ distribution $p_A$ supports tractable sampling and tractable evaluation of both the unnormalized distribution $p_A^*(\mathbf{x})$ and the partition function $Z_A$ we can use the following relation:
 \begin{align}
 \begin{split}
@@ -110,28 +107,22 @@ p(h^B) & =
 \end{split}
 \end{align}
 
-\begin{algorithm}[!bthp]
-\caption{Appendix -- Implementation for BM and RBM.}
-\label{alg:vae}
-\begin{algorithmic}
-\State $\theta, \phi \gets .$
-\While {$\textrm{not converged in } \theta, \phi$}
-  \State {Pick subset of size $\mathbf{x}_{1:M}$ from the full dataset uniformly at random.}
-  \State {Compute $g \gets \nabla_{\theta, \phi} {\tilde{\mathcal{L}}^B}{\theta, \phi; \mathbf{x}_{1:M}, \epsilon_{1:M}}$}
-\EndWhile
-\end{algorithmic}
-\end{algorithm}
-
 \subsubsection{Comparison}
-Two models were estimated with $5$ of magnetizations to compare the quality of the approximation of the variational free energy. Figure \ref{fig:AISTAP2} presents the estimates of \ref{eq:freeEnergy} for the \verb|TAP2| and \verb|TAP3| models along with AIS estimates for different numbers of runs.
+Two models were estimated based on the extended mean field approximation -- up to the second-order term (TAP2) and with third-order term (TAP3) to compare the quality of the approximation of the variational free energy.
+Each model was restimated $10$ times using persistent chains with $10$ iterations of self-consistency relations using asynchronous schedule. Taking into consideration the inherent variability of the AIS method $100$ runs of AIS were performed to obtain an average estimate.  A sequence of $\beta$s is required to set the "tempo" of annealing -- following \cite{salakhutdinov2008learning} $1000$ $\beta_k$ was spaced uniformly from  $0 $ to  $0.5$, $4,000$ $\beta_k$ was spaced uniformly from $0.5$ to $0.9$, and $5,000$ spaced uniformly from $0.9$ to $1.0$, with a total of 10,000 intermediate distributions. Figure \ref{fig:AISTAP2} presents the estimates of \ref{eq:freeEnergy} for the TAP2 and TAP3 models along with AIS estimates.
 
 \begin{figure}[!htb]
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
-\label{fig:AISTAP2}
-  \caption[1]{AIS for TAP2 and TAP3}
+\minipage{0.50\linewidth}%
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/AISTAP2}
+\endminipage 
+\minipage{0.50\linewidth}  
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/AISTAP3}
+\endminipage\hfill
+  \caption[1]{Free energy estimates using two forms of extended mean field approximations and AIS estimates for $10$ trained models.}
+  \label{fig:AISTAP2}
 \end{figure}
-TAP2, TAP3
-3 or 10 steps of magnetization!
+
+Firstly, as it was expected the learned models using two approximations yield very similar estimates of the free energy. Secondly, in both cases they give consistently biased upper bound approximation for the $\mathcal{F}$ assuming that the AIS method gives an accurate estimation of it. The mean squared error between the average estimate AIS estimate and the TAP2 method was $505.747$ while for the the approximation including third-order the MSE was $534.193$. This suggests that even though the extended mean field approximation enable us to learn good generative models, the approximation of the free energy is very biased. However, the computational cost of estimation is about $10^{-5}$ smaller comparing to the AIS.
 
 \subsection{Deep RBM}
 \subsubsection{Unsupervised Pre-training of Neural Networks}
@@ -192,12 +183,12 @@ training criterion that depends on the learnt representation \ref{bengio2007gree
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
-    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
-    \tikzstyle{input neuron}=[neuron, fill=blue!50];
+    \tikzstyle{neuron}=[circle,fill=blue!50,minimum size=17pt,inner sep=0pt]
+    \tikzstyle{input neuron}=[neuron, fill=black!50];
     \tikzstyle{output neuron}=[neuron, fill=red!50];
-    \tikzstyle{hidden neuron}=[neuron, fill=blue!50];
-     \tikzstyle{shidden neuron}=[neuron, fill=blue!50];
-          \tikzstyle{thidden neuron}=[neuron, fill=black!50];
+    \tikzstyle{hidden neuron}=[neuron, fill=black!50];
+     \tikzstyle{shidden neuron}=[neuron, fill=black!50];
+          \tikzstyle{thidden neuron}=[neuron, fill=blue!50];
     \tikzstyle{annot} = [text width=4em, text centered]
 
     % Draw the input layer nodes
@@ -241,60 +232,57 @@ training criterion that depends on the learnt representation \ref{bengio2007gree
     \foreach \source in {1,...,4}
         \foreach \dest in {1,...,4}
             \path (S-\source) edge (T-\dest);
-            
-%    % Connect every node in the hidden layer with the output layer
-%    \foreach \source in {1,...,5}
-%        \path (H-\source) edge (O);
+      
+      \foreach \dest in {1,...,4}
+          \foreach \source in {1,...,4}
+            \path (T-\dest) edge (S-\source) ;
 
     % Annotate the layers
-    \node[annot,above of=H-1, node distance=1cm] (hl) {1th Hidden layer};
+    \node[annot,above of=H-1, node distance=1cm] (hl) {1th hidden layer};
     \node[annot,left of=hl] {Input layer};
-        \node[annot,above of=S-1, node distance=1cm] (hl) {2nd Hidden layer};
-    \node[annot,above of=T-1, node distance=1cm] (hl) {3rd Hidden layer};
+        \node[annot,above of=S-1, node distance=1cm] (hl) {2nd hidden layer};
+    \node[annot,above of=T-1, node distance=1cm] (hl) {3rd hidden layer};
 \end{tikzpicture}
-  \label{fig:neuralnet}
-  \caption[1]{dsd}
+  \caption[1]{An exemplary deep belief net with $3$ hidden layers where the last two layers form a RBM.}
 \end{center}
+  \label{fig:DBN}
 \end{figure}
 
 \subsubsection{Reconstructions analysis}
-Figure \ref{drbm} presents the reconstructions of randomly chosen samples from the validation data set produced by deep autoencoders trained with four different methods of pre-training DBNs. The autoencoder consists of three hidden layers of sizes $500$, $250$ and $25$ accordingly. The reconstructions created by \verb|PTAP2| and \verb|PTAP3| are of similar quality as \verb|PCD|. 
+Figure \ref{fig:drbm} presents the reconstructions of randomly chosen samples from the validation data set produced by deep autoencoders trained with four different methods of pre-training DBNs. The autoencoder consists of three hidden layers of sizes $500$, $250$ and $25$ accordingly. Extended mean field approximation was considered up to the first-order (MF), second-order (TAP2) and third-order (TAP3) terms. One model was also trained using CD procedure. At each layer $50$ updates through the entire data sets were performed using $10$ iterations of asynchronous updates. In each case magnetization or Gibbs chains were persistent.
 
-
-TODO - learn model long and maybe on samples to get 2 dimensions.
+Figure \ref{fig:drbm} presents the reconstructions of MNIST digits as well as a the original numbers. By the visual inspection, it might be argued that the reconstruction created by TAP2 and PCD are of similar quality and they are more identifiable than those produced by the MF. 
+It can be observed how the autoencoder learnt by EMF or PCD recovers a a smoothed version of the original digit -- an "average" representative of a given number. Surprisingly, the addition of the third-order term leads somewhat to deterioration of the quality in reconstructions which can be observed especially in the case of the first ($2$) and sixth ($5$) number. 
 \begin{figure}[!htb]
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
+\includegraphics[width=\linewidth]{../../../Code/DRBM/drbm/reconstructions}
+  \caption[1]{Reconstructions of MNIST digits (top row) generated by four different deep belief nets trained using naive mean field approach (second row), EMF up to the second-order term (third row), EMF up to the third-order term (fourth row) and with PCD (bottom row).}
 \label{fig:drbm}
-  \caption[1]{DRBM TAP2 TAP3 PCD}
 \end{figure}
 
-The average squared errors on training and validation data sets (Figure \ref{mse}) confirms the visual assessment of reconstructions. The mean field obtains the highest score while TAP2 and TAP3's scores are slightly higher then with training DBN using PCD approach. 
+The average squared errors on training and validation data sets (Figure \ref{fig:mse}) confirms the visual assessment of reconstructions. The mean field approximation obtains the highest score while TAP2 and TAP3's scores are slightly higher then with training DBN using PCD approach. 
 
 \begin{figure}[!htb]
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMZ}
+\begin{center}
+ \includegraphics[width=.5\linewidth]{../../../Code/DRBM/drbm/mseRecon}
+\end{center}
+  \caption[1]{MSE of reconstructions for four different models on training and validation sets.}
 \label{fig:mse}
-  \caption[1]{shows the mean squared error on training and validation data sets for different methods for pre-training the RBMs.}
 \end{figure}
 
-TAP2 0.0515471685931
-MF 0.0610472665952
-TAP3 0.0511828595047
-PCD 0.048851695881
-
-Those results confirms the observations from the previous chapter and shows that additional higher-order approximations substantially improves the quality of learned magnetizations which in turns helps learning a better model.
+Those results confirms the observations from the previous chapter and shows that additional higher-order approximations substantially improves the quality of learned magnetizations which in turns helps learning a better generative model.
 
 \end{document}
 
 
-\subsection{Semi RBM}
-SEE IF IT IS WORTH IT.
-\subsubsection{Exploiting the SRBM structure}
-Clamped free energy can be written in the form:
-\begin{align}
-\begin{split}
-\mathcal{F}^c(\mathbf{v}) = & \sum_\mathbf{h} e^{-E(\mathbf{v}, \mathbf{h})} = e^{\mathbf{b}'\mathbf{v}}\sum_{h_1}...\sum_{h_m}e^{-E(\mathbf{v}, \mathbf{h})} \\
-=&  e^{\mathbf{b}'\mathbf{v}} \sum_{h_1} e^{h_1 (c_1 + W_{1\bullet}\mathbf{v})}... \sum_{h_m} e^{h_m (c_m + W_{m\bullet}\mathbf{v})} \\
-= & e^{\mathbf{b}'\mathbf{v}} \prod_{j=1}^{m} \left( 1 + e^{c_i + W_{i\bullet}\mathbf{v}} \right)
-\label{eq:freeEnergy}
-\end{split}
-\end{align}
+%\subsection{Semi RBM}
+%SEE IF IT IS WORTH IT.
+%\subsubsection{Exploiting the SRBM structure}
+%Clamped free energy can be written in the form:
+%\begin{align}
+%\begin{split}
+%\mathcal{F}^c(\mathbf{v}) = & \sum_\mathbf{h} e^{-E(\mathbf{v}, \mathbf{h})} = e^{\mathbf{b}'\mathbf{v}}\sum_{h_1}...\sum_{h_m}e^{-E(\mathbf{v}, \mathbf{h})} \\
+%=&  e^{\mathbf{b}'\mathbf{v}} \sum_{h_1} e^{h_1 (c_1 + W_{1\bullet}\mathbf{v})}... \sum_{h_m} e^{h_m (c_m + W_{m\bullet}\mathbf{v})} \\
+%= & e^{\mathbf{b}'\mathbf{v}} \prod_{j=1}^{m} \left( 1 + e^{c_i + W_{i\bullet}\mathbf{v}} \right)
+%\label{eq:freeEnergy}
+%\end{split}
+%\end{align}

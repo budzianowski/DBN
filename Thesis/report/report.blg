@@ -7,45 +7,45 @@ Warning--empty year in bottou1998online
 Warning--empty year in bottou1998online
 Warning--empty institution in lecun1998
 Warning--empty institution in salakhutdinov2008learning
-You've used 18 entries,
+You've used 21 entries,
             2773 wiz_defined-function locations,
-            709 strings with 7567 characters,
-and the built_in function-call counts, 7911 in all, are:
-= -- 751
-> -- 308
-< -- 22
-+ -- 108
-- -- 90
-* -- 556
-:= -- 1168
-add.period$ -- 56
-call.type$ -- 18
-change.case$ -- 85
-chr.to.int$ -- 18
-cite$ -- 40
-duplicate$ -- 411
-empty$ -- 717
-format.name$ -- 124
-if$ -- 1711
+            724 strings with 8004 characters,
+and the built_in function-call counts, 9180 in all, are:
+= -- 872
+> -- 349
+< -- 26
++ -- 123
+- -- 102
+* -- 636
+:= -- 1352
+add.period$ -- 66
+call.type$ -- 21
+change.case$ -- 97
+chr.to.int$ -- 21
+cite$ -- 46
+duplicate$ -- 483
+empty$ -- 842
+format.name$ -- 141
+if$ -- 1992
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 17
-newline$ -- 98
-num.names$ -- 72
-pop$ -- 170
+missing$ -- 21
+newline$ -- 113
+num.names$ -- 84
+pop$ -- 202
 preamble$ -- 1
-purify$ -- 66
+purify$ -- 76
 quote$ -- 0
-skip$ -- 320
+skip$ -- 372
 stack$ -- 0
-substring$ -- 385
-swap$ -- 69
-text.length$ -- 6
+substring$ -- 448
+swap$ -- 82
+text.length$ -- 7
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 193
+type$ -- 221
 warning$ -- 4
-while$ -- 86
+while$ -- 100
 width$ -- 0
-write$ -- 239
+write$ -- 278
 (There were 4 warnings)
