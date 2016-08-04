@@ -1,5 +1,4 @@
-\chapter{Learning of Boltzmann machines}
-
+\chapter{Learning of Boltzmann machine}
 \section{Unsupervised learning}
 So far it was assumed that the couplings in analysed structures (along with bias terms) were known a priori. However, in general when we analyse some phenomena we don't know this values and we are interested in learning an unknown distribution $Q$ based on some observed data $\mathcal{D}$. The theoretical results suggests that the RBM structure is a natural candidate for approximating underlying distribution from which the data were generated. Thus, the unsupervised learning in this case consists of learning the parameters $\theta$ of the approximate distribution $P$. Therefore, our general goal is to maximize the probability of $\mathcal{D}$ under the MRF distribution i.e. we are looking for the vector of parameters $\mathbf{\theta}$ that maximize the likelihood given the training data:
 \begin{align}
@@ -11,7 +10,7 @@ where $N$ is the size of $\mathcal{D}$.
 
 The experiments on toy models suggest that the initial unsatisfactory results with naive mean field approaches \cite{tieleman2008training} might be greatly improved if we include additional terms responsible for connections between the spins.
 
-\section{Training of Boltzmann Machines}
+\section{Training of Boltzmann machine}
 With large graphical models, it is not possible to find an analytical solution to the maximum likelihood estimation of parameters and we need to resort to some approximation methods. That is also the case of the RBM and learning the parameters of this structure relies on the gradient ascent of the log-likelihood. At time $t$ during training, the update of the vector containing all parameters of the RBM $\mathbf{\theta}$ has the form:
 \begin{align}
 \begin{split}
@@ -67,7 +66,7 @@ A particular class of MCMC algorithms is the Gibbs sampling algorithm which enab
      
 In the case of the RBM, the structure of the model suggests that we can divide the variables from the joint into two blocks -- visible and hidden units. No connections between variables from the same layer enables us efficiently sample from conditionals $p(\mathbf{v}| \mathbf{h})$ and $p(\mathbf{h} | \mathbf{v})$ using \ref{gibbs}.
     
-\section{Contrastive Divergence}
+\section{Contrastive divergence}
 The main challenge related with MCMC methods is the computational burden related with ensuring that the Markov chain has been run sufficiently long to ensure convergence to a stationary distribution. However, it was proven empirically that the chain might be run only a few steps in order to train an effective model \cite{hinton2002training} which is called contrastive divergence (CD) learning. 
  
 There are two steps which differ CD from the naive MCMC sampling to approximating the second expectation from the gradient \ref{eq:gradient}. Firstly, instead of running the Markov chain until it obtains a stationary distribution, the chain is initialized using training data point $\mathbf{v}^{0}$ from the training data set. Secondly, the Gibbs chain is run only for $k$ steps (CD-$k$) where $k$ is usually smaller than $20$. 
@@ -134,7 +133,7 @@ Figure \ref{fig:gibbsSampling} presents the procedure for the CD-$1$:
             \draw    (-3 +12,2.2) node {$\mathbf{h}^{1}$};
 \end{tikzpicture}
 \end{center}
-  \caption[1]{The first step of the Gibbs sampler for the RBM for a particular data point $\mathbf{v}^0 \in \mathcal{D}$.}
+  \caption[Illustration of Gibbs sampling]{The first step of the Gibbs sampler for the RBM for a particular data point $\mathbf{v}^0 \in \mathcal{D}$.}
   \label{fig:gibbsSampling}
 \end{figure}
 
@@ -223,12 +222,12 @@ Figure \ref{fig:validLL} presents the pseudo log-likelihood \ref{eq:pseudoLL} (l
 
 \begin{figure}[!htb]
 \minipage{0.50\linewidth}%
-%  \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/validLL}
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/validLL}
 \endminipage 
 \minipage{0.50\linewidth}  
- %\includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/validEMF}
+ \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/validEMF}
 \endminipage\hfill
-  \caption[1]{Per-sample pseudo log-likelihood (left) and EMF log-likelihood (right) on the validation set of the MNIST data set divided by number of all units in the model ($1284$) across first training $50$ epochs for RBMs models trained stochastically and deterministically. Error bars shows the standard deviations of $10$ trained models using a particular version of training.}
+  \caption[Comparison of log-likelihood estimates]{Per-sample pseudo log-likelihood (left) and EMF log-likelihood (right) on the validation set of the MNIST data set divided by number of all units in the model ($1284$) across first training $50$ epochs for RBMs models trained stochastically and deterministically. Error bars shows the standard deviations of $10$ trained models using a particular version of training.}
    \label{fig:validLL}
 \end{figure}
 Secondly, results for the MF-10\footnote{The results for MF-3 weren't included as it was very similar to the MF-10} confirms the findings from the literature -- the naive mean field approach is not able to learn an effective model. Moreover, the results for the CD, TAP2 and TAP3 are very similar. There are not significant differences between models with $3$ or $10$ iterations of self-consistency relations which shows that the deterministic approach is not computationally expensive. 
@@ -243,7 +242,7 @@ Figure \ref{fig:PvalidLL} presents the results for persistent versions of models
 \minipage{0.50\linewidth}  
  \includegraphics[width=\linewidth]{../../../Code/DRBM/scripts/PvalidEMF}
 \endminipage\hfill
-  \caption[1]{Per-sample pseudo log-likelihood (left) and EMF log-likelihood (right) for the same models trained using persistent Gibbs chains. Results of the naive method weren't included.}
+  \caption[Comparison of log-likelihood estimates with persistent chains]{Per-sample pseudo log-likelihood (left) and EMF log-likelihood (right) for the same models trained using persistent Gibbs chains. Results of the naive method weren't included.}
    \label{fig:PvalidLL}
 \end{figure}
 
@@ -267,7 +266,7 @@ The restricted Boltzmann machine can also be seen as a generative model that can
 \minipage{0.46\linewidth}  
  \includegraphics[width=\linewidth]{../../../Code/DRBM/backup/tap2/particlestap2}
 \endminipage
-  \caption[1]{Comparison of samples generated by $500$ hidden unit RBM trained using naive mean field approach (top right), extended mean field approximation up to the second-term order (bottom right) and with contrastive divergence (bottom left) to the original digits from the MNIST data (top left). All models were trained using persistent chains.}
+  \caption[Generated samples from trained models]{Comparison of samples generated by $500$ hidden unit RBM trained using naive mean field approach (top right), extended mean field approximation up to the second-term order (bottom right) and with contrastive divergence (bottom left) to the original digits from the MNIST data (top left). All models were trained using persistent chains.}
   \label{fig:particles}
 \end{figure}
 The samples produced by the naive mean field methos provides the samples of the poorest quality that are often non-identifiable as one of $10$ digits. As we can see, the addition of the second-order term greatly improves also the generetive qualitative of the learned model. It might be argued that samples produced by the PCD and EMF models are of similar quality.

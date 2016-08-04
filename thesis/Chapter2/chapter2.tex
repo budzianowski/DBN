@@ -208,7 +208,7 @@ Figure \ref{fig:updates} presents graphically all proposed procedures.
 \end{tikzpicture}
 \end{center}
 \endminipage\hfill
- \caption[1]{Graphical visualisations of three different schedule of updates considered for the RBM toy model. Numbers above the coloured arrows denotes the order of updates.}
+ \caption[Graphical illustration of three different kinds of updates]{Graphical visualisations of three different schedule of updates considered for the RBM toy model. Numbers above the coloured arrows denotes the order of updates.}
 \label{fig:updates}
 \end{figure}
 \newpage
@@ -238,7 +238,7 @@ A small grid toy model was considered of size $4 \times 4$ with periodic boundar
 \end{tikzpicture}
 
 \end{center}
-  \caption[1]{$4 \times 4$ grid toy model used for an exact inference.}
+  \caption[Grid toy model]{$4 \times 4$ grid toy model used for an exact inference.}
     \label{fig:grid}
 \end{figure}
 
@@ -253,7 +253,7 @@ Another computational inference problem that can be evaluate thanks to the TAP m
 \minipage{0.50\linewidth}  
 \includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsMAG}
 \endminipage\hfill
-  \caption[Grid toy model -- the couplings strength]{Comparison of two  variational approaches -- free energy estimates (left) with the true free energy (green line) and MSE between real and estimated magnetisations (right) as a function of the couplings strength ranging from $-1$ to $1$.}
+  \caption[Results on grid toy model with uniform couplings' strength]{Comparison of two  variational approaches -- free energy estimates (left) with the true free energy (green line) and MSE between real and estimated magnetisations (right) as a function of the couplings strength ranging from $-1$ to $1$.}
   \label{fig:gridModel}
 \end{figure}
 
@@ -266,7 +266,7 @@ In the next experiment, all couplings were initialised to random values around "
 \minipage{0.50\linewidth}  
 \includegraphics[width=\linewidth]{../../../Code/DRBM/toy/randomWeightsMAG}
 \endminipage\hfill
-  \caption[1]{Absolute difference between true free energy and the one computed by the naive and the extended mean field approach (left) and MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength.}
+  \caption[Results on grid toy model with random couplings' strength]{Absolute difference between true free energy and the one computed by the naive and the extended mean field approach (left) and MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength.}
   \label{fig:gridModelCoup}
 \end{figure}
 
@@ -284,7 +284,7 @@ Unlike in the previous case, there is no strong heuristics how the updates of se
 \includegraphics[width=\linewidth]{../../../Code/DRBM/toy/sameCouplingsRBMMAG}
 \endminipage\hfill
 \label{fig:rbmSame}
-  \caption[1]{Comparison of two  variational approaches -- free energy estimates (left)with the true free energy (green line) and MSE between real and estimated magnetisations (right) as a function of the couplings strength ranging from $-1$ to $1$.}
+  \caption[Results on RBM toy model with uniform couplings' strength]{Comparison of two  variational approaches -- free energy estimates (left)with the true free energy (green line) and MSE between real and estimated magnetisations (right) as a function of the couplings strength ranging from $-1$ to $1$.}
 \end{figure}
 
 Unlike the case of the grid model, the estimation of the free energy is almost exact in the case of the TAP method while the naive mean field method again provides a slightly biased upper bound. As it was the case on the grid model, the magnetizations estimated using extended approximation are very precise while MF magnetizations shows discrepancies from true values when connections become stronger in the model. No significant differences were observed between different schedules of updates and thus results for sequential updates weren't included here.
@@ -297,7 +297,7 @@ When couplings were random with randomly assigned negative or positive signs, TA
 \minipage{0.50\linewidth}  
 \includegraphics[width=\linewidth]{../../../Code/DRBM/toy/randomWeightsRBMMAG}
 \endminipage\hfill
-  \caption[1]{Absolute difference between the true free energy and the one computed by the naive and the extended mean field approach (left) and MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength.}
+  \caption[Results on RBM toy model with random couplings' strength]{Absolute difference between the true free energy and the one computed by the naive and the extended mean field approach (left) and MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength.}
   \label{fig:rbmRandom}
 \end{figure}
 
@@ -309,7 +309,7 @@ The randomness associated with choosing the sign of connections might have avera
 \minipage{0.50\linewidth}  
 \includegraphics[width=\linewidth]{../../../Code/DRBM/toy/randomWeightsSignsRBMMAG}
 \endminipage\hfill
-  \caption[1]{Absolute difference between the true free energy and the one computed by the naive and the extended mean field approach (left) and MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength with sequentially opposite signs.}
+  \caption[Results on RBM toy model with sequential changes of couplings' signs]{Absolute difference between the true free energy and the one computed by the naive and the extended mean field approach (left) and MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength with sequentially opposite signs.}
   \label{fig:signs}
 \end{figure}
 
@@ -322,7 +322,7 @@ This time, TAP estimates are not exact for couplings with an absolute strength a
 \minipage{0.50\linewidth}  
 \includegraphics[width=\linewidth]{../../../Code/DRBM/toy/BrandomWeightsRBMMAG}
 \endminipage\hfill
-  \caption[1]{Absolute difference between true free energy and the one computed by naive and extended mean field approach (left) an MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength with sequential changes of signs.}
+  \caption[Results on RBM toy model with external fields]{Absolute difference between true free energy and the one computed by naive and extended mean field approach (left) an MSE between real and estimated magnetisations (right) as a function of the absolute value of couplings strength with sequential changes of signs.}
   \label{fig:bias}
 \end{figure}
 

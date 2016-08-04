@@ -34,7 +34,7 @@ Surprisingly, only with the naive mean field approximation we can observe that t
 
 \subsection{Evaluation of EMF approximation}
 The similiarity of the estimates of the log-likelihood using the pseudo log-likelihood method and with the extended mean field approach suggests that the high-temperature expansion method might be a computationally inexpensive metric of the partition function and the log-likelihood in general for RBMs. However, the pseudo log-likelihood is a very noisy approximation thus as a benchmark for comparison of the effectiveness of the EMF-based estimates I will use the annealed importance sampling (AIS) \cite{neal2001annealed} -- very popular method for computing the partition function. Naturally, this comparison assumes that the AIS estimate are close to the true value which in general might no be the case.
-\section{Annealed Importance Sampling }
+\section{Annealed importance sampling}
 The AIS method is based on a very simple identity -- assume we have two distributions $p_A= \frac{1}{Z_A}p_A^*(\mathbf{x})$ and $p_B= \frac{1}{Z_B}p_B^*(\mathbf{x})$, where $p^*(\dot)$ denotes an unnormalized distribution and $Z_A, Z_B$ are partition functions of distribution $p_A$ and $B$ respectively. If the proposal distribution $p_A$ supports tractable sampling and tractable evaluation of both the unnormalized distribution $p_A^*(\mathbf{x})$ and the partition function $Z_A$, we can use the following relation:
 \begin{align}
 \begin{split}
@@ -108,7 +108,7 @@ where $\beta_m \in [0, 1]$ with $\beta_m = 0$ yielding $p_A$ and $\beta_m = 1$ g
 %\end{split}
 %\end{align}
 
-\subsection{Comparison}
+\subsection{Comparison of AIS and EMF}
 Two models were estimated based on the extended mean field approximation -- up to the second-order term (TAP2), and up to the third-order term (TAP3), to compare the quality of the approximation of the variational free energy.
 Each model was re-estimated $10$ times using persistent chains with $10$ iterations of self-consistency relations with asynchronous updates. Taking into consideration the inherent variability of the AIS method, $10$ runs of AIS were performed to obtain an average estimate.  A sequence of $\beta$s is required to set the "tempo" of annealing -- following \cite{salakhutdinov2008learning} $1000$ $\beta_k$ were spaced uniformly from  $0 $ to  $0.5$, $4,000$ $\beta_k$ were spaced uniformly from $0.5$ to $0.9$, and $5,000$ $\beta_k$ were spaced uniformly from $0.9$ to $1.0$, with a total of 10,000 intermediate distributions. 
 
@@ -149,6 +149,7 @@ Recent major advances in tasks like speech recognition, vision recognition or ma
 The breakthrough that lead to effective training strategies for deep architectures came in 2006 with the CD algorithm for training deep belief networks (DBN) \cite{hinton2006reducing}. The deep structure might be formed by stacking single RBMs pre-trained using contrastive divergence approach. It was empirically shown that unsupervised pre-training guides the learning towards basins of attraction of minima that support better generalization from the training data set \ref{erhan2010does}. Thus, such pre-trained networks much better generalize and are more robust comparing to networks trained only in supervised fashion.
 
 In the previous chapter it was shown that unsupervised learning using the extended mean-field approach can be used to learn a good quality generative model of the observed phenomena. Those results motivate learning deep structures using layer-wise greedily pre-training where instead of using CD for training RBMs we might consider fully deterministic approach. 
+
 \subsection{Deep belief nets}
 DBNs are generative graphical models with many hidden layers of hidden
 causal variables which joint distribution has the following form:
