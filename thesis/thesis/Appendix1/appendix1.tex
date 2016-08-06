@@ -26,8 +26,9 @@ Now, the first derivative from the Taylor expansion is:
 \begin{align*}
 \begin{split}
 \frac{\partial (\beta F)}{\partial \beta} = &
-\dfrac{\sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j +  \beta \sum_i \theta_i s_i+ \sum_i \lambda_i (\beta) (s_i - m_i) \right) \left(\sum_{(ij)} w_{ij} s_i s_j +  \sum_i \theta_i s_i + \sum_i \frac{\partial \lambda_i(\beta)}{\partial \beta} (s_i - m_i) \right) }
+\dfrac{\sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j +  \beta \sum_i \theta_i s_i+ \sum_i \lambda_i (\beta) (s_i - m_i) \right)  }
 {\sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j + \sum_i \theta_i s_i + \sum_i \lambda_i (\beta) (s_i - m_i) \right)} \\
+& \cdot \left(\sum_{(ij)} w_{ij} s_i s_j +  \sum_i \theta_i s_i + \sum_i \frac{\partial \lambda_i(\beta)}{\partial \beta} (s_i - m_i) \right) \\
  = & \sum_{(ij)} w_{ij} \mathbb{E}(  s_i s_j) +  \sum_i a_i  \mathbb{E}( s_i) + \frac{\partial \lambda_i(\beta)}{\partial \beta} \sum_i \mathbb{E}(
  s_i - m_i ).
 \end{split}

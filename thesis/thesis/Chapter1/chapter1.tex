@@ -5,21 +5,21 @@
 \chapter{Extended mean field approximation}
 
 \section{Graphical models as Markov random fields}
-One of the basic concepts in the theory of statistical modelling are graphical models which greatly help in analysing multivariate phenomena. Visualizations by graphs help in efficient development and understanding of analysed models while complex computations can be performed exploiting the graph properties. Consider a graph $G = (V,E)$ which consists of a finite set of vertices $V$ and a collection of edges $E \subset V \times V$. Each edge $e_i \in E$ joins two vertices and in general may have a direction. The vertex $v \in V$ may be seen as a random variable $X_v$ defined on some space $\mathcal{X}_v$ that may be either continuous or discrete. Moreover, an important concept related with every graph structure is the notion of clique which is a subset of $V$ in which all nodes are pairwise connected. One of the most useful class of graphical models is a Markov random field (MRF) which is a type undirected random field that satisfies global Markov property, specifically:
+One of the basic concepts in the theory of statistical modelling are graphical models which greatly help in analysing multivariate phenomena. Visualization by graphs helps in efficient development and understanding of analysed models while complex computations can be performed exploiting graph's properties. Consider a graph $G = (V,E)$ which consists of a finite set of vertices $V$ and a collection of edges $E \subset V \times V$. Each edge $e_i \in E$ joins two vertices and in general may have a direction. The vertex $v \in V$ may be seen as a random variable $X_v$ defined on some space $\mathcal{X}_v$ that may be either continuous or discrete. Moreover, an important concept related with every graph structure is the notion of clique which is a subset of $V$ in which all nodes are pairwise connected. One of the most useful class of graphical models is a Markov random field (MRF) which is a type undirected random field that satisfies global Markov property, specifically:
 \begin{mydef} An undirected graphical model G is a Markov random field if for any node $X_v$ in the graph the following conditional property holds:
 \begin{align*}
 \begin{split}
-P(X_i |X_{G\backslash i} ) = P(X_i | X_{N(i)})
+P(X_i |X_{G\backslash i} ) = P(X_i | X_{N(i)}),
 \end{split}
 \end{align*}
 where $X_{G\backslash i}$ denotes all the nodes except $X_i$, and $X_{N(i)}$ denotes the set of all vertices connected to $X_i$.
 \end{mydef}
 Thus, the MRF has a desired property that any two nodes are conditionally independent given some evidence nodes that separate them. This property is closely related with the notion of factorization of the joint probability distribution:
-\begin{mydef} A probability distribution $P(\mathbf{X})$, $\mathbf{X} =(X_1,..., X_n)$, defined on an undirected graphical model $G$ factorizes over $G$ if there exists a set of non-negative functions (potentials) on cliques $\{ \psi_{C} \}_{C \in \mathcal{C}}$  that cover all the nodes and edges of $G$ and we can write:
+\begin{mydef} A probability distribution $P(\mathbf{X})$, $\mathbf{X} =(X_1,..., X_n)$, defined on an undirected graphical model $G$ factorizes over $G$ if there exists a set of non-negative functions (potentials) on maximal cliques $\{ \psi_{C} \}_{C \in \mathcal{C}}$  that cover all the nodes and edges of $G$ and we can write:
 \begin{align*}
 \begin{split}
 P(X_1, X_2, ..., X_n) = \frac{1}{Z} \prod_{C \in \mathcal{C}} \psi
-_C(x_C)
+_C(x_C),
 \end{split}
 \end{align*}
 where $\mathcal{C}$ is a set of all cliques in $G$ and $Z$ is a normalization constant $Z = \sum_{\mathbf{x}} \prod_{C \in \mathcal{C}} \psi_C(X_C) $ which is often called a partition function.
@@ -27,61 +27,65 @@ where $\mathcal{C}$ is a set of all cliques in $G$ and $Z$ is a normalization co
 The following theorem shows a direct connection between those two family of probability distributions that will be heavily exploited in the following sections:
 \begin{theorem} [Hammersley-Clifford] Strictly positive distribution $P(\mathbf{X})$ is MRF  w.r.t an undirected graph $G$ if and only if it factorizes over $G$.
 \end{theorem}
-Theorem $1$ ensures us that there exits a general factorization form of the distribution of MRFs. It follows from the strict positivity of $P$ that we can write:
+Theorem $1$ ensures us that there exists a general factorization form of the distribution of MRFs. It follows from the strict positivity of $P$ that we can write:
 \begin{align}
 \begin{split}
 p(x_1, x_2, ..., x_n) = \frac{1}{Z} \prod_{C \in \mathcal{C}} \psi
 _C(x_C) = \frac{1}{Z} e ^{\sum_{C \in \mathcal{C}} \ln \psi
-_C(x_C) } = \frac{1}{Z} e ^{-E(x)}
+_C(x_C) } = \frac{1}{Z} e ^{-E(x)},
 \end{split}
 \label{eq:gibbsDistribution}
 \end{align}
-where $E(x)$ is called an energy function. This general form of distribution is usually defined as \emph{Gibbs distribution}. Hence, the probability distribution of every positive MRF can be expressed as in \ref{eq:gibbsDistribution}. 
-This relationship allows us to take advantage of both approaches to statistical modelling as we can perform inference exploiting a graph structure as well as algebraic properties of the Gibbs family. Moreover, this form of distribution is a natural candidate to approximate and model phenomena which can be also seen as graphical models. In next sections we will analyse one particular class of Gibbs distribution which is powerful enough to approximate any probability distribution.
+where $E(x)$ is called an \emph{energy function}. This general form of distribution is usually defined as \emph{Gibbs distribution}. Hence, the probability distribution of every positive MRF can be expressed as in \ref{eq:gibbsDistribution}. 
+This relationship allows us to take advantage of both approaches to statistical modelling as we can perform inference exploiting a graph structure as well as algebraic properties of the Gibbs family. Moreover, this form of distribution is a natural candidate to approximate and model phenomena which can be also visualise using graphical models. In next sections we will analyse one particular class from family of Gibbs distributions which is powerful enough to approximate any probability distribution.
 
 \section{Boltzmann distribution}
-In this thesis, an undirected graphical model (which can be also seen a MRF) that will be extensively analysed is the Boltzmann distribution which in the most general form has the following joint distribution:
+In this thesis, an undirected graphical model (which can be also seen a MRF) that will be extensively analysed is the Boltzmann distribution. In the most general form it has the following joint distribution:
 \begin{align}
 \begin{split}
-p(x_1,x_2, ..., x_n) = \frac{1}{Z}\exp \left(-\frac{1}{T}E(x_1,x_2, ..., x_n) \right)
+p(x_1,x_2, ..., x_n) = \frac{1}{Z}\exp \left(-\frac{1}{T}E(x_1,x_2, ..., x_n) \right),
 \end{split}
 \label{eq:boltzDistr}
 \end{align}
 where $T$ is the temperature of the system and  $E$ is the \emph{energy} of the system defined as:
-$$E(\mathbf{X}) = -\sum_{(ij)} w_{ij} x_i x_j -\sum_i  \theta_i x_i.$$
-and $Z = \sum_{\mathbf{x}}\exp (-\frac{1}{T}E(x_1,x_2, ..., x_n))$  is the normalization constant often called the partition function. The pair-wise potential function has here the form:
-$$\psi_{i,j} = \exp(x_i w_{ij} x_j)$$
+$$E(\mathbf{X}) = -\sum_{(ij)} w_{ij} x_i x_j -\sum_i  \theta_i x_i,$$
+and $Z = \sum_{\mathbf{x}}\exp (-\frac{1}{T}E(x_1,x_2, ..., x_n))$ is the normalization constant often called the\emph{ partition function}. The pair-wise potential function takes here the form:
+$$\psi_{i,j} = \exp(x_i w_{ij} x_j),$$
 while the magnetic field is defined as:
 $$\psi_i = \exp(\theta_i x_i).$$
-Wide range of distributions having the form of \ref{eq:boltzDistr} is extensively used in physics to compute the energy of the system of particles. This model proves to be very useful in many other applications such as the error-correcting code, computer vision, medical diagnosis or statistical mechanics \cite{yedidia2001idiosyncratic}. This model may represent statistical dependencies between different variables through the weight link $w_{ij}$ as well as the evidence for the specific variable. However, computing the partition function requires summation over a number of states that grows exponentially with the number of variables and is intractable even for a small number of variables. That is why, we have to resort to some tractable approximations which two of them will be considered in next sections. 
+Wide range of distributions having the form of \ref{eq:boltzDistr} is extensively used in physics to compute the energy of the system of particles. This model proves to be very useful in many other applications such as the error-correcting code, computer vision, medical diagnosis or statistical mechanics \cite{yedidia2001idiosyncratic}. This model may represent statistical dependencies between different variables through the weight link $w_{ij}$ as well as the evidence for the specific variable. However, computing the partition function requires summation over a number of states that grows exponentially with the number of variables and it is intractable even for a small number of variables. That is why, we have to resort to some tractable approximations which two of them will be considered in next sections. 
 
 \section{Statistical physics perspective}
-Following the notation from the statistical physics, consider a graphical model over a set of random variables $\mathbf{s}$ taking the "spin" values $\{0, 1 \}$. In the context of statistical physics, these values might represent the orientations of magnets in a field, or the existence of particles in a gas. Lets consider the Boltzmann distribution for such system:
+Following the notation from the statistical physics consider a graphical model over a set of random variables $\mathbf{s}$ taking the "spin" values $\{0, 1 \}$. In the context of statistical physics, these values might represent the orientations of magnets in a field, or the existence of particles in a gas. Let's consider the Boltzmann distribution for such system:
 \begin{equation}
 P(\mathbf{s}) = \frac{ e^{-\frac{1}{T}E(\mathbf{s})}}{\sum_{\mathbf{s}} e^{-\frac{1}{T}E(\mathbf{s})}} = \frac{1}{Z}e^{-\frac{1}{T}E(\mathbf{s})}
 \label{eq:distribution}
 \end{equation}
 where energy is defined as:
 $$E \equiv E (\mathbf{s}) = - \sum_{(ij)} s_i w_{ij} s_j - \sum_i \theta_i s_i.$$
-This yields the well-known Ising model which plays a primarily role in the analysis of phase transitions in many physical systems. Restricting the $w_{ij}$ to be positive we obtain the ferromagnetic Ising model. Finally, assuming that the $w_{ij}$ are chosen from a random distribution, we obtain the Ising spin glass model \cite{yedidia2001idiosyncratic}. 
+This yields the well-known Ising model which plays a primarily role in the analysis of phase transitions in many physical systems. By restricting the $w_{ij}$ to be positive we obtain the ferromagnetic Ising model. Finally, assuming that the $w_{ij}$ are chosen from a random distribution, we obtain the Ising spin glass model \cite{yedidia2001idiosyncratic}. 
 
 As it was mentioned previously, the number of configurations in the system scales exponentially with the number of variables which forces us to resort to some kind of approximations. Instead of imposing some restrictions on the model structure, we will try to find an approximate distribution $Q$ that poses useful characteristics and minimizes the relative entropy often called the Kullback-Leibler divergence:
 \begin{equation}
-KL(Q || P)  = \mathbb{E}_{Q}\left( \ln \frac{Q}{P} \right) = \sum_{\mathbf{s}} Q(\mathbf{s}) \ln \frac{Q(\mathbf{s})}{P(\mathbf{s})} .
+KL(Q || P)  = \mathbb{E}_{Q}\left( \ln \frac{Q}{P} \right) = \sum_{\mathbf{s}} Q(\mathbf{s}) \ln \frac{Q(\mathbf{s})}{P(\mathbf{s})}.
 \label{eq:kl}
 \end{equation}
 The $KL$-divergence is a non-symmetric measure of the difference between two distributions which is always non-negative. Substituting $P$ from \ref{eq:distribution} into the previous equation yields:
-$$ KL(Q||P) = \ln Z + \frac{1}{T}\mathbb{E}[Q] - H[Q]$$
+$$ KL(Q||P) = \ln Z + \frac{1}{T}\mathbb{E}[Q] - H[Q],$$
 where $H$ stands for entropy of the distribution $Q$, $\ln Z$ is the \emph{free energy} and $\mathbb{E}[Q] = \sum_{\mathbf{s}} Q(\mathbf{s})E(\mathbf{s})$ is called the \emph{variational energy} where $\mathbb{E}$ refers to the average configuration under the Boltzmann measure \cite{opper2001advanced}. The partition function $Z$ doesn't depend on $Q$ and we need to only focus on minimizing the variational free energy:
 \begin{align}
 \begin{split}
 F[Q]  \coloneqq \mathbb{E}[Q] - TH[Q].
-\label{eq:gibbsFreeEnergy}
 \end{split}
+\label{eq:gibbsFreeEnergy}
 \end{align}
-At equilibrium i.e. when the approximate distribution would equal the desired one the KL-divergence is $0$ and the variational free energy is equal to the Helmholtz free energy defined by 
-$\mathcal{F} \coloneqq -T \ln Z$. 
-
+At equilibrium i.e. when the approximate distribution would equal the desired one the KL-divergence is $0$ and the variational free energy is equal to the \emph{Helmholtz free energy} defined as:
+\begin{align}
+\begin{split}
+\mathcal{F} \coloneqq -T \ln Z. 
+\end{split}
+\label{eq:freeEnergy}
+\end{align}
 %In next two sections, we will analyse two approximations 
 % On the other hand we have (TODO: derive):
 %$$\ln P(\mathbf{s}) = KL(Q || P) + F(Q,\mathbf{s})
@@ -93,23 +97,23 @@ $\mathcal{F} \coloneqq -T \ln Z$.
 The most widely used approximation to the family of models defined in \ref{eq:distribution} is the mean field approximation which is obtained by taking as an approximator the family of distribution that factorizes as following:
 \begin{align}
 \begin{split}
-Q(\mathbf{s}) = \prod_i q_i(s_i)
+Q(\mathbf{s}) = \prod_i q_i(s_i),
 \end{split}
 \end{align}
 which results in neglecting the dependency between the random variables. The variational free energy in this case takes the form:
 \begin{align}
 \begin{split}
-F^{MF} = - \sum_{(ij)} \sum_{s_i, s_j} w_{ij} q_i(x_i)q_j(x_j) - \sum_{i}\sum_{s_i} \theta_i q_i(x_i) + T\sum_i \sum_{s_i} q_i(s_i)\ln q_i(s_i)
+F^{MF} = - \sum_{(ij)} \sum_{s_i, s_j} w_{ij} q_i(x_i)q_j(x_j) - \sum_{i}\sum_{s_i} \theta_i q_i(x_i) + T\sum_i \sum_{s_i} q_i(s_i)\ln q_i(s_i),
 \label{eq:freeEnergyMF}
 \end{split}
 \end{align}
 and the energy for a single spin is:
 \begin{align}
 \begin{split}
-E(s_i) = - \theta_i s_i - s_i \sum_j  w_{ij} m_j
+E(s_i) = - \theta_i s_i - s_i \sum_j  w_{ij} m_j,
 \end{split}
 \end{align}
-where neighbour spins are replaced by certain effective mean fields which are defined as:
+where adjacent spins are replaced by certain effective mean fields which are defined as:
  \begin{align}
 \begin{split}
 m_i = \mathbb{E}_{q_i} (s_i), ~~ i \in \{1, ..., N\}.
@@ -125,11 +129,11 @@ F^{MF} = - \sum_{(ij)} w_{ij} m_i m_j - \sum_{i} \theta_i m_i  + T\sum_i \left[ 
 Minimizing \ref{eq:freeEnergyMF2} with respect to magnetizations yields the so-called mean field stationary conditions:
 \begin{align}
 \begin{split}
-m_i = \text{sigm}\left(\frac{1}{T}\sum_j w_{ij}m_j + \frac{1}{T} \theta_i \right), ~~ i \in \{1, ..., N\}
+m_i = \text{sigm}\left(\frac{1}{T}\sum_j w_{ij}m_j + \frac{1}{T} \theta_i \right), ~~ i \in \{1, ..., N\},
 \label{eq:MFupdates}
 \end{split}
 \end{align}
-where $N$ is the number of spins in the model. These equations are usually run sequentially. As the free energy is convex \cite{wainwright2008graphical}, these updates can be seen as coordinate descent in $\mathbf{m}$ that guarantees to obtain some stable solution. However, there might exist many solutions to \ref{eq:MFupdates} as well as some of them might not be even local minima. Nonetheless, the MF approach is exact for the infinite-ranged Ising model where each the node is connected to every other node and all couplings $w_{ij}$ are positive and equal\cite{kirkpatrick1978infinite}.
+where $N$ is the number of spins in the model. These equations are usually run sequentially. As the free energy is convex \cite{wainwright2008graphical}, these updates can be seen as coordinate descent in $\mathbf{m}$ that guarantees to obtain some stable solution. However, there might exist many solutions to \ref{eq:MFupdates} as well as some of them might not be even local minima. Nonetheless, the MF approach is exact for the infinite-ranged Ising model where each node is connected to every other node and all couplings $w_{ij}$ are positive and takes the same value \cite{kirkpatrick1978infinite}.
 
 Additionally, the variational mean field approximation yields an upper bound on the exact free energy as the following holds:
 \begin{align}
@@ -146,21 +150,21 @@ where the middle inequality follows from the concavity of the log function and a
 \end{align}
  %This is known as the \emph{mean field free energy}
 \section{Extended mean field approximation (EMF)}
-At the expense of loosing the rigorous upper bound on the Helmholtz free energy, we might consider a different approximation for the magnetization dependent variational free energy \cite{georges1991expand}. We will minimize \ref{eq:gibbsFreeEnergy} where instead of assuming $Q$ to be a product distribution we require that magnetizations has appropriate values, i.e.:
+At the expense of loosing the rigorous upper bound on the Helmholtz free energy, we might consider a different approximation for the magnetization dependant variational free energy \cite{georges1991expand}. We will minimize \ref{eq:gibbsFreeEnergy} where instead of enforcing $Q$ to be a product distribution we require that magnetizations has appropriate values, i.e.:
 \begin{align}
 \begin{split}
-\mathbb{E}_Q (\mathbf{s}) = \mathbf{m} .
+\mathbb{E}_Q (\mathbf{s}) = \mathbf{m},
 \label{eq:constraint}
 \end{split}
 \end{align}
  where $\mathbf{m}$ is fixed. Thus, the variational free energy is now defined as: 
  \begin{align}
 \begin{split}
-\beta F(\mathbf{m}) = \min_{Q} \{E(Q) - H(Q) ~|~\mathbb{E}(\mathbf{S}) = \mathbf{m} \}
+\beta F(\mathbf{m}) = \min_{Q} \{E(Q) - H(Q) ~|~\mathbb{E}(\mathbf{S}) = \mathbf{m} \},
 \label{eq:minimum}
 \end{split}
 \end{align}
-	where $\beta$ was introduced as a reciprocal of temperature -- this will allow us to a perform useful expansion w.r.t $\beta$ later on. The constrained optimization problem can be transformed into unconstrained using Lagrange multipliers, i.e.:
+where $\beta$ was introduced as a reciprocal of temperature -- this will allow us to perform an useful expansion w.r.t $\beta$ later on. The constrained optimization problem can be transformed into unconstrained using Lagrange multipliers, i.e.:
  \begin{align}
 \begin{split}
 E(Q) - H(Q) -  \sum_i \lambda_i(\mathbb{E}(s_i) - m_i). 
@@ -169,12 +173,12 @@ E(Q) - H(Q) -  \sum_i \lambda_i(\mathbb{E}(s_i) - m_i).
 Thus, the minimizing distribution has the form:
  \begin{align}
 \begin{split}
-Q_{\mathbf{m}}(\mathbf{s}) = \frac{1}{Z} e^{-E(\mathbf{s}) + \lambda_i s_i}
+Q_{\mathbf{m}}(\mathbf{s}) = \frac{1}{Z} e^{-E(\mathbf{s}) + \lambda_i s_i},
 \end{split}
 \end{align}
-with partition function $Z = \sum_{\mathbf{s}} e^{-E(\mathbf{s}) + \sum_i \lambda_i s_i}$. Using this distribution back into \ref{eq:minimum} along with making auxiliary fields $\mathbf{\lambda}$ temperature-dependant and suppressing (for the moment) the $\mathbf{\lambda}$ and $\{m_i \}$ dependence of $F$ we arrive at the objective function:
+with partition function $Z = \sum_{\mathbf{s}} e^{-E(\mathbf{s}) + \sum_i \lambda_i s_i}$. Putting this distribution back into \ref{eq:minimum} along with making auxiliary fields $\mathbf{\lambda}$ temperature-dependant and suppressing (for the moment) the $\mathbf{\lambda}$ and $\{m_i \}$ dependence of $F$ we arrive at the objective function:
  \begin{align}
-\begin{split} - \beta F = \ln \sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j +\beta \sum_i  \theta_i s_i  + \sum_i \lambda_i (\beta) (s_i - m_i) \right)
+\begin{split} - \beta F = \ln \sum_{\mathbf{s}} \exp \left( \beta \sum_{(ij)} w_{ij} s_i s_j +\beta \sum_i  \theta_i s_i  + \sum_i \lambda_i (\beta) (s_i - m_i) \right).
 \end{split}
 \end{align}
 
@@ -192,47 +196,48 @@ with partition function $Z = \sum_{\mathbf{s}} e^{-E(\mathbf{s}) + \sum_i \lambd
 %\end{split}
 %\end{align}
 
-Lets now expand $-\beta F$ around $\beta =0$: 
+Let's now expand $-\beta F$ around $\beta =0$: 
  \begin{align}
 \begin{split}-\beta F = -(\beta F)_{\beta=0} - \left( \frac{\partial (\beta F)}{\partial \beta}\right)_{\beta = 0}  \beta - \left( \frac{\partial^2 (\beta F)}{\partial \beta^2}\right)_{\beta = 0}  \frac{\beta^2}{2} - ...
 \label{eq:taylor}
 \end{split}
 \end{align}
 In this case, the spins are entirely controlled by their auxiliary fields. Although it not a desired assumption, it will allow us to obtain useful form of the expansion. 
-Magnetizations are fixed equal to $\mathbb{E}_Q (\mathbf{s})$ , particularly for $\beta = 0$ which gives an important conjugate relation between magnetizations and auxiliary fields:
+Magnetizations are fixed equal to $\mathbb{E}_Q (\mathbf{s})$, particularly for $\beta = 0$ which gives an important conjugate relation between magnetizations and auxiliary fields:
 \begin{align}
 \begin{split}
- m_i = \mathbb{E}_{\beta =0}(s_i) = \frac{\exp(\lambda_i(0))}{\exp(\lambda_i(0)) + 1}= \text{sigm}(\lambda_i(0))
+ m_i = \mathbb{E}_{\beta =0}(s_i) = \frac{\exp(\lambda_i(0))}{\exp(\lambda_i(0)) + 1}= \text{sigm}(\lambda_i(0)).
 \label{eq:mi}
 \end{split}
 \end{align}
-We can now choose which variables use in derivations and this is a purely dependent on mathematical convenience. As the equation \ref{eq:mi} is easy to invert, we will work on the magnetizations. The first term from the \ref{eq:taylor} takes now the form:
+We can now choose which variable use in obtaining perturbation terms and this purely depends on mathematical convenience. As the equation \ref{eq:mi} is easy to invert, we will work with magnetizations. The first term from the \ref{eq:taylor} takes now the form:
 \begin{align}
 \begin{split}
  -(\beta F)_{\beta =0 } = & \ln \sum_{\mathbf{s}} \exp \left( \sum_i \lambda_i (0) (s_i - m_i) \right) \\
  = & \ln \left\lbrace \sum_{s_1}  \exp \left( \lambda_1 (0) (s_1 - m_1) \right) ... \sum_{s_n}  \exp \left(\lambda_n (0) (s_n - m_n) \right) \right\rbrace \\
  = &\ln \left\lbrace (\exp(\lambda_i(0)) +1)\exp(-\lambda_1(0)m_1) ... (\exp(\lambda_i(0)) +1)\exp(-\lambda_1(0)m_n) \right\rbrace \\
  = & \sum_i \left\lbrace  \ln \left( \frac{1}{1 -m_i}  \right) - m_i\ln \left(\frac{m_i}{1- m_i} \right)   \right\rbrace\\
- = & - \sum_i \left[m_i\ln (m_i) +  (1 - m_i)\ln \left( 1-m_i \right)\right] 
+ = & - \sum_i \left[m_i\ln (m_i) +  (1 - m_i)\ln \left( 1-m_i \right)\right], 
  \label{eq:entropy}
 \end{split}
 \end{align}
-where using \ref{eq:mi}, we replace auxiliary variables by:
+where using \ref{eq:mi} we replace auxiliary variables by:
 $$\lambda_i(0) = \text{logit} (m_i) = \ln \left( \frac{m_i}{1-m_i} \right).$$
-As we can see, this is exactly the mean field entropy from the equation \ref{eq:freeEnergyMF2}. Next, the first derivative is:
+As we can see this is exactly the mean field entropy from the equation \ref{eq:freeEnergyMF2}. Furthermore, the first derivative is:
 \begin{align}
 \begin{split}
- - \left. \frac{\partial (\beta F)}{\partial \beta}\right|_{\beta = 0} & =  \sum_{(ij)} w_{ij} \mathbb{E}_{\beta =0}(s_i s_j) + \sum_i \theta_i \mathbb{E}_{\beta =0}(s_i) - \sum_i  \left.\frac{\partial\lambda_i (\beta)}{\partial \beta}\right|_{\beta = 0}\mathbb{E}(s_i - m_i) 
+ - \left. \frac{\partial (\beta F)}{\partial \beta}\right|_{\beta = 0} & =  \sum_{(ij)} w_{ij} \mathbb{E}_{\beta =0}(s_i s_j) + \sum_i \theta_i \mathbb{E}_{\beta =0}(s_i) - \sum_i  \left.\frac{\partial\lambda_i (\beta)}{\partial \beta}\right|_{\beta = 0}\mathbb{E}(s_i - m_i),
  \end{split}
+\label{eq:firstterm}
 \end{align}
-and as it was observed earlier, at $\beta =0$ the spins are independent and the expectation in the first term factorizes. Thus, we have:
+and as it was observed earlier at $\beta =0$ spins are independent and the expectation in the first term of \ref{eq:firstterm} factorizes. Thus, we obtain:
 \begin{align}
 \begin{split}
  - \left. \frac{\partial (\beta F)}{\partial \beta}\right|_{\beta = 0} & =  \sum_{(ij)} w_{ij} m_i m_j +  \sum_i \theta_i m_i.
  \label{eq:firstterm} 
  \end{split}
 \end{align}
-Comparing \ref{eq:firstterm} and \ref{eq:entropy} with \ref{eq:freeEnergyMF2} we can see that we have already recovered the simple mean field approximation. Yedida and Georges \cite{georges1991expand} showed how to continue this expansion to the arbitrarily high order (derivation in Appendix A). However, in next chapters the expansion will be used only up to the third-order term:
+Comparing \ref{eq:firstterm} and \ref{eq:entropy} with \ref{eq:freeEnergyMF2} we can see that we have already recovered the simple mean field approximation. Yedida and Georges \cite{georges1991expand} showed how to continue this expansion to the arbitrarily high order (detailed derivation in Appendix A). However, in next chapters the expansion will be used only up to the third-order term:
 \begin{align*}
 \begin{split}
 -\beta F^{EMF} = & - \sum_i \left[m_i\ln (m_i) +  (1 - m_i)\ln \left( 1-m_i \right)\right]  \\
@@ -245,22 +250,20 @@ Comparing \ref{eq:firstterm} and \ref{eq:entropy} with \ref{eq:freeEnergyMF2} we
 \end{align*}
 where $(ijk)$ stands for coupled triplets of nodes. The second-order term is known in the statistical physics literature as "Onsager reaction" or TAP term firstly derived by Thousless, Anderson and Palmer \cite{thousless1977solution}. Contrary to the mean field approximation, the extended approach takes into account all distinct pairs and triplets of spins. This will lead to significant improvements over naive mean field approach
 in learning graphical models from Boltzmann family.
-
 %TODO - what is this? The variational free energy $\mathcal{F}$ is highly multimodal in real world examples in which case all stationary points either maximum, minimum or saddle satisfies the self-consistency relations \ref{eq:selfConsistency}.
 
 \subsection{EMF approximation of the free energy}
-Although it is very straightforward to obtain naive mean field approximation from the extended approach, unlike the former, in general case this method doesn't bound in any way the free energy $-\ln Z$. This follows from the fact that we don't enforce any constraint regarding marginal or joint probabilities. Moreover, the approximation was based on the Taylor expansion which poses a threat that the radius of convergence of the expansion will be too small to obtain robust results for the different values of $\beta$ \cite{yedidia2001idiosyncratic}.
-There are a few examples in statistical physics where this method works very reliably in a wide variety of temperatures  \cite{plefka1982convergence} however in general there aren't any theoretical foundations for the robustness of this expansion. In the next chapter this approach will be tested on various toy models to assess the quality of the approximation.
+Although it is very straightforward to obtain naive mean field approximation from the extended approach, unlike the former in general case this method doesn't bound in any way the free energy $\mathcal{F}$. This follows from the fact that we don't enforce any constraint regarding marginal or joint probabilities. Moreover, the approximation was based on the Taylor expansion which poses a threat that the radius of convergence of the expansion will be too small to obtain robust results for the different values of $\beta$ \cite{yedidia2001idiosyncratic}. There are a few examples in statistical physics where this method works very reliably in a wide variety of temperatures \cite{plefka1982convergence} however in general there aren't any theoretical foundations proving the robustness of this expansion. In the next chapter this approach will be tested on various toy models to assess the quality of the approximation.
 
 \section{Boltzmann machine}
 A particular example from the family of distributions defined in \ref{eq:boltzDistr} is a Boltzmann machine \cite{ackley1985learning}
  which has a two-layer architecture with $N$ visible units $\mathbf{v
-} = (v_1, ..., v_N)$ and $ M$ hidden units $\mathbf{b} = (h_1,..., h_M)$ that can take values $0$ or $1$. The energy function has the form:
+} = (v_1, ..., v_N)$ and $ M$ hidden units $\mathbf{h} = (h_1,..., h_M)$ that can take values $0$ or $1$. The energy function has the form:
 $$ E (\mathbf{v,h}) = - \sum_i a_i v_i - \sum_j b_j h_j - \sum_{i,j} v_i W_{ij}h_j - \sum_{i < j} v_i V_{ij} v_j - \sum_{i < j} h_i J_{ij} h_j,$$
-where $W_{ij}$, $V_{ij}$, $H_{ij}$ are real valued couplings between visible and hidden, visible and visible and hidden and hidden units respectively for $i \in \{1,..., n \}$, $j \in \{1, ..., M \}$. An example of such structure presents Figure \ref{fig:bm} (left). The connections between units from the same layer makes this model hard to operate with -- for example even with given visible units, we are not able to compute the marginal probability $p(\mathbf{v})$ as this requires summation that scales exponentially with number of hidden units.
+where $W_{ij}$, $V_{ij}$, $H_{ij}$ are real-valued couplings between visible and hidden, visible and visible and hidden and hidden units respectively for $i \in \{1,..., n \}$, $j \in \{1, ..., M \}$. An example of such structure presents Figure \ref{fig:bm} (left). The connections between units from the same layer makes this model hard to perform inference -- for example even with given visible units we are not able to compute the marginal probability $p(\mathbf{v})$ as this requires summation that scales exponentially with number of hidden units.
 
 \subsection{Restricted Boltzmann machine}
-A restricted Boltzmann machine (RBM) is a special case of Boltzmann machine which overcomes difficulties associated with Boltzmann machines at the same time preserving the approximating power. The energy function takes the simplified form:
+A restricted Boltzmann machine (RBM) is a special case of Boltzmann machine which overcomes difficulties associated with the general form at the same time preserving the approximating power. The energy function takes the simplified form:
 $$ E (\mathbf{v,h}) = - \sum_i a_i v_i - \sum_j b_j h_j - \sum_{i,j} v_i W_{ij}h_j.$$
 The graph of an RBM has connections between visible and hidden units but not between any variables from the same layer (Figure \ref{fig:bm}, right). This results in independence between variables from the same layer given the state of the other layer. The RBM can be interpreted as a stochastic neural network, where units and connections correspond to neurons and synaptics respectively \cite{fischer2012introduction}.
 
@@ -344,7 +347,7 @@ The graph of an RBM has connections between visible and hidden units but not bet
 \end{tikzpicture}
 \end{center}
 \endminipage\hfill
-  \caption[Boltzmann Machines]{Exemplary graphs of Boltzmann machine (left) and restricted Boltzmann Machine (right) with $4$ visible and $5$ hidden units.}
+  \caption[Boltzmann Machines]{Illustrative graphs of Boltzmann machine (left) and restricted Boltzmann Machine (right) with $4$ visible units and $5$ hidden units.}
   \label{fig:bm}
 \end{figure}
 
@@ -352,7 +355,7 @@ The graph of an RBM has connections between visible and hidden units but not bet
 %http://arxiv.org/pdf/1005.1593.pdf
 %https://papers.nips.cc/paper/4380-expressive-power-and-approximation-errors-of-restricted-boltzmann-machines.pdf
 %http://www.iro.umontreal.ca/~lisa/publications2/index.php/attachments/single/95
-The power of RBM comes from the fact that with data-dependent number of hidden units they become non-parametric and possess universal approximation properties \cite{le2008representational}.
+The power of RBMs comes from the fact that with data-dependent number of hidden units they become non-parametric and possess universal approximation properties \cite{le2008representational}.
 It can be shown that with additional hidden units there exist weight values for these new units that guarantee improvement in increasing the log-likelihood of observed data. Taking this process to extreme, we can obtain a model with an unlimited expressive power:
 \begin{theorem} [LeRoux-Bengio, 2010] Any distribution over $\{0,1 \}^n$ can be approximated arbitrarily well (in the sense of the KL divergence) with an RBM with $k+1$ hidden units where	$k$ is is the number of input vectors whose probability is not $0$.
 \end{theorem}
@@ -372,23 +375,23 @@ The conditional probability of a single variable being one is also explicitly av
 p(h_i = 1| \mathbf{v})& = p(h_i = 1| \mathbf{h}_{-i}, \mathbf{v}) = \frac{p(h_i = 1, \mathbf{h}_{-i}, \mathbf{v})}{p( \mathbf{h}_{-i}, \mathbf{v})} \\
 & = \frac{\exp( -E(h_i=1,\mathbf{h}_{-i}, \mathbf{v})) }{\exp( -E(h_i=1,\mathbf{h}_{-i}, \mathbf{v})) + \exp( -E(h_i=0,\mathbf{h}_{-i}, \mathbf{v}))}\\
 & = \frac{1}{1 + \exp( \sum_{n=1}^N W_{i,n} v_n + a_n)}\\
-& = \text{sigm} (\sum_{n=1}^N W_{i,n} v_n + b_i))
+& = \text{sigm} (\sum_{n=1}^N W_{i,n} v_n + b_i)),
 \end{split}
 \label{eq:phv}
 \end{align}
 and following the same steps we can show that:
  \begin{align}
 \begin{split}
-p(v_j = 1| \mathbf{h})=  \text{sigm} (\sum_{m=1}^M W^T_{i,m} h_m + a_j)).
+p(v_j = 1| \mathbf{h})=  \text{sigm} (\sum_{m=1}^M W^T_{i,m} h_m + a_j)),
 \end{split}
 \label{eq:pvh}
 \end{align}
-The independence between the variables in one layer makes sampling from conditional distributions \ref{eq:phv} and \ref{eq:pvh} easy to perform. This will be crucial for effective learning of this model when we don't know a priori the parameters. Moreover the nominator from the $p(\mathbf{v})$ factorizes over hidden variables and we can write:
+where $\text{sigm}(x) = (1 + e^{-x})^{-1}$. The independence between the variables in one layer makes sampling from conditional distributions \ref{eq:phv} and \ref{eq:pvh} easy to perform. This will be crucial for effective learning of this model when we don't know \emph{a priori} the parameters. Moreover the nominator from the $p(\mathbf{v})$ factorizes over hidden variables and we can write:
 \begin{align}
 \begin{split}
  \sum_\mathbf{h} e^{-E(\mathbf{v}, \mathbf{h})} & = e^{\mathbf{b}'\mathbf{v}}\sum_{h_1}...\sum_{h_m}e^{-E(\mathbf{v}, \mathbf{h})} \\
 =&  e^{\mathbf{b}'\mathbf{v}} \sum_{h_1} e^{h_1 (c_1 + W_{1\bullet}\mathbf{v})}... \sum_{h_m} e^{h_m (c_m + W_{m\bullet}\mathbf{v})} \\
-= & e^{\mathbf{b}'\mathbf{v}} \prod_{j=1}^{m} \left( 1 + e^{c_i + W_{i\bullet}\mathbf{v}} \right)
+= & e^{\mathbf{b}'\mathbf{v}} \prod_{j=1}^{m} \left( 1 + e^{c_i + W_{i\bullet}\mathbf{v}} \right),
 \label{eq:clampedFreeEnergy}
 \end{split}
 \end{align}
