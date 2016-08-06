@@ -1,0 +1,162 @@
+\begin{thebibliography}{}
+
+\bibitem[Ackley et~al., 1985]{ackley1985learning}
+Ackley, D.~H., Hinton, G.~E., and Sejnowski, T.~J. (1985).
+\newblock A learning algorithm for boltzmann machines.
+\newblock {\em Cognitive science}, 9(1):147--169.
+
+\bibitem[Bengio et~al., 2007]{bengio2007greedy}
+Bengio, Y., Lamblin, P., Popovici, D., Larochelle, H., et~al. (2007).
+\newblock Greedy layer-wise training of deep networks.
+
+\bibitem[Besag, 1972]{besag1972nearest}
+Besag, J.~E. (1972).
+\newblock Nearest-neighbour systems and the auto-logistic model for binary
+  data.
+\newblock {\em Journal of the Royal Statistical Society. Series B
+  (Methodological)}, pages 75--83.
+
+\bibitem[Bottou, 1998]{bottou1998online}
+Bottou, L. (1998).
+\newblock Online learning and stochastic approximations.
+\newblock {\em On-line learning in neural networks}, 17(9):142.
+
+\bibitem[Erhan et~al., 2010]{erhan2010does}
+Erhan, D., Bengio, Y., Courville, A., Manzagol, P.-A., Vincent, P., and Bengio,
+  S. (2010).
+\newblock Why does unsupervised pre-training help deep learning?
+\newblock {\em Journal of Machine Learning Research}, 11(Feb):625--660.
+
+\bibitem[Fischer and Igel, 2012]{fischer2012introduction}
+Fischer, A. and Igel, C. (2012).
+\newblock An introduction to restricted boltzmann machines.
+\newblock In {\em Iberoamerican Congress on Pattern Recognition}, pages 14--36.
+  Springer.
+
+\bibitem[Gabri{\'e} et~al., 2015]{gabrie2015training}
+Gabri{\'e}, M., Tramel, E.~W., and Krzakala, F. (2015).
+\newblock Training restricted boltzmann machine via the
+  thouless-anderson-palmer free energy.
+\newblock In {\em Advances in Neural Information Processing Systems}, pages
+  640--648.
+
+\bibitem[Georges and Yedidia, 1991]{georges1991expand}
+Georges, A. and Yedidia, J.~S. (1991).
+\newblock How to expand around mean-field theory using high-temperature
+  expansions.
+\newblock {\em Journal of Physics A: Mathematical and General}, 24(9):2173.
+
+\bibitem[Hinton, 2002]{hinton2002training}
+Hinton, G.~E. (2002).
+\newblock Training products of experts by minimizing contrastive divergence.
+\newblock {\em Neural computation}, 14(8):1771--1800.
+
+\bibitem[Hinton and Salakhutdinov, 2006]{hinton2006reducing}
+Hinton, G.~E. and Salakhutdinov, R.~R. (2006).
+\newblock Reducing the dimensionality of data with neural networks.
+\newblock {\em Science}, 313(5786):504--507.
+
+\bibitem[Jarzynski, 1997]{jarzynski1997nonequilibrium}
+Jarzynski, C. (1997).
+\newblock Nonequilibrium equality for free energy differences.
+\newblock {\em Physical Review Letters}, 78(14):2690.
+
+\bibitem[Kirkpatrick and Sherrington, 1978]{kirkpatrick1978infinite}
+Kirkpatrick, S. and Sherrington, D. (1978).
+\newblock Infinite-ranged models of spin-glasses.
+\newblock {\em Physical Review B}, 17(11):4384.
+
+\bibitem[Le~Roux and Bengio, 2008]{le2008representational}
+Le~Roux, N. and Bengio, Y. (2008).
+\newblock Representational power of restricted boltzmann machines and deep
+  belief networks.
+\newblock {\em Neural computation}, 20(6):1631--1649.
+
+\bibitem[LeCun and Cortes, 1998]{lecun1998}
+LeCun, Y. and Cortes, C. (1998).
+\newblock The mnist database of handwritten digits.
+\newblock Technical report.
+
+\bibitem[Minka, 2005]{minka2005divergence}
+Minka, T. (2005).
+\newblock Divergence measures and message passing.
+\newblock Technical report.
+
+\bibitem[Montufar and Ay, 2010]{montufar2010refinements}
+Montufar, G. and Ay, N. (2010).
+\newblock Refinements of universal approximation results for deep belief
+  networks and restricted boltzmann machines.
+\newblock {\em arXiv preprint arXiv:1005.1593}.
+
+\bibitem[Murphy, 2012]{murphy2012machine}
+Murphy, K.~P. (2012).
+\newblock {\em Machine learning: a probabilistic perspective}.
+\newblock MIT Press.
+
+\bibitem[Neal, 1992]{neal1992connectionist}
+Neal, R.~M. (1992).
+\newblock Connectionist learning of belief networks.
+\newblock {\em Artificial intelligence}, 56(1):71--113.
+
+\bibitem[Neal, 2001]{neal2001annealed}
+Neal, R.~M. (2001).
+\newblock Annealed importance sampling.
+\newblock {\em Statistics and Computing}, 11(2):125--139.
+
+\bibitem[Opper and Saad, 2001]{opper2001advanced}
+Opper, M. and Saad, D. (2001).
+\newblock {\em Advanced mean field methods: Theory and practice}.
+\newblock MIT press.
+
+\bibitem[Plefka, 1982]{plefka1982convergence}
+Plefka, T. (1982).
+\newblock Convergence condition of the tap equation for the infinite-ranged
+  ising spin glass model.
+\newblock {\em Journal of Physics A: Mathematical and general}, 15(6):1971.
+
+\bibitem[Robbins and Monro, 1951]{robbins1951stochastic}
+Robbins, H. and Monro, S. (1951).
+\newblock A stochastic approximation method.
+\newblock {\em The annals of mathematical statistics}, pages 400--407.
+
+\bibitem[Salakhutdinov, 2008]{salakhutdinov2008learning}
+Salakhutdinov, R. (2008).
+\newblock Learning and evaluating boltzmann machines.
+\newblock {\em Technical Report UTML TR 2008-002}.
+
+\bibitem[Salakhutdinov and Murray, 2008]{salakhutdinov2008quantitative}
+Salakhutdinov, R. and Murray, I. (2008).
+\newblock On the quantitative analysis of deep belief networks.
+\newblock In {\em Proceedings of the 25th international conference on Machine
+  learning}, pages 872--879. ACM.
+
+\bibitem[Thousless et~al., 1977]{thousless1977solution}
+Thousless, D.~J., Anderson, P.~W., and Palmer, R.~G. (1977).
+\newblock Solution of 'solvable model of a spin glass'.
+\newblock {\em Philosophical Magazine}, 35:593--601.
+
+\bibitem[Tieleman, 2008]{tieleman2008training}
+Tieleman, T. (2008).
+\newblock Training restricted boltzmann machines using approximations to the
+  likelihood gradient.
+\newblock In {\em Proceedings of the 25th international conference on Machine
+  learning}, pages 1064--1071. ACM.
+
+\bibitem[Wainwright and Jordan, 2008]{wainwright2008graphical}
+Wainwright, M.~J. and Jordan, M.~I. (2008).
+\newblock Graphical models, exponential families, and variational inference.
+\newblock {\em Foundations and Trends{\textregistered} in Machine Learning},
+  1(1-2):1--305.
+
+\bibitem[Welling and Hinton, 2002]{welling2002new}
+Welling, M. and Hinton, G.~E. (2002).
+\newblock A new learning algorithm for mean field boltzmann machines.
+\newblock In {\em International Conference on Artificial Neural Networks},
+  pages 351--357. Springer.
+
+\bibitem[Yedidia, 2001]{yedidia2001idiosyncratic}
+Yedidia, J. (2001).
+\newblock An idiosyncratic journey beyond mean field theory.
+\newblock {\em Advanced mean field methods: Theory and practice}, pages 21--36.
+
+\end{thebibliography}
