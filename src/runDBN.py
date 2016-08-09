@@ -11,7 +11,7 @@ import copy
 import sys
 import numpy as np
 import gzip
-import sklearn
+import sklearn.preprocessing
 try:
     import cPickle as pickle
 except:
