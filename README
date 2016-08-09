@@ -1,11 +1,15 @@
 Python library for unsupervised training of Deep Restricted Bolztmann Machines using two different approaches.
 
-To run the MNIST experiment just type:
+To run the MNIST experiment for a single RBM just type:
 
 python3 run.py
 
 from src folder with additional command line args specified as --argument value, for example:
 
 python3 run.py --epochs 50 --hiddenUnits 500
+
+To run the MNIST experiment for a DBN specify the sizes of consecutive layers in runDBN.py and then:
+
+python3 runDBN.py 
 
 The code is MIT licensed.
