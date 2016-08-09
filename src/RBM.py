@@ -44,7 +44,7 @@ class RBM(object):
 
         self.eps = 1e-6  # Some "tiny" value, used to enforce min/max boundary conditions
         self.momentum = momentum
-
+        self.layer = 1 # for DBN
         if params is None:
             # Initialize the weighting matrix by drawing from an iid Gaussian
             # of the specified standard deviation.
@@ -280,18 +280,3 @@ class RBM(object):
                 except EOFError:
                     break
         return params
-
-    def generate(self, vis_init, approx, iterations):
-        n_samples = vis_init.shape[1]
-        n_hidden = self.hbias.shape[0]
-        hid_init = np.zeros((n_hidden, n_samples))
-
-        if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-            vis_mag, hid_mag = SamplingEMF.equilibrate(self, vis_init, hid_init, iterations=iterations, approx=approx)
-
-        if "CD" in approx:
-            vis_samples, vis_means, hid_mag, hid_means = SamplingGibbs.MCMC(self, vis_init, iterations=iterations, StartMode="visible")
-
-        samples, temp = SamplingGibbs.sample_visibles(self, hid_mag)
-
-        return samples
