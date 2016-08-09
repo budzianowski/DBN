@@ -18,7 +18,6 @@ def sample_visibles(rbm, hid):
     samples = sample(means)
     return samples, means
 
-
 # 'Main course'
 def MCMC(rbm, init, iterations=1, StartMode="hidden"):
     if StartMode == "visible":

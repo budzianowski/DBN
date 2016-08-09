@@ -1,8 +1,6 @@
 import SamplingEMF
 import SamplingGibbs
-import RBM
 import numpy as np
-import time
 import copy
 
 
@@ -40,39 +38,30 @@ def regularize_weight_gradient(rbm, LearnRate, L2Penalty=None, L1Penalty=None, D
     if L1Penalty is not None:
         rbm.dW -= LearnRate * L1Penalty * np.sign(rbm.W)
 
-    # Dropout Regularization (restricted set of updates)
-    if DropOutRate is not None:
-        pass
-        # Not yet implemented, so we do nothing.
-        # TODO: Implement Drop-out, here.
-
 
 def update_weights(rbm, approx):
     rbm.W += rbm.dW
     rbm.dW_prev = copy.deepcopy(rbm.dW)
 
-    if ("tap2" in approx) or ("tap3" in approx):
-        rbm.W2 = rbm.W ** 2       # Update Square [for EMF-TAP2]
-
-    if "tap3" in approx:
-        rbm.W3 = rbm.W ** 3        # Update Cube   [for EMF-TAP3]
+    rbm.W2 = rbm.W ** 2  # Update Square
+    rbm.W3 = rbm.W ** 3  # Update Cube
 
 
-def get_negative_samples(rbm, vis_init, hid_init, approx, iterations):
+def get_negative_samples(rbm, vis_init, hid_init, approx, iterations, update):
     if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-        v_samples, h_samples = SamplingEMF.equilibrate(rbm, vis_init, hid_init, iterations=iterations, approx=approx)
+        # v_samples, h_samples
+        v_neg, h_neg = SamplingEMF.equilibrate(rbm, vis_init, hid_init, iterations=iterations, approx=approx, update=update)
 
     if "CD" in approx:
-        # In the case of Gibbs/MCMC sampling, we will take the binary visible samples as the negative
-        # visible samples, and the expectation (means) for the negative hidden samples.
-        v_samples, v_means, h_samples, h_means = SamplingGibbs.MCMC(rbm, hid_init, iterations=iterations, StartMode="hidden")
+        #v_samples, v_means, h_samples, h_means
+        v_neg, v_means, h_samples, h_neg = SamplingGibbs.MCMC(rbm, hid_init, iterations=iterations, StartMode="hidden")
 
-    return v_samples, h_samples
+    return v_neg, h_neg
 
 
 def fit_batch(rbm, vis,
                     persistent=True, lr=0.1, NormalizationApproxIter=1,
-                    weight_decay=None, decay_magnitude=0.01, approx="CD"):
+                    weight_decay=None, decay_magnitude=0.01, approx="CD", update="asynch"):
 
     # Determine how to acquire the positive samples based upon the persistence mode.
     v_pos = copy.deepcopy(vis)
@@ -82,8 +71,8 @@ def fit_batch(rbm, vis,
     if persistent:
         if rbm.persistent_chain_hid is None:
             # if we just initialize
-            rbm.persistent_chain_hid = copy.deepcopy(h_samples)
-            rbm.persistent_chain_vis = copy.deepcopy(vis)
+            rbm.persistent_chain_hid = np.copy(h_samples)
+            rbm.persistent_chain_vis = np.copy(vis)
             h_init = rbm.persistent_chain_hid
             v_init = rbm.persistent_chain_vis
         else:
@@ -91,18 +80,18 @@ def fit_batch(rbm, vis,
                 v_init = rbm.persistent_chain_vis
                 h_init = rbm.persistent_chain_hid
             if "CD" in approx:
-                v_init = copy.deepcopy(vis)
+                v_init = np.copy(vis)
                 h_init = rbm.persistent_chain_hid
     else:
         if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-            v_init = copy.deepcopy(vis)
+            v_init = np.copy(vis)
             h_init = h_means
         if "CD" in approx:
-            v_init = copy.deepcopy(vis)
+            v_init = np.copy(vis)
             h_init = h_samples
 
     # Calculate the negative samples according to the desired approximation mode
-    v_neg, h_neg = get_negative_samples(rbm, v_init, h_init, approx, NormalizationApproxIter)
+    v_neg, h_neg = get_negative_samples(rbm, v_init, h_init, approx, NormalizationApproxIter, update)
 
     # If we are in persistent mode, update the chain accordingly
     if persistent:
@@ -123,7 +112,7 @@ def fit_batch(rbm, vis,
 
 
 def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, NormalizationApproxIter=1,
-             weight_decay="none", decay_magnitude=0.01, approx="CD",
+             weight_decay="none", decay_magnitude=0.01, approx="CD", update="asynch",
              persistent_start=3, trace_file=None, save_file=None):
 
     assert 0 <= data.all() <= 1
@@ -131,7 +120,7 @@ def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, Normalizatio
     n_samples = data.shape[1]   # number of samples
     n_hidden = rbm.W.shape[0]  # size of hidden layer
 
-    lr /= batch_size
+    lr /= batch_size  # can be divided here or in the gradient update
     batch_order = np.arange(int(n_samples / batch_size))
 
     if trace_file is not '':
@@ -150,9 +139,9 @@ def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, Normalizatio
         use_persistent = True if itr >= persistent_start else False
 
         if trace_file is not '':
-            saveResults(trace_file, rbm, data, ValidSet, n_hidden, n_features)
+            saveResults(trace_file, rbm, data, ValidSet, n_hidden, n_features, approx)
         else:
-            printResults(rbm, data, ValidSet, n_hidden, n_features)
+            printResults(rbm, data, ValidSet, n_hidden, n_features, approx)
 
         for index in batch_order:
             if index % 100 == 0:
@@ -163,17 +152,21 @@ def fit(rbm, data, ValidSet, lr=0.001, n_epochs=10, batch_size=100, Normalizatio
                       NormalizationApproxIter=NormalizationApproxIter,
                       weight_decay=weight_decay,
                       decay_magnitude=decay_magnitude,
-                      lr=lr, approx=approx
+                      lr=lr, approx=approx,
+                      update=update
             )
-
-    # saving parameters
+        # if itr % 10 == 0:
+        #     print('saving')
+        #     # saving parameters
+        #     if save_file:
+        #         rbm.save(save_file + 'epochs' + str(itr))
     if save_file:
         rbm.save(save_file)
 
     return rbm
 
 
-def saveResults(trace_file, rbm, trainSet, validSet, n_hidden, n_features):
+def saveResults(trace_file, rbm, trainSet, validSet, n_hidden, n_features, approx):
     with open(trace_file, 'a') as f:
         N = n_hidden + n_features
         tmeanLL = np.mean(rbm.score_samples(trainSet[:, 0:10000]))
@@ -188,14 +181,14 @@ def saveResults(trace_file, rbm, trainSet, validSet, n_hidden, n_features):
         vEMF = np.mean(rbm.score_samples_TAP(validSet[:, 0:10000]))
         vnormEMF = vEMF / N
         vmeanMSE = np.mean(rbm.recon_error(validSet[:, 0:10000]))
-        vnormMSE = vmeanMSE/ N
+        vnormMSE = vmeanMSE / N
 
         f.write('{0:5.3f}, {1:5.3f}, {2:5.3f}, {3:5.3f}, {4:5.3f}, {5:5.3f}, {6:5.3f}, {7:5.3f}, {8:5.3f}, {9:5.3f}, {10:5.3f}, {11:5.3f}\n'.format(\
                 tmeanLL, tnormLL, tEMF, tnormEMF, tmeanMSE, tnormMSE, vmeanLL, vnormLL, vEMF, vnormEMF, vmeanMSE, vnormMSE)
         )
 
 
-def printResults(rbm, trainSet, validSet, n_hidden, n_features):
+def printResults(rbm, trainSet, validSet, n_hidden, n_features, approx):
     N = n_hidden + n_features
     tmeanLL = np.mean(rbm.score_samples(trainSet[:, 0:10000]))
     tnormLL = tmeanLL / N

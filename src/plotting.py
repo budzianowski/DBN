@@ -129,59 +129,36 @@ def plotFilters(model):
     image.save('filters.pdf')
 
 
-# def plotSamples(model, ValidSet, n_samples, n_chains, iterations=1000):
-#
-#     image_data = numpy.zeros(
-#         (29 * n_samples + 1, 29 * n_chains - 1),
-#         dtype='uint8'
-#     )
-#
-#     for idx in range(n_samples):
-#         vis_mf = numpy.zeros((ValidSet[:, 0:n_chains]).shape)  # TODO - change it?
-#
-#         for ii in range(n_chains):
-#             vis_samples, vis_means, temp1, temp2 = SamplingGibbs.MCMC(model, ValidSet[:, ii:(ii+1)], iterations=iterations, StartMode="visible")
-#             vis_mf[:, ii] = numpy.copy(vis_samples).reshape((784))
-#
-#         print(' ... plotting sample %d' % idx)
-#         image_data[29 * idx:29 * idx + 28, :] = tile_raster_images(
-#             X=vis_mf.T,
-#             img_shape=(28, 28),
-#             tile_shape=(1, n_chains),
-#             tile_spacing=(1, 1)
-#         )
-#
-#     # construct image
-#     image = Image.fromarray(image_data)
-#     image.save('samples.pdf')
-#
-
 import SamplingEMF
 import copy
 
-def plotSamples(approx, model, ValidSet, n_samples, n_chains, iterations=1000):
 
+def plotSamples(approx, model, ValidSet, n_samples, n_chains, iterations=1000):
     image_data = numpy.zeros(
         (29 * n_samples + 1, 29 * n_chains - 1),
         dtype='uint8'
     )
-    vis_init = copy.deepcopy(ValidSet[:, 0:n_chains])
+    vis_init = copy.deepcopy(ValidSet[:, 0+10:n_chains+10])
     hid_init = numpy.zeros((model.hbias.shape[0], n_chains))
+    # real ones
+    image_data[0:  28, :] = tile_raster_images(
+            X=vis_init.T,
+            img_shape=(28, 28),
+            tile_shape=(1, n_chains),
+            tile_spacing=(1, 1)
+    )
 
-    for idx in range(n_samples):
+    for idx in range(1, n_samples):
         vis_mf = numpy.zeros((ValidSet[:, 0:n_chains]).shape)
 
-        if idx == 0:
-            vis_mf = copy.deepcopy(ValidSet[:, 0:n_chains])
-        else:
-            for ii in range(n_chains):
-                if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
-                    vis_mag, hid_mag = SamplingEMF.equilibrate(model, vis_init[:, ii:(ii+1)], hid_init[:, ii:(ii+1)], iterations=iterations, approx=approx)
-                elif "CD" in approx:
-                    vis_samples, vis_means, hid_mag, hid_means = SamplingGibbs.MCMC(model, vis_init[:, ii:(ii+1)], iterations=iterations, StartMode="visible")
+        for ii in range(n_chains):
+            if ("naive" in approx) or ("tap2" in approx) or ("tap3" in approx):
+                vis_mag, hid_mag = SamplingEMF.equilibrate(model, vis_init[:, ii:(ii+1)], hid_init[:, ii:(ii+1)], iterations=iterations, approx=approx)
+            elif "CD" in approx:
+                vis_samples, vis_means, hid_mag, hid_means = SamplingGibbs.MCMC(model, vis_init[:, ii:(ii+1)], iterations=iterations, StartMode="visible")
 
-                samples, temp = SamplingGibbs.sample_visibles(model, hid_mag)
-                vis_mf[:, ii] = numpy.copy(samples).reshape((784))
+            samples, temp = SamplingGibbs.sample_visibles(model, hid_mag)
+            vis_mf[:, ii] = numpy.copy(samples).reshape((784))
 
         # update persistent chain
         vis_init = copy.deepcopy(vis_mf)
