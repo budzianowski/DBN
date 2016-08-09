@@ -135,12 +135,13 @@ class DBN(object):
         return logPL
 
     def score_samples_TAP(self, vis, n_iter=5, approx="tap2"):
-        if self.layer == 2 or self.layer == 3:
+        prob = vis
+        if self.layer >= 2:
             prob = self.probHidCondOnVis1Layer(vis)
             if self.layer == 3:
                 prob = self.probHidCondOnVis2Layer(prob)
         """ Computes Gibbs free energy """
-        m_vis, m_hid = SamplingEMF.iter_mag(self, prob, iterations=n_iter, approx="tap2")  # TODO change to automat
+        m_vis, m_hid = SamplingEMF.iter_mag(self, prob, iterations=n_iter, approx="tap2")
         # clipping to compute entropy
         m_vis = np.clip(m_vis, self.eps, 1 - self.eps)
         m_hid = np.clip(m_hid, self.eps, 1 - self.eps)
@@ -156,17 +157,18 @@ class DBN(object):
 
         fe_tap = Entropy - Naive - Onsager
 
-        # if "tap3" in approx:
-        #     visible = (m_vis-m_vis2) * (0.5 - m_vis)
-        #     hidden = (m_hid-m_hid2) * (0.5 - m_hid)
-        #     fe_tap -= (2.0 / 3.0) * np.sum(hidden * np.dot(self.W3, visible), 0)
+        if "tap3" in approx:
+            visible = (m_vis-m_vis2) * (0.5 - m_vis)
+            hidden = (m_hid-m_hid2) * (0.5 - m_hid)
+            fe_tap -= (2.0 / 3.0) * np.sum(hidden * np.dot(self.W3, visible), 0)
 
         fe = self.free_energy(prob)
         return -fe + fe_tap
 
     def recon_error(self, vis):
         """ Computes reconstruction error """
-        if self.layer == 2 or self.layer == 3:
+        prob = vis
+        if self.layer >= 2:
             prob = self.probHidCondOnVis1Layer(vis)
             if self.layer == 3:
                 prob = self.probHidCondOnVis2Layer(prob)
