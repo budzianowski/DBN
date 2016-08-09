@@ -117,6 +117,7 @@ class DBN(object):
 
     def score_samples(self, vis):
         """ Computes proxy LL """
+        prob = vis
         if self.layer >= 2:
             prob = self.probHidCondOnVis1Layer(vis)
             if self.layer == 3:
