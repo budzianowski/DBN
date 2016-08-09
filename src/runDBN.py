@@ -107,17 +107,15 @@ def main():
             )
 
     else:
-        # place for plotting with learned structure
         print('Initializing model')
         params = DBN.DBN.load(load_file)
-        model = DBN.DBN(layer=whatLayer, params=params, n_vis=hiddenUnits, n_hid=secondLayerUnits)
+        model = DBN.DBN(layer=whatLayer, params=params)
         print('W1 shape', model.W1.shape, 'hbias', model.hbias1.shape, 'vbias', model.vbias1.shape)
-        if model.layer == 3 or model.layer == 4:
+        if model.layer >= 3:
             print('W2 shape', model.W22.shape, 'hbias', model.hbias2.shape, 'vbias', model.vbias2.shape)
-        if model.layer == 4:
-            print('W3 shape', model.W33.shape, 'hbias', model.hbias3.shape, 'vbias', model.vbias3.shape)
+            if model.layer == 4:
+                print('W3 shape', model.W33.shape, 'hbias', model.hbias3.shape, 'vbias', model.vbias3.shape)
         print('Next W shape', model.W.shape, 'hbias', model.hbias.shape, 'vbias', model.vbias.shape)
-        print('Start of training')
 
 
 def get_arg(arg, args, default, type_):
